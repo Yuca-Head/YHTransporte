@@ -1,5 +1,5 @@
-using Core.Exceptions;
-namespace Core.Exceptions;
+using YHTransporte.Core.Exceptions;
+namespace YHTransporte.Core.Exceptions;
 
 public class ShipmentException : DomainException
 {

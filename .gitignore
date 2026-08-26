@@ -55,4 +55,4 @@ nunit-*.xml
 
 # Database
 appsettings.Development.json
-Testing/Database
+YHTransporte.Testing/Database

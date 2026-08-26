@@ -78,7 +78,7 @@ CREATE TABLE [dbo].[Orders] (
     [Code]             NVARCHAR (12)  NOT NULL,
     [CreatedAt]        DATETIMEOFFSET (7) NOT NULL,
     [SupplierId]       INT            NOT NULL,
-    [CustomerId]       INT            NOT NULL,
+    [CustomerId]       INT            NOT NULL, 
     [IdOriginDir]      INT            NOT NULL,
     [IdDestinationDir] INT            NOT NULL,
     [IdStatus]         INT            CONSTRAINT [DEFAULT_Order_IdStatus] DEFAULT 1 NOT NULL,

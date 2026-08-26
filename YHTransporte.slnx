@@ -1,4 +1,4 @@
 <Solution>
-  <Project Path="Core/Core.csproj" />
-  <Project Path="Testing/Testing.csproj"/>
+  <Project Path="YHTransporte.Core/YHTransporte.Core.csproj" />
+  <Project Path="YHTransporte.Testing/YHTransporte.Testing.csproj" />
 </Solution>

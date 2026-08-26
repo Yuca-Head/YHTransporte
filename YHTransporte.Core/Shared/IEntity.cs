@@ -1,4 +1,4 @@
-namespace Core.Shared;
+namespace YHTransporte.Core.Shared;
 
 public interface IEntity<T>
 {

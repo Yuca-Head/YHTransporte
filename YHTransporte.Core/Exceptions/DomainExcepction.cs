@@ -1,4 +1,4 @@
-namespace Core.Exceptions;
+namespace YHTransporte.Core.Exceptions;
 
 public class DomainException : Exception
 {
@@ -12,5 +12,8 @@ public class DomainException : Exception
     public DomainException(string message, string fieldName) : this(message) => FieldName = fieldName;
 
     public string? FieldName {get; init;}
+
+
+   public override string? Source { get => base.Source + $" -[{FieldName}]- "; set => base.Source = value; }
 
 }

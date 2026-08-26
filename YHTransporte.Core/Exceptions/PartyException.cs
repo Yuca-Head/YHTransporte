@@ -1,4 +1,4 @@
-namespace Core.Exceptions;
+namespace YHTransporte.Core.Exceptions;
 
 public class PartyException : DomainException
 {
