@@ -8,14 +8,14 @@ namespace YHTransporte.Testing.AppsTests;
 
 public class ThirdPartyUseCasesTests
 {
-    private static Mock<IThirdPartyRepository> _repositoryMock
+    private Mock<IThirdPartyRepository> _repositoryMock
     {get;} = new();
     public ThirdPartyUseCasesTests()
     {
         _repositoryMock
         .Setup(repository => repository.FindExistingNamesAsync(It.IsAny<IEnumerable<string>>()))
         .ReturnsAsync((IEnumerable<string> names) =>
-            names.Where(name => _existingNames.Contains(name)));
+        names.Where(name => _existingNames.Contains(name)));
     }
 
     private readonly HashSet<string> _existingNames = new(
@@ -76,4 +76,5 @@ public class ThirdPartyUseCasesTests
         _repositoryMock.Verify(r =>
         r.AddAsync(It.IsAny<IEnumerable<ThirdParty>>()), Times.Never);
     }
+
 }
