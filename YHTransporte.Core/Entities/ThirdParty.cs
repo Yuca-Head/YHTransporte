@@ -38,7 +38,6 @@ public class ThirdParty : IEntity<int>
     public SupplierRole? Supplier {get; private set;}
     public CustomerRole? Customer {get; private set;}
 
-
     public void BecomeCustomer()
     => Customer ??= new();
     public void BecomeSupplier()

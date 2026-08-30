@@ -82,7 +82,7 @@ CREATE TABLE [dbo].[Orders] (
     [IdOriginDir]      INT            NOT NULL,
     [IdDestinationDir] INT            NOT NULL,
     [IdStatus]         INT            CONSTRAINT [DEFAULT_Order_IdStatus] DEFAULT 1 NOT NULL,
-    [Description]      NVARCHAR (150) NULL,
+    [Description]      NVARCHAR (150) NULL, 
     CONSTRAINT [PK_Order] PRIMARY KEY CLUSTERED ([Code] ASC),
     CONSTRAINT [FK_Order_Addresses_Destination] FOREIGN KEY ([IdDestinationDir]) REFERENCES [dbo].[Addresses] ([Id]),
     CONSTRAINT [FK_Order_Addresses_Origin] FOREIGN KEY ([IdOriginDir]) REFERENCES [dbo].[Addresses] ([Id]),

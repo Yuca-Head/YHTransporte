@@ -10,4 +10,7 @@
     <PackageReference Include="OneOf" Version="3.0.271" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\YHTransporte.Core\YHTransporte.Core.csproj" />
+  </ItemGroup>
 </Project>
