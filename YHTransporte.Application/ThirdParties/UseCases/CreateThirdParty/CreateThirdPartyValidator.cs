@@ -9,9 +9,10 @@ public class CreateThirdPartyValidator(IThirdPartyRepository repository)
 {
     private readonly IThirdPartyRepository _repository = repository ?? 
     throw new ArgumentNullException(nameof(repository));
+
     public async Task<OneOf<Success, AlreadyExists, ValidationError, RepeatedValue>> Validate(CreateThirdPartyCommand[] commands)
     {
-        HashSet<string> names = [];
+        HashSet<string> names = new(StringComparer.CurrentCultureIgnoreCase);
 
         foreach(var command in commands)
             if(string.IsNullOrWhiteSpace(command.Name))
