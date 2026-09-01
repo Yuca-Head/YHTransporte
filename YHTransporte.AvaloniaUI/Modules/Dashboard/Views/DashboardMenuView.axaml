@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Dashboard.Views.DashboardMenuView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels"
+    x:DataType="vm:DashboardMenuViewModel">
+
+    <Border Grid.Row="1" Background="#12161f" Padding="20">
+        <Grid RowDefinitions="110, *">
+
+            <UniformGrid Grid.Row="0" Columns="6" Margin="0,0,0,15">
+
+                <Border Background="#b8d3f3" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Servicios Pendientes" Foreground="Black" FontSize="11"
+                                    HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtServiciosPendientes" Text="0" Foreground="#0056D6" FontSize="22"
+                                    FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Por Asignar" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#fed585" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Servicios en Tránsito" Foreground="Black" FontSize="11"
+                                    HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtServiciosTransito" Text="0" Foreground="#ff862f" FontSize="22"
+                                    FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="En ruta" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#9cf2b5" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Entregas Realizadas" Foreground="Black" FontSize="11"
+                                    HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtEntregasRealizadas" Text="0" Foreground="#24b224" FontSize="22"
+                                    FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Este mes" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#e8e8e8" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Vehículos Disponibles" Foreground="Black" FontSize="11"
+                                    HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtVehiculosDisponibles" Text="0" Foreground="#231f20"
+                                    FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="En Base" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#e8e8e8" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Conductores Disponibles" Foreground="Black" FontSize="11"
+                                    HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtConductoresDisponibles" Text="0" Foreground="#231f20"
+                                    FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Listos" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#fa8484" CornerRadius="8" Margin="5" Padding="10">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Incidencias" Foreground="Black" FontSize="11" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                        <TextBlock x:Name="txtIncidencias" Text="0" Foreground="#ff0000" FontSize="22" FontWeight="Bold"
+                                    HorizontalAlignment="Center"/>
+                        <TextBlock Text="Requieren Atención" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
+                                    FontWeight="SemiBold"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Grid Grid.Row="1">
+                <Border Background="#1d2531" >
+                    
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+
+
+
+
+</UserControl>

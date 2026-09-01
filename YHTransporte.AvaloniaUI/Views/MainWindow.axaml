@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YHTransporte.AvaloniaUI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="657.34"
+        x:Class="YHTransporte.AvaloniaUI.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        MinWidth="900" MinHeight="550"
+        Width="900" Height="550"    
+        Icon="/Assets/Full-logo.png"
+        Title="YHTransporte"
+        >
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+    
+    
+    <Grid>
+        <UserControl Content="{Binding CurrentView}"/>  
+    </Grid>
+
+</Window>

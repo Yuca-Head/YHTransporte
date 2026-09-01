@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\YHTransporte.Application\YHTransporte.Application.csproj" />
     <ProjectReference Include="..\YHTransporte.Core\YHTransporte.Core.csproj" />
+    <ProjectReference Include="..\YHTransporte.Infrastructure\YHTransporte.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

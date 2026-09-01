@@ -1,0 +1,77 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Login.ViewModels"
+        x:Class="YHTransporte.AvaloniaUI.Modules.Login.Views.LoginView"
+        x:DataType="vm:LoginViewModel"
+        >
+
+    <Grid Background="#111111">
+
+        <Grid VerticalAlignment="Stretch">
+
+            <Image Source="avares://YHTransporte.AvaloniaUI/Assets/Gemini_Generated_Image_gpkfj7gpkfj7gpkf.png"
+                   Stretch="UniformToFill"/>
+
+            <Panel Background="#15000000"/>
+
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Spacing="8"
+                        Margin="130,0,30,365">
+
+                <Image Source="avares://YHTransporte.AvaloniaUI/Assets/Full-logo.png"
+                       Width="90" Height="90" HorizontalAlignment="Center"/>
+
+                <TextBlock Text="FAST - PACK" FontSize="20" FontWeight="ExtraBold"
+                           Foreground="DarkBlue" HorizontalAlignment="Center"/>
+
+                <TextBlock Text="SISTEMA DE GESTIÓN DE TRANSPORTE Y FLETES"
+                           FontSize="9" FontWeight="ExtraBold" Foreground="#2F25BD"
+                           HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Width="230"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Text="BIENVENIDO" FontSize="18" FontWeight="ExtraBold" Foreground="DarkBlue"
+                   HorizontalAlignment="Left" VerticalAlignment="Top" Margin="889,35,0,0"/>
+
+        <TextBlock Text="Inicie sesión para continuar" FontSize="13" FontWeight="Bold"
+                   Foreground="#5A8BDB" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   Margin="854,60,0,0"/>
+
+        <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                HorizontalAlignment="Left" VerticalAlignment="Top" Width="380" Height="410" Margin="755,90,0,0">
+
+            <StackPanel Margin="30,25,30,0" Spacing="10">
+
+                <TextBlock Text="Iniciar Sesión" FontSize="18" FontWeight="Bold" Foreground="DarkBlue"
+                           HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <TextBlock Text="Código de Empleado" Foreground="Black" FontSize="12" FontWeight="Bold"/>
+                <TextBox Tag="txtCodeEmpleado" Text="{Binding User.User}" Height="32" VerticalContentAlignment="Center"
+                         Margin="0,0,0,5"/>
+
+                <TextBlock Text="Contraseña" Foreground="Black" FontSize="12" FontWeight="Bold"/>
+                <TextBox Tag="txtPassword" Height="32" PasswordChar="*" VerticalContentAlignment="Center"
+                         Margin="0,0,0,12" Text="{Binding User.Password}"/>
+
+                <Button Tag="btnIniciarSesion" Content="Iniciar Sesión" Background="#0066CC"
+                        Foreground="White" FontWeight="Bold" HorizontalContentAlignment="Center"
+                        Command="{Binding AuthenticateUserCommand}"
+                        HorizontalAlignment="Stretch" Height="35"/>
+
+                <Button Tag="btnRegistrarse" Content="Registrarse Aquí" Background="#D5E1F2"
+                        Foreground="#0044AA" FontStyle="Italic" FontWeight="Bold"
+                        HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Height="32"/>
+
+                <TextBlock Tag="txtMensajeError" Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="Red" Background="#FFEEEE"
+                           FontSize="12" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"
+                           Padding="5" Height="28"/>
+            </StackPanel>
+        </Border>
+
+        <Button Tag="btnSalir" Content="Salir" Background="Red" Foreground="White"
+                FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding CloseAppCommand}"
+                HorizontalContentAlignment="Center" Width="150" Height="30" Margin="870,508,0,0"/>
+
+        
+    </Grid>
+    
+</UserControl>

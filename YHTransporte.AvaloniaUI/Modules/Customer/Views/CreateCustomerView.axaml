@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Customer.Views.CreateCustomerView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
+    x:DataType="vm:CreateCustomerViewModel">
+
+    <Border>
+        <Grid>
+            <TextBox Text="{Binding NewCustomer.Name}"/>
+        </Grid>
+    </Border>
+
+
+</UserControl>

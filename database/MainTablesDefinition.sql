@@ -165,5 +165,7 @@ INSERT INTO [dbo].[ShipmentStatuses] VALUES ('Pending');--Other statuses will be
 
 INSERT INTO [dbo].[OrderStatuses] VALUES ('Pending'), ('In Progress'), ('Completed');
 
+DELETE FROM ThirdParties WHERE Id = 1;
 
-SELECT * FROM Shipments;    
+DBCC CHECKIDENT ('ThirdParties', RESEED, 0);   
+SELECT * FROM ThirdParties;    
