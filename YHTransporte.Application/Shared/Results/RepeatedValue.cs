@@ -1,3 +1,6 @@
 namespace YHTransporte.Application.Shared.Results;
 
-public record RepeatedValue(object? Argument = null);
+public readonly record struct RepeatedValue<T>(T Argument)
+{
+    public readonly record struct RepeatedKeyInformation(T Value, int Times);
+}

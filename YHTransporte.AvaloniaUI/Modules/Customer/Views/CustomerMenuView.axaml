@@ -4,116 +4,120 @@
     xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
     x:DataType="vm:CustomerMenuViewModel">
     
-    <Border Grid.Row="1" Background="#12161f" Padding="25">
-        <Grid RowDefinitions="Auto, *, Auto">
+    <Grid>
+        <Border Grid.Row="1" Background="#12161f" Padding="25">
+            <Grid RowDefinitions="Auto, *, Auto">
 
-            <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
+                <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
 
-                <TextBox Grid.Column="0" PlaceholderText="Buscar por nombre, cédula o código"
-                            Background="White" Foreground="Black" BorderBrush="#374151"
-                            CornerRadius="8" VerticalContentAlignment="Center" Height="40"/>
+                    <TextBox Grid.Column="0" PlaceholderText="Buscar por nombre, cédula o código"
+                                Background="White" Foreground="Black" BorderBrush="#374151"
+                                CornerRadius="8" VerticalContentAlignment="Center" Height="40"/>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
-                    <Button Content="+ Registrar Nuevo Cliente" Background="#0056D6" Foreground="White"
-                            FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
-                    <Button Content="Importar Datos" Background="#374151" Foreground="White"
-                            FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
-                    <Button Content="Exportar Lista" Background="#374151" Foreground="White"
-                            FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
-                </StackPanel>
-            </Grid>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+                        <Button Content="+ Registrar Nuevo Cliente" Background="#0056D6" Command="{Binding OpenCustomerPopUpCommand}" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                        <Button Content="Importar Datos" Background="#374151" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                        <Button Content="Exportar Lista" Background="#374151" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                    </StackPanel>
+                </Grid>
 
-            <Grid Grid.Row="1" ColumnDefinitions="440, *">
+                <Grid Grid.Row="1" ColumnDefinitions="440, *">
 
-                <StackPanel Grid.Column="0" Spacing="15" Margin="0,0,15,0">
-                    <Border Background="#1f2937" CornerRadius="10" Padding="20">
-                        <StackPanel Spacing="10">
-                            <TextBlock Text="Información Básica" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                            <Grid ColumnDefinitions="Auto, *">
+                    <StackPanel Grid.Column="0" Spacing="15" Margin="0,0,15,0">
+                        <Border Background="#1f2937" CornerRadius="10" Padding="20">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Información Básica" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <Grid ColumnDefinitions="Auto, *">
 
-                                <Ellipse Grid.Column="0" Width="60" Height="60" Fill="#374151" Margin="0,0,15,0"/>
+                                    <Ellipse Grid.Column="0" Width="60" Height="60" Fill="#374151" Margin="0,0,15,0"/>
 
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
-                                    <TextBlock Text="Código de Cliente" Foreground="Gray" FontSize="11"/>
-                                    <TextBlock Text="Nombre / Razón Social" Foreground="White" FontWeight="Bold" FontSize="15"/>
-                                    <TextBlock Text="Cédula" Foreground="Gray" FontSize="11"/>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
+                                        <TextBlock Text="Código de Cliente" Foreground="Gray" FontSize="11"/>
+                                        <TextBlock Text="Nombre / Razón Social" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                                        <TextBlock Text="Cédula" Foreground="Gray" FontSize="11"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1f2937" CornerRadius="10" Padding="20">
+                            <StackPanel Spacing="0">
+                                <TextBlock Text="Datos de Contacto" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,5,0,0">
+                                    <TextBlock Text="**** - ****" Foreground="LightGray" VerticalAlignment="Center"/>
+                                    <TextBlock Text="****@gmail.com" Foreground="LightGray" VerticalAlignment="Center"/>
                                 </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#1f2937" CornerRadius="10" Padding="20" Height="140">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Dirección de Domicilio" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <Border Background="#111827" CornerRadius="8" Height="65"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" Background="#1f2937" CornerRadius="10" Padding="20">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Historial de Fletes Recientes" Foreground="White" FontWeight="Bold" FontSize="14"/>
+
+                            <Grid Margin="0,5,0,5" ColumnDefinitions="*, *,120, 100">
+
+                                <TextBlock Grid.Column="0" Text="Carga" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="Ruta" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="2" Text="Estado" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="Fecha" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+
+                            <Separator Background="#374151" Height="1"/>
+
+                            <Grid Margin="0,5" ColumnDefinitions="*, *, 120, 100">
+
+                                <TextBlock Grid.Column="0" Text="C-1345" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="Managua → León" Foreground="LightGray" VerticalAlignment="Center"/>
+
+                                <Border Grid.Column="2" Background="#065f46" CornerRadius="12" Padding="8,3" HorizontalAlignment="Center">
+                                    <TextBlock Text="En tránsito" Foreground="#34d399" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+
+                                <TextBlock Grid.Column="3" Text="06/02/2026" Foreground="LightGray" VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"/>
+                            </Grid>
+
+                            <Grid Margin="0,5" ColumnDefinitions="*, *, 120, 100">
+
+                                <TextBlock Grid.Column="0" Text="C-1033" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="Managua → León" Foreground="LightGray" FontWeight="Bold"
+                                            VerticalAlignment="Center"/>
+
+                                <Border Grid.Column="2" Background="#065f46" CornerRadius="12" Padding="8,3" HorizontalAlignment="Center">
+                                    <TextBlock Text="Entregado" Foreground="#34d399" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+
+                                <TextBlock Grid.Column="3" Text="24/02/2024" Foreground="LightGray" VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"/>
                             </Grid>
                         </StackPanel>
                     </Border>
+                </Grid>
 
-                    <Border Background="#1f2937" CornerRadius="10" Padding="20">
-                        <StackPanel Spacing="0">
-                            <TextBlock Text="Datos de Contacto" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                            <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,5,0,0">
-                                <TextBlock Text="**** - ****" Foreground="LightGray" VerticalAlignment="Center"/>
-                                <TextBlock Text="****@gmail.com" Foreground="LightGray" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button Content="Guardar Cambios" Background="#0056D6" Foreground="White"
+                            FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
+                    <Button Content="Eliminar Cliente" Background="#dc2626" Foreground="White"
+                            FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
+                    <Button Content="Restablecer Campos" Background="#374151" Foreground="LightGray"
+                            FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
 
-                    <Border Background="#1f2937" CornerRadius="10" Padding="20" Height="140">
-                        <StackPanel Spacing="10">
-                            <TextBlock Text="Dirección de Domicilio" Foreground="White" FontWeight="Bold" FontSize="14"/>
-                            <Border Background="#111827" CornerRadius="8" Height="65"/>
-                        </StackPanel>
-                    </Border>
                 </StackPanel>
-
-                <Border Grid.Column="1" Background="#1f2937" CornerRadius="10" Padding="20">
-                    <StackPanel Spacing="12">
-                        <TextBlock Text="Historial de Fletes Recientes" Foreground="White" FontWeight="Bold" FontSize="14"/>
-
-                        <Grid Margin="0,5,0,5" ColumnDefinitions="*, *,120, 100">
-
-                            <TextBlock Grid.Column="0" Text="Carga" Foreground="Gray" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="Ruta" Foreground="Gray" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="2" Text="Estado" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Fecha" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Right"/>
-                        </Grid>
-
-                        <Separator Background="#374151" Height="1"/>
-
-                        <Grid Margin="0,5" ColumnDefinitions="*, *, 120, 100">
-
-                            <TextBlock Grid.Column="0" Text="C-1345" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Managua → León" Foreground="LightGray" VerticalAlignment="Center"/>
-
-                            <Border Grid.Column="2" Background="#065f46" CornerRadius="12" Padding="8,3" HorizontalAlignment="Center">
-                                <TextBlock Text="En tránsito" Foreground="#34d399" FontSize="11" FontWeight="Bold"/>
-                            </Border>
-
-                            <TextBlock Grid.Column="3" Text="06/02/2026" Foreground="LightGray" VerticalAlignment="Center"
-                                        HorizontalAlignment="Right"/>
-                        </Grid>
-
-                        <Grid Margin="0,5" ColumnDefinitions="*, *, 120, 100">
-
-                            <TextBlock Grid.Column="0" Text="C-1033" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="Managua → León" Foreground="LightGray" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-
-                            <Border Grid.Column="2" Background="#065f46" CornerRadius="12" Padding="8,3" HorizontalAlignment="Center">
-                                <TextBlock Text="Entregado" Foreground="#34d399" FontSize="11" FontWeight="Bold"/>
-                            </Border>
-
-                            <TextBlock Grid.Column="3" Text="24/02/2024" Foreground="LightGray" VerticalAlignment="Center"
-                                        HorizontalAlignment="Right"/>
-                        </Grid>
-                    </StackPanel>
-                </Border>
             </Grid>
+        </Border>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="15" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <Button Content="Guardar Cambios" Background="#0056D6" Foreground="White"
-                        FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
-                <Button Content="Eliminar Cliente" Background="#dc2626" Foreground="White"
-                        FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
-                <Button Content="Restablecer Campos" Background="#374151" Foreground="LightGray"
-                        FontWeight="Bold" CornerRadius="8" Padding="20,10"/>
-
-            </StackPanel>
-        </Grid>
-    </Border>
-
+        <UserControl MaxWidth="400" MaxHeight="300"
+        Content="{Binding CreateCustomer}" IsVisible="{Binding CreateCustomer.IsOpen}" ZIndex="100"/>
+    </Grid>
 </UserControl>

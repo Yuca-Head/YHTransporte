@@ -7,9 +7,9 @@ public sealed class DbConnectionFactory(IConfiguration configuration)
 {
     
     private readonly string _connectionString =
-            configuration.GetConnectionString("DefaultConnection")
+            configuration.GetConnectionString("AzureConnection")
             ?? throw new InvalidOperationException(
-                "Connection string not configured.");
+                "Connection string not configured.");   
 
     public SqlConnection Create()
         => new(_connectionString);

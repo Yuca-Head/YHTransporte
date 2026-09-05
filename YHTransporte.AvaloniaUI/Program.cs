@@ -1,12 +1,22 @@
 ﻿using Avalonia;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Threading;
+using YHTransporte.Application.ThirdParties.Repositories;
+using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
+using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Customer.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
 using YHTransporte.AvaloniaUI.ViewModels;
+using YHTransporte.AvaloniaUI.Views;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
 namespace YHTransporte.AvaloniaUI;
 
@@ -24,7 +34,10 @@ sealed class Program
         var builder = Microsoft.Extensions.Hosting.Host
         .CreateApplicationBuilder(args);
 
+
         ConfigureServices(builder.Services);
+
+        builder.Configuration.AddUserSecrets<Program>().Build();
 
         Host = builder.Build();
 
@@ -50,6 +63,26 @@ sealed class Program
         services.AddTransient<HomeViewModel>();
         services.AddTransient<CustomerMenuViewModel>();
         services.AddTransient<DashboardMenuViewModel>();
+        services.AddTransient<CargoMenuViewModel>();
+        services.AddTransient<ShipmentMenuViewModel>();
+        services.AddTransient<CreateCustomerViewModel>();
+
+        //Windows
+        services.AddTransient<MainWindow>();
+
+        //UseCases
+        services.AddSingleton<CreateThirdPartyHandler>();
+        services.AddSingleton<CreateThirdPartyValidator>();
+
+
+        //Repositories
+        services.AddSingleton<IThirdPartyRepository, SqlServerThirdPartyRepository>();
+
+
+
+        //Others
+        services.AddSingleton<DbConnectionFactory>();
+
     }
             
 }

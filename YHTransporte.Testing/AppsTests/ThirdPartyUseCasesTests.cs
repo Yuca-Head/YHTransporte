@@ -8,18 +8,18 @@ namespace YHTransporte.Testing.AppsTests;
 
 public class ThirdPartyUseCasesTests
 {
-    private Mock<IThirdPartyRepository> _repositoryMock
+    private Mock<IThirdPartyRepository> RepositoryMock
     {get;} = new();
     public ThirdPartyUseCasesTests()
     {
-        _repositoryMock
+        RepositoryMock = new();
+        RepositoryMock
         .Setup(repository => repository.FindExistingNamesAsync(It.IsAny<IEnumerable<string>>()))
-        .ReturnsAsync((IEnumerable<string> names) =>
+        .ReturnsAsync((IEnumerable<string> names, CancellationToken e) =>
         names.Where(name => _existingNames.Contains(name)));
     }
-
-    private readonly HashSet<string> _existingNames = new(
-    StringComparer.OrdinalIgnoreCase);
+ 
+    private readonly HashSet<string> _existingNames = new(StringComparer.OrdinalIgnoreCase);
 
     [Theory]
     [InlineData("empresa A")]
@@ -31,7 +31,7 @@ public class ThirdPartyUseCasesTests
         _existingNames.Add(repeatedName);
 
         var validator = new CreateThirdPartyValidator(
-            _repositoryMock.Object);
+            RepositoryMock.Object);
 
         var commands = new[]
         {
@@ -49,6 +49,7 @@ public class ThirdPartyUseCasesTests
         result.AsT1.Argument, exactMatch: false);
     }
 
+
     public static TheoryData<CreateThirdPartyCommand, List<string>> ValidationData 
     => new()
     {
@@ -64,8 +65,8 @@ public class ThirdPartyUseCasesTests
         // Arrange
         names.ForEach(n => _existingNames.Add(n));
 
-        CreateThirdPartyValidator validator = new(_repositoryMock.Object);
-        CreateThirdPartyHandler handler = new(_repositoryMock.Object, validator);
+        CreateThirdPartyValidator validator = new(RepositoryMock.Object);
+        CreateThirdPartyHandler handler = new(RepositoryMock.Object, validator);
 
         // Act
         var result = await handler.Handle(command);
@@ -73,7 +74,7 @@ public class ThirdPartyUseCasesTests
         // Assert
         Assert.True(result.IsT1);
 
-        _repositoryMock.Verify(r =>
+        RepositoryMock.Verify(r =>
         r.AddAsync(It.IsAny<IEnumerable<ThirdParty>>()), Times.Never);
     }
 

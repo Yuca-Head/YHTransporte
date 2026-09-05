@@ -1,0 +1,202 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Cargo.Views.CargoMenuView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels"
+    x:DataType="vm:CargoMenuViewModel">
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <Border Background="#12161F" Padding="25">
+            <Grid RowDefinitions="Auto, Auto, Auto">
+
+                <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
+
+                    <TextBox Grid.Column="0" Watermark="Buscar por código de carga, servicio o descripción"
+                                Background="White" Foreground="Black" BorderBrush="#374151"
+                                CornerRadius="8" VerticalAlignment="Center" Height="40"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+                        <Button Content="+ Registrar Nueva Carga" Background="#0056D6" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                        <Button Content="Exportar Lista" Background="#374151" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,0,0,20" ColumnDefinitions="*, 380">
+
+                    <Border Grid.Column="0" Background="#1f2937" CornerRadius="10" Padding="20" Margin="0,0,20,0">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Información de la Carga" Foreground="White" FontWeight="Bold" FontSize="15"/>
+
+                            <Grid ColumnDefinitions="*, *, *">
+
+                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Código de Carga" Foreground="White" FontSize="11"/>
+                                    <TextBox Watermark="Ej. C-004" Background="White" Foreground="Black"
+                                                CornerRadius="8" Height="35" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Servicio Asociado" Foreground="White" FontSize="11"/>
+                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8"
+                                                Height="35" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Tipo de Servicio" Foreground="White" FontSize="11"/>
+                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8"
+                                                Height="35" HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                <TextBlock Text="Descripción" Foreground="White" FontSize="11"/>
+                                <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*, *, *, *">
+
+                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Cantidad" Foreground="White" FontSize="11"/>
+                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Peso en Kg" Foreground="White" FontSize="11"/>
+                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Volumen en m³" Foreground="White" FontSize="11"/>
+                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Valor Declarado(C$)" Foreground="White" FontSize="11"/>
+                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*, *">
+
+                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Estado Físico" Foreground="White" FontSize="11"/>
+                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35"
+                                                HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,10,0">
+                                    <TextBlock Text="Tipo" Foreground="White" FontSize="11"/>
+                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35"
+                                                HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
+                                <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
+                                <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,0,0">
+                                <Button Content="Guardar Carga" Background="#0056D6" Foreground="White"
+                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
+                                <Button Content="Limpiar Campos" Background="#374151" Foreground="White"
+                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Background="#1f2937" CornerRadius="10" Padding="20" VerticalAlignment="Top">
+                        <StackPanel Spacing="15">
+                            <TextBlock Text="Validación de carga" Foreground="White" FontWeight="Bold" FontSize="14"/>
+
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <TextBlock Text="Peso de la carga" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="294 kg" Foreground="White" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <TextBlock Text="Capacidad del vehículo asignado" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="2000 kg" Foreground="White" FontWeight="Bold" FontSize="13" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <Rectangle Height="1" Fill="#374151" Margin="0,2"/>
+
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <TextBlock Text="Resultado" Foreground="#9ca3af" FontSize="12" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Border Grid.Column="1" Background="#15803d" CornerRadius="6" Padding="10,4">
+                                    <TextBlock Text="Capacidad suficiente" Foreground="White" FontWeight="Bold" FontSize="11"/>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Border Background="#1f2937" CornerRadius="10" Padding="20">
+                        <StackPanel Spacing="15">
+                            <TextBlock Text="Cargas Registradas" Foreground="White" FontWeight="Bold" FontSize="15"/>
+
+                            <Grid ColumnDefinitions="100, 100, 160, 90, 100, 150, 120, *" Margin="0,0,0,5">
+                                <TextBlock Grid.Column="0" Text="Código" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="1" Text="Servicio" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="2" Text="Mercancía" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="3" Text="Cantidad" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="4" Text="Peso" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="5" Text="Valor declarado" Foreground="#9ca3af" FontWeight="Bold" FontSize="12"/>
+                                <TextBlock Grid.Column="6" Text="Estado" Foreground="#9ca3af" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="7" Text="Acciones" Foreground="#9ca3af" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                            </Grid>
+
+                            <Rectangle Height="1" Fill="#374151"/>
+
+                            <StackPanel Spacing="10">
+                                <Grid ColumnDefinitions="100, 100, 160, 90, 100, 150, 120, *">
+                                    <TextBlock Grid.Column="0" Text="C-001" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="F-001" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="Cajas de Loción" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="20" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="300 kg" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="C$293,302.04" Foreground="White" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="6" Background="#1d4ed8" CornerRadius="12" Padding="10,3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="En tránsito" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="7" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="[Ver]" Foreground="#3b82f6" Cursor="Hand"/>
+                                        <TextBlock Text="[Editar]" Foreground="#3b82f6" Cursor="Hand"/>
+                                        <TextBlock Text="[Cancelar]" Foreground="#ef4444" Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="100, 100, 160, 90, 100, 150, 120, *">
+                                    <TextBlock Grid.Column="0" Text="C-002" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="F-002" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="Electrodomésticos" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="5" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="200 kg" Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="C$102,938.99" Foreground="White" VerticalAlignment="Center"/>
+                                    <Border Grid.Column="6" Background="#d97706" CornerRadius="12" Padding="10,3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="Pendiente" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="7" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock Text="[Ver]" Foreground="#3b82f6" Cursor="Hand"/>
+                                        <TextBlock Text="[Editar]" Foreground="#3b82f6" Cursor="Hand"/>
+                                        <TextBlock Text="[Cancelar]" Foreground="#ef4444" Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </ScrollViewer>
+
+</UserControl>

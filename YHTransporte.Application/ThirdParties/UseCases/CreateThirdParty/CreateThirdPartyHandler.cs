@@ -16,7 +16,8 @@ public sealed class CreateThirdPartyHandler(IThirdPartyRepository repository, Cr
     private readonly CreateThirdPartyValidator _validator = validator ??
     throw new ArgumentNullException(nameof(validator));
 
-    public async Task<OneOf<Success, AlreadyExists, ValidationError, RepeatedValue>> Handle(params CreateThirdPartyCommand[] commands)
+    public async Task<OneOf<Success, AlreadyExists<IEnumerable<string>>,
+    ValidationError, RepeatedValue<IEnumerable<string>>>> Handle(params CreateThirdPartyCommand[] commands)
     {
         List<ThirdParty> thirdParties = [];
 
@@ -48,4 +49,6 @@ public sealed class CreateThirdPartyHandler(IThirdPartyRepository repository, Cr
 
         return new Success();
     }
+
+    
 }

@@ -2,26 +2,38 @@ CREATE TABLE [dbo].[ThirdParties] (
     [Id]         INT           IDENTITY (1, 1) NOT NULL,
     [Name]       NVARCHAR (120) NOT NULL UNIQUE,
     [IsSupplier] BIT           NOT NULL,
-    [IsCustomer] BIT           NOT NULL
+    [IsCustomer] BIT           NOT NULL,
     CONSTRAINT [PK_ThirdParties] PRIMARY KEY CLUSTERED ([Id] ASC)   
 );
 
+
+CREATE TABLE [dbo].[ThirdPartiesAddresses] (
+    [IdThirdParty] INT NOT NULL,
+    [IdAddress]    INT NOT NULL,
+    CONSTRAINT [PK_ThirdPartiesAddresses] PRIMARY KEY CLUSTERED ([IdThirdParty] ASC, [IdAddress] ASC),
+    CONSTRAINT [FK_ThirdPartiesAddresses_Addresses] FOREIGN KEY ([IdAddress]) REFERENCES [dbo].[Addresses] ([Id]),
+    CONSTRAINT [FK_ThirdPartiesAddresses_ThirdParties] FOREIGN KEY ([IdThirdParty]) REFERENCES [dbo].[ThirdParties] ([Id])
+);
 
 CREATE TABLE [dbo].[Addresses] (
     [Id]            INT            IDENTITY (1, 1) NOT NULL,
     [Details]       NVARCHAR (125) NOT NULL,
     [IdMunicipality ] INT  NOT NULL,
 --  [Dept]          NVARCHAR (50)  NOT NULL, (DROPPED)
-    [IdThirdParty] INT NOT NULL,
+--  [IdThirdParty] INT NOT NULL,
     CONSTRAINT [PK_Addresses] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Addresses_IdMunicipality] FOREIGN KEY ([IdMunicipality])
     REFERENCES [dbo].[Municipality] ([Id]),
-    CONSTRAINT [FK_Addresses_ThirdParties] FOREIGN KEY ([IdThirdParty])
-    REFERENCES [dbo].[ThirdParties] ([Id])
+--  CONSTRAINT [FK_Addresses_ThirdParties] FOREIGN KEY ([IdThirdParty])
+--  REFERENCES [dbo].[ThirdParties] ([Id])
 );
+
 
 --Changes:
 /*
+*   ALTER TABLE [Addresses] DROP CONSTRAINT [FK_Addresses_ThirdParties]
+*   ALTER TABLE [Addresses] DROP COLUMN [IdThirdParty]
+*
 *   --Now Addresses connects to other table (municipality) and municipality to Departaments
 *   ALTER TABLE Addresses ALTER COLUMN Municipality INT NOT NULL;
 *   EXEC sp_rename 'Addresses.Municipality', 'IdMunicipality', 'COLUMN';   
@@ -54,10 +66,6 @@ CREATE TABLE [dbo].[Municipality] (
     CONSTRAINT [PK_Municipality] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Municipality_Departments] FOREIGN KEY ([IdDept]) REFERENCES [dbo].[Departments] ([Id])
 );
-
-
-
-
 
 
 CREATE TABLE [dbo].[Vehicles] (
@@ -165,7 +173,7 @@ INSERT INTO [dbo].[ShipmentStatuses] VALUES ('Pending');--Other statuses will be
 
 INSERT INTO [dbo].[OrderStatuses] VALUES ('Pending'), ('In Progress'), ('Completed');
 
-DELETE FROM ThirdParties WHERE Id = 1;
+DELETE FROM ThirdParties;
 
 DBCC CHECKIDENT ('ThirdParties', RESEED, 0);   
 SELECT * FROM ThirdParties;    

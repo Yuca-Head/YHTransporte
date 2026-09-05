@@ -32,19 +32,20 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
 
         await connection.ExecuteAsync(command);
     }
-    public Task AddAsync(IEnumerable<ThirdParty> entities, CancellationToken cancellationToken = default)
+    public async Task AddAsync(IEnumerable<ThirdParty> entities, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        foreach(var e in entities)
+            await AddAsync(e, cancellationToken);
     }
-
+    
     public Task<bool> Exists(int key)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<string>> FindExistingNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<string>> FindExistingNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return [];
     }
 
     public Task<ThirdParty?> GetByKeyAsync(int key, CancellationToken cancellationToken = default)

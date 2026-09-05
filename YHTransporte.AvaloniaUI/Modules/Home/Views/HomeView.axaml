@@ -29,8 +29,8 @@
 
 					<Button x:Name="btnInicio" Content="Inicio" Command="{Binding SetDashboardMenuCommand}"/>
 					<Button x:Name="btnClientes" Content="Clientes" Command="{Binding SetCustomerMenuCommand}"/>
-					<Button x:Name="btnServicios" Content="Servicios"/>
-					<Button x:Name="btnCargas" Content="Cargas"/>
+					<Button x:Name="btnServicios" Content="Servicios" Command="{Binding SetShipmentMenuCommand}"/>
+					<Button x:Name="btnCargas" Content="Cargas" Command="{Binding SetCargoMenuCommand}"/>
 					<Button x:Name="btnVehiculos" Content="Vehículos"/>
 					<Button x:Name="btnConductores" Content="Conductores"/>
 					<Button x:Name="btnRutas" Content="Rutas"/>
@@ -38,7 +38,7 @@
 					<Button x:Name="btnReportes" Content="Reportes"/>
 
 				</StackPanel>
-
+				
 				<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8"
 						HorizontalAlignment="Right" VerticalAlignment="Center">
 

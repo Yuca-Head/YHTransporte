@@ -4,9 +4,19 @@
     xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
     x:DataType="vm:CreateCustomerViewModel">
 
-    <Border>
-        <Grid>
-            <TextBox Text="{Binding NewCustomer.Name}"/>
+    <Border Background="#29303A" Padding="15">
+        <Grid Background="Transparent" ColumnDefinitions="*, *" RowDefinitions="*,*,*">
+            <TextBox Grid.ColumnSpan="2" 
+            Text="{Binding NewCustomer.Name}" MaxHeight="40" MaxWidth="200"/>
+
+            <TextBlock  Grid.ColumnSpan="2" TextWrapping="Wrap"
+            Text="{Binding ResultMessage}" x:Name="ResultTextBlock" Grid.Row="1"/>
+            <Button Content="Create Customer" Background="#0056D6" HorizontalAlignment="Center"
+            Command="{Binding CreateCustomerCommand}" Grid.Row="2"/>
+
+            <Button Content="Close" Background="#C52727" HorizontalAlignment="Center"
+            Command="{Binding CloseCommand}" Grid.Row="2" Grid.Column="1"/>
+            
         </Grid>
     </Border>
 

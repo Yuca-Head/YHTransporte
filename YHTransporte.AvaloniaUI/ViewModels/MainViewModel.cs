@@ -21,6 +21,7 @@ public partial class MainViewModel: ViewModelBase
         #endif
     }
 
+    internal MainViewModel(){}
     private readonly LoginViewModel _login;
     private readonly HomeViewModel _home;
     
