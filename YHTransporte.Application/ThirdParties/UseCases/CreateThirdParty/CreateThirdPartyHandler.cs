@@ -8,13 +8,16 @@ using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 
-public sealed class CreateThirdPartyHandler(IThirdPartyRepository repository, CreateThirdPartyValidator validator)
+public sealed class CreateThirdPartyHandler
 {
-    private readonly IThirdPartyRepository _repository = repository ??
-    throw new ArgumentNullException(nameof(repository));
+    public CreateThirdPartyHandler(IThirdPartyRepository repository)
+    {
+        _repository = repository;
+        _validator = new(_repository);
+    }
+    private readonly IThirdPartyRepository _repository;
 
-    private readonly CreateThirdPartyValidator _validator = validator ??
-    throw new ArgumentNullException(nameof(validator));
+    private readonly CreateThirdPartyValidator _validator;
 
     public async Task<OneOf<Success, AlreadyExists<IEnumerable<string>>,
     ValidationError, RepeatedValue<IEnumerable<string>>>> Handle(params CreateThirdPartyCommand[] commands)

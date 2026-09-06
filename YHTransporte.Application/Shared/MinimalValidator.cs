@@ -19,9 +19,9 @@ public static class MinimalValidator
     /// </returns>
     public static OneOf
     <Success, RepeatedValue<IEnumerable<RepeatedValue<T>.RepeatedKeyInformation>>> 
-    ValidateForRepeatedKeys<T>(IEnumerable<T> values)
+    ValidateForRepeatedKeys<T>(IEnumerable<T> values, IEqualityComparer<T>? comparer = null)
     {
-        var repeatedValues = values.GroupBy(x => x)
+        var repeatedValues = values.GroupBy(x => x, comparer)
         .Select(g => new RepeatedValue<T>.RepeatedKeyInformation(g.Key, g.Count()))
         .Where(x => x.Times > 1).ToArray();
 

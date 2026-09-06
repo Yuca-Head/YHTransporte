@@ -1,4 +1,4 @@
 namespace YHTransporte.Application.Shared.Results;
 
-public record AlreadyExists(object? Argument);
+public abstract record AlreadyExists(object? Argument);
 public record AlreadyExists<T>(T Argument);

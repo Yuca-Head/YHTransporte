@@ -66,7 +66,7 @@ public class ThirdPartyUseCasesTests
         names.ForEach(n => _existingNames.Add(n));
 
         CreateThirdPartyValidator validator = new(RepositoryMock.Object);
-        CreateThirdPartyHandler handler = new(RepositoryMock.Object, validator);
+        CreateThirdPartyHandler handler = new(RepositoryMock.Object);
 
         // Act
         var result = await handler.Handle(command);

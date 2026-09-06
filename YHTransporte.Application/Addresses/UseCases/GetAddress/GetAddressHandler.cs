@@ -17,7 +17,7 @@ public sealed class GetAddressHandler(IAddressRepository repository)
     RepeatedValue<IEnumerable<RepeatedValue<int>.RepeatedKeyInformation>>>>
     GetAddressesAsync(IEnumerable<GetAddressCommand> commands)
     {
-        
+
         var commandsValidator = MinimalValidator.ValidateForRepeatedKeys(commands.Select(x => x.Id));
 
         if(commandsValidator.IsT1)
@@ -25,7 +25,7 @@ public sealed class GetAddressHandler(IAddressRepository repository)
     
         var values = (await _repository.GetManyByKeysAsync(
             commands.Select(x => x.Id)))
-            .Select(AddressMapper.AddressToDetailedDto)
+            .Select(AddressMappers.AddressToDetailedDto)
             .ToList();
 
         return values.Count == commands.Count() ?

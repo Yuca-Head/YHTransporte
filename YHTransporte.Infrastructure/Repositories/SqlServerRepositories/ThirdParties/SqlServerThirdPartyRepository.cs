@@ -43,12 +43,22 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
         throw new NotImplementedException();
     }
 
+    public Task<bool> Exists(int key, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<IEnumerable<string>> FindExistingNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
         return [];
     }
 
     public Task<ThirdParty?> GetByKeyAsync(int key, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<ThirdParty>> GetManyByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

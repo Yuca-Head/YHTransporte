@@ -72,7 +72,6 @@ sealed class Program
 
         //UseCases
         services.AddSingleton<CreateThirdPartyHandler>();
-        services.AddSingleton<CreateThirdPartyValidator>();
 
 
         //Repositories

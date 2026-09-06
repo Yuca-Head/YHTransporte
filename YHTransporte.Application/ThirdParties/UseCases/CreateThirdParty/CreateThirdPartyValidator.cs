@@ -5,7 +5,7 @@ using YHTransporte.Application.ThirdParties.Repositories;
 
 namespace YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 
-public class CreateThirdPartyValidator(IThirdPartyRepository repository)
+internal class CreateThirdPartyValidator(IThirdPartyRepository repository)
 {
     private readonly IThirdPartyRepository _repository = repository ?? 
     throw new ArgumentNullException(nameof(repository));
