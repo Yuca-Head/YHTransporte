@@ -28,7 +28,7 @@ public class Order : IEntity<string>
         Customer = customer;
     }
 
-    public string Key {get; init;}
+    public string Key {get; init;} = "-1";
 
     public DateTimeOffset CreatedAt {get;} = DateTimeOffset.UtcNow;
 
@@ -42,7 +42,7 @@ public class Order : IEntity<string>
 
     public OrderStatuses Status {get; private set;} = OrderStatuses.Pending;
 
-    public string Description {get; set;}
+    public string Description {get; set;}  = "";
 
 
     public void AddShipments(params IEnumerable<Shipment> shipments)

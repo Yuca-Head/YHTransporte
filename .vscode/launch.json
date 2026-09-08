@@ -1,0 +1,11 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Avalonia: YHTransporte.AvaloniaUI",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/YHTransporte.AvaloniaUI/YHTransporte.AvaloniaUI.csproj"
+        }
+    ]
+}

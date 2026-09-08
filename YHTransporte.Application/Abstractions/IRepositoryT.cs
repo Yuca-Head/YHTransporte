@@ -8,6 +8,6 @@ public interface IRepository<TKey, TValue> : IRepository where TValue : IEntity<
     Task AddAsync(TValue entity, CancellationToken cancellationToken = default);
     Task AddAsync(IEnumerable<TValue> entities, CancellationToken cancellationToken = default);
     Task<TValue?> GetByKeyAsync(TKey key, CancellationToken cancellationToken = default);
-    Task<IEnumerable<TValue>?> TakeManyAsync(int take, CancellationToken cancellationToken = default);
-    Task<bool> Exists(TKey key);
+    Task<IEnumerable<TValue>> GetManyByKeysAsync(IEnumerable<TKey> keys, CancellationToken cancellationToken = default);
+    Task<bool> Exists(TKey key, CancellationToken cancellationToken = default);
 }
