@@ -1,0 +1,250 @@
+<Styles xmlns="https://github.com/avaloniaui">
+
+
+
+<!--ComboBox Common-->
+
+
+<!--Por fuera-->
+
+<Style Selector="ComboBox.common">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Foreground" Value="Black"/>
+</Style>
+
+<Style Selector="ComboBox.common:pointerover /template/ Border">
+    <Setter Property="Opacity" Value="0.8"/>
+    <Setter Property="Background" Value="#8c52ff"/>
+</Style>
+
+<Style Selector="ComboBox.common:focus:not(:pointerover) Border">
+    <Setter Property="Background" Value="#8147F4"/>
+</Style>
+
+
+<!--/Por fuera-->
+
+<!--Items dentro del ComboBox-->
+
+
+<Style Selector="ComboBox.common ComboBoxItem">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="Black"/>
+</Style>
+
+<!--Cuando el item es seleccionado-->
+<Style Selector="ComboBox.common ComboBoxItem:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="#7436F1"/>
+</Style>
+
+<!--Cuando el ratón está encima del item-->
+<Style Selector="ComboBox.common ComboBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#7436F1"/>
+    <Setter Property="Opacity" Value="0.5"/>
+</Style>
+
+<!--Cuando el ratón está encima del item seleccionado-->
+<Style Selector="ComboBox.common ComboBoxItem:pointerover:selected /template/ ContentPresenter">
+    <Setter Property="Opacity" Value=".8"/>
+</Style>
+
+<!--Como se ve el fondo del interior de la lista (detrás de los items)-->
+<Style Selector="ComboBox.common /template/ Popup Border">
+    <Setter Property="Background" Value="White"/>
+</Style>
+
+
+<!--/Items dentro del ComboBox-->
+
+
+
+
+<!--/ComboBox Common-->
+
+
+
+<!--DatePicker Common-->
+
+
+<!--Por fuera-->
+
+
+
+<Style Selector="DatePicker.common">
+    <Setter Property="BorderThickness" Value="2"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+</Style>
+
+<Style Selector="DatePicker.common:pointerover">
+    <Setter Property="Opacity" Value="0.8"/>
+    <Setter Property="Background" Value="#8c52ff"/>
+</Style>
+
+<Style Selector="DatePicker.common:pressed">
+    <Setter Property="Opacity" Value="0.8"/>
+    <Setter Property="Background" Value="#7436F1"/>
+</Style>
+<!--Warning ☣️-->
+<!--PART_ButtonContentGrid-->
+<Style Selector="DatePicker.common Grid#PART_ButtonContentGrid">    
+    <Setter Property="Background" Value="White"/>
+</Style>
+
+<!--Warning ☣️-->
+<Style Selector="DatePicker.common Grid#PART_ButtonContentGrid TextBlock">    
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="Black"/>
+</Style>
+
+<!--Warning ☣️-->
+<Style Selector="DatePicker.common Grid#PART_ButtonContentGrid Rectangle">    
+    <Setter Property="Fill" Value="Black"/>
+</Style>
+<!--/Por fuera-->
+
+<!--Items dentro del DatePicker-->
+
+
+<Style Selector="DatePicker.common /template/ DatePickerPresenter">
+    <Setter Property="Foreground" Value="Black"/>   
+    <Setter Property="Background" Value="Transparent"/>
+</Style>
+    
+<Style Selector="DatePicker.common DatePickerPresenter ListBoxItem">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+</Style>
+
+<Style Selector="DatePicker.common DatePickerPresenter ListBoxItem:pointerover ContentPresenter">
+    <Setter Property="Opacity" Value="0.5"/>
+    <Setter Property="Background" Value="#7436F1"/>
+    <Setter Property="Foreground" Value="#233321"/>
+</Style>
+
+<!--Diseño de las flechas-->
+<Style Selector="DatePicker.common /template/ DatePickerPresenter RepeatButton /template/ ContentPresenter">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1.5"/>
+    
+</Style>
+
+<!--Para hacer las flechas visibles siempre-->
+<Style Selector="DatePicker.common /template/ DatePickerPresenter RepeatButton">
+    <Setter Property="IsVisible" Value="True"/>
+</Style>
+
+
+<Style Selector="DatePicker.common /template/ DatePickerPresenter RepeatButton:pointerover ContentPresenter">
+    <Setter Property="Background" Value="Lightgray"/>
+</Style>
+<!--/Diseño de flechas-->
+
+<!--Diseño botones inferiores-->
+<!--PART_AcceptButton / PART_DismissButton-->
+<!--Warning ☣️-->
+<Style Selector="DatePicker.common /template/ DatePickerPresenter Button#PART_AcceptButton  ContentPresenter">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Content" Value="✔️"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="2,0,0,2"/>
+</Style>
+
+<Style Selector="DatePicker.common /template/ DatePickerPresenter ContentPresenter Path">
+    <Setter Property="IsVisible" Value="false"/>
+</Style>
+
+<!--Warning ☣️-->
+<Style Selector="DatePicker.common /template/ DatePickerPresenter Button#PART_DismissButton /template/ ContentPresenter">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Content" Value="✖️"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="0,0,2,2"/>
+</Style>
+
+<Style Selector="DatePicker.common /template/ DatePickerPresenter Button:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#E1D7F5"/>
+    <Setter Property="Opacity" Value="0.8"/>
+</Style>
+
+
+<Style Selector="DatePicker.common /template/ DatePickerPresenter Button:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#9E7DE0"/>
+</Style>
+<!--/Diseño botones inferiores-->
+
+<!--Warning ☣️-->
+<!--Cuando el item es seleccionado-->
+<Style Selector="DatePicker.common /template/ DatePickerPresenter Rectangle#HighlightRect">
+    <Setter Property="Fill" Value="#6D2DEE"/>   
+</Style>
+
+<!--Cuando el ratón está encima del item-->
+<Style Selector="DatePicker.common DatePickerPresenter ListBoxItem:pointerover">
+    <Setter Property="Background" Value="#7436F1"/>
+    <Setter Property="Foreground" Value="#233321"/>
+    <Setter Property="Opacity" Value="0.5"/>
+</Style>
+
+<!--Cuando el ratón está encima del item seleccionado-->
+<Style Selector="DatePicker.common DatePickerPresenter:pointerover:selected Rectangle">
+    <Setter Property="Opacity" Value=".8"/>
+</Style>
+
+<!--Como se ve el fondo del interior de la lista (detrás de los items)-->
+<Style Selector="DatePicker.common /template/ Popup Border">
+    <Setter Property="Background" Value="White"/>
+</Style>
+
+
+<!--/Items dentro del DatePicker-->
+
+<!--/DatePicker Common-->
+
+
+
+<!--ListBox Common-->
+<Style Selector="ListBox.common ListBoxItem /template/ ContentPresenter">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+</Style>
+
+<Style Selector="ListBox.common ListBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#8c52ff"/>
+</Style>
+
+<!--/ListBox Common-->
+
+<!--ProductList-->
+    <Style Selector="Grid.productList TextBlock">
+        <Setter Property="Foreground" Value="black"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="MaxWidth" Value="160"/>
+    </Style>
+<!--/ProductList-->
+
+<!--DataGrid Common-->
+
+<!-- Temporary hidden (or maybe not)
+<Style Selector="DataGrid.common DataGridColumnHeadersPresenter">
+    <Setter Property="Background" Value="#b7b5b4"/>
+</Style>
+<Style Selector="DataGrid.common DataGridColumnHeadersPresenter DataGridColumnHeader">
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Background" Value="Transparent"/>
+</Style>
+<Style Selector="DataGrid.common DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="#9460FC"/>   
+</Style>
+<Style Selector="DataGrid.common DataGridRow">
+    <Setter Property="Foreground" Value="#1D1D1D"/>   
+</Style>
+-->
+<!--/DataGrid Common-->
+</Styles>

@@ -9,10 +9,12 @@ using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Customer.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
+using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
 using YHTransporte.AvaloniaUI.ViewModels;
 using YHTransporte.AvaloniaUI.Views;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
@@ -66,6 +68,8 @@ sealed class Program
         services.AddTransient<CargoMenuViewModel>();
         services.AddTransient<ShipmentMenuViewModel>();
         services.AddTransient<CreateCustomerViewModel>();
+        services.AddTransient<DriverMenuViewModel>();
+        services.AddTransient<VehicleMenuViewModel>();
 
         //Windows
         services.AddTransient<MainWindow>();

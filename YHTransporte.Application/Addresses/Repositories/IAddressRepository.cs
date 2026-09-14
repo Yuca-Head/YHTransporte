@@ -13,4 +13,7 @@ public interface IAddressRepository : IRepository<int, Address>
     Task<IEnumerable<Department>> GetDepartmentsByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default);
     Task<IEnumerable<Municipality>> GetMunicipalitiesByNameAsync(IEnumerable<string> names, CancellationToken cancellationToken = default);
     Task<IEnumerable<Address>> GetAddressesByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default);
+
+    Task<IEnumerable<Municipality>> GetMunicipalitiesAsync();
+    Task<IEnumerable<Department>> GetDepartmentsAsync();
 }

@@ -1,0 +1,54 @@
+<Styles xmlns="https://github.com/avaloniaui">
+
+    <Design.PreviewWith>
+        <Grid Height="500" Width="600">
+            <TextBox Classes="searchbar" Width="50" Height="50"/>
+        </Grid>
+    </Design.PreviewWith>
+
+    <Style Selector="TextBox.numeric ItemsPresenter#PART_ItemsPresenter">
+        <Setter Property="IsVisible" Value="false"/>    
+    </Style>
+
+    <!--SearchBar También tipo común-->
+    <Style Selector="TextBox.searchbar:focus /template/ Panel Border#PART_BorderElement">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#7436F1"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="TextBox.searchbar:focus /template/ ContentPresenter#PART_WatermarkPresenter">
+        <Setter Property="Foreground" Value="Gray"/>
+    </Style>
+
+    <Style Selector="TextBox.searchbar:focus /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
+
+    <Style Selector="TextBox.searchbar:pointerover /template/ Panel Border#PART_BorderElement">
+        <Setter Property="Background" Value="#9D7B3CF8"/>
+        <Setter Property="BorderBrush" Value="#8247F8"/>
+    </Style>
+
+    <Style Selector="TextBox.searchbar">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="CaretBrush" Value="#9966FF"/>
+        <Setter Property="SelectionBrush" Value="#CB4747E9"/>
+    </Style>
+
+
+
+    <Style Selector="StackPanel.search-container ListBox">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+
+    <Style Selector="StackPanel.search-container:focus-within ListBox">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+
+    <Style Selector="TextBox.searchbar">
+        <Setter Property="PlaceholderForeground" Value="#231D1D"/>
+    </Style>
+    <!--/SearchBar-->
+</Styles>

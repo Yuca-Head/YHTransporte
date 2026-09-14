@@ -20,7 +20,7 @@ public partial class MainViewModel: ViewModelBase
             ViewToHome();
         #endif
     }
-
+    //This is for previsualiserx
     internal MainViewModel(){}
     private readonly LoginViewModel _login;
     private readonly HomeViewModel _home;

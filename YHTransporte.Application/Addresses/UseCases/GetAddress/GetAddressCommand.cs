@@ -4,4 +4,4 @@ namespace YHTransporte.Application.Addresses.UseCases.GetAddress;
 /// General Command To Any kind of address.
 /// Can be use either for addresses, departments and municipalities.
 /// </summary>
-public sealed record GetAddressCommand(int Id);
+public sealed record GetAddressQuery(int Id);

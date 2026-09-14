@@ -5,17 +5,17 @@
     x:DataType="vm:CargoMenuViewModel">
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-        <Border Background="#12161F" Padding="25">
+        <Border Background="{DynamicResource BackgroundBrush}" Padding="25">
             <Grid RowDefinitions="Auto, Auto, Auto">
 
                 <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
 
-                    <TextBox Grid.Column="0" Watermark="Buscar por código de carga, servicio o descripción"
+                    <TextBox Classes="searchbar" Grid.Column="0" Watermark="Buscar por código de carga, servicio o descripción"
                                 Background="White" Foreground="Black" BorderBrush="#374151"
                                 CornerRadius="8" VerticalAlignment="Center" Height="40"/>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
-                        <Button Content="+ Registrar Nueva Carga" Background="#0056D6" Foreground="White"
+                        <Button Content="+ Registrar Nueva Carga" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                                 FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
                         <Button Content="Exportar Lista" Background="#374151" Foreground="White"
                                 FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
@@ -24,7 +24,7 @@
 
                 <Grid Grid.Row="1" Margin="0,0,0,20" ColumnDefinitions="*, 380">
 
-                    <Border Grid.Column="0" Background="#1f2937" CornerRadius="10" Padding="20" Margin="0,0,20,0">
+                    <Border Grid.Column="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel Spacing="12">
                             <TextBlock Text="Información de la Carga" Foreground="White" FontWeight="Bold" FontSize="15"/>
 
@@ -32,7 +32,7 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Código de Carga" Foreground="White" FontSize="11"/>
-                                    <TextBox Watermark="Ej. C-004" Background="White" Foreground="Black"
+                                    <TextBox Classes="searchbar" Watermark="Ej. C-004" Background="White" Foreground="Black"
                                                 CornerRadius="8" Height="35" HorizontalAlignment="Stretch"/>
                                 </StackPanel>
 
@@ -51,29 +51,29 @@
 
                             <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                 <TextBlock Text="Descripción" Foreground="White" FontSize="11"/>
-                                <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
+                                <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
                             </StackPanel>
 
                             <Grid ColumnDefinitions="*, *, *, *">
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Cantidad" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Peso en Kg" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Volumen en m³" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="3" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Valor Declarado(C$)" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
                             </Grid>
 
@@ -94,11 +94,11 @@
 
                             <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                 <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
-                                <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
+                                <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="70"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,0,0">
-                                <Button Content="Guardar Carga" Background="#0056D6" Foreground="White"
+                                <Button Content="Guardar Carga" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                                         FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
                                 <Button Content="Limpiar Campos" Background="#374151" Foreground="White"
                                         FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
@@ -106,7 +106,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1" Background="#1f2937" CornerRadius="10" Padding="20" VerticalAlignment="Top">
+                    <Border Grid.Column="1" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" VerticalAlignment="Top">
                         <StackPanel Spacing="15">
                             <TextBlock Text="Validación de carga" Foreground="White" FontWeight="Bold" FontSize="14"/>
 
@@ -139,7 +139,7 @@
                 </Grid>
 
                 <Grid Grid.Row="2">
-                    <Border Background="#1f2937" CornerRadius="10" Padding="20">
+                    <Border Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20">
                         <StackPanel Spacing="15">
                             <TextBlock Text="Cargas Registradas" Foreground="White" FontWeight="Bold" FontSize="15"/>
 

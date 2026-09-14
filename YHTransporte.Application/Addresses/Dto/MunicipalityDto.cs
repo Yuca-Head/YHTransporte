@@ -1,3 +1,3 @@
 namespace YHTransporte.Application.Addresses.Dto;
 
-public sealed record MunicipalityDto(int Id, DepartmentDto Department);
+public sealed record MunicipalityDto(int Id, string Name, DepartmentDto Department);

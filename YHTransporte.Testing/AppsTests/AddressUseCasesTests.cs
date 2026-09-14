@@ -5,7 +5,9 @@ using YHTransporte.Application.Addresses.Dto;
 using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Addresses.Results;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
+using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.Shared.Results;
+using YHTransporte.AvaloniaUI.Shared.Contexts;
 using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Testing.AppsTests;
@@ -80,6 +82,37 @@ public class CreateAddressHandlerTests
                 It.IsAny<IEnumerable<Address>>(),
                 It.IsAny<CancellationToken>()),
             Times.Never);
+    }
+
+    [Fact]
+    public async Task AddressContextWorks()
+    {
+        // Given
+        var commands = new[]
+        {
+            new Address("Casa", new("Managua", new("Managua"))){Key = 1},
+            new Address("Oficina", new("Managua", new("Managua"))){Key = 2}
+        };
+
+        _repository
+            .Setup(r => r.GetByKeysAsync(It.IsAny<IEnumerable<int>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(
+                (IEnumerable<int> ids, CancellationToken _) => [commands.FirstOrDefault(x => x.Key == ids.First())]
+            );
+        AddressContext context = new(_handler, new(_repository.Object));
+    
+        // When
+        var result = await context.GetAddressesByKeysAsync([new (2)]);
+    
+        // Then
+        Assert.True(result.IsT0);
+        result.AsT0.Value.ToList().ForEach(x => _output.WriteLine(x.Name));
+
+        foreach(var x in context.Addresses)
+            _output.WriteLine(x.Name);
+        //Assert.Null(result.AsT0.Value);
+        //Assert.Equal(2, result.AsT0.Value.First().Id);
+
     }
 
 

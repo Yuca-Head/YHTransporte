@@ -53,7 +53,12 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
         return [];
     }
 
-    public Task<ThirdParty?> GetByKeyAsync(int key, CancellationToken cancellationToken = default)
+    public Task<IEnumerable<ThirdParty>> GetByKeysAsync(IEnumerable<int> key, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<ThirdParty>> GetEverythingAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

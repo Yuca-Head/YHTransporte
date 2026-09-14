@@ -6,12 +6,12 @@
 
     
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-        <Border Background="#12161f" Padding="25">
+        <Border Background="{DynamicResource BackgroundBrush}" Padding="25">
             <Grid RowDefinitions="Auto, Auto, Auto">
 
                 <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
 
-                    <TextBox Grid.Column="0"
+                    <TextBox Classes="searchbar" Grid.Column="0"
                                 PlaceholderText="Buscar por número de servicio, cliente, origen o destino "
                                 Background="White" Foreground="Black" BorderBrush="#374151"
                                 CornerRadius="8" VerticalAlignment="Center" Height="40"/>
@@ -26,7 +26,7 @@
 
                 <Grid Grid.Row="1" Margin="0,0,0,20" ColumnDefinitions="*, 380">
 
-                    <Border Grid.Column="0" Background="#1f2937" CornerRadius="10" Padding="20" Margin="0,0,20,0">
+                    <Border Grid.Column="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel Spacing="12">
                             <TextBlock Text="Información del Servicio" Foreground="White" FontWeight="Bold" FontSize="15"/>
 
@@ -34,7 +34,7 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Número de Servicio" Foreground="White" FontSize="11"/>
-                                    <TextBox PlaceholderText="Ej. F-001" Background="White" Foreground="Black" CornerRadius="8"
+                                    <TextBox Classes="searchbar" PlaceholderText="Ej. F-001" Background="White" Foreground="Black" CornerRadius="8"
                                                 Height="35"/>
                                 </StackPanel>
 
@@ -49,13 +49,13 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Origen" Foreground="White" FontSize="11"/>
-                                    <TextBox PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
+                                    <TextBox Classes="searchbar" PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
                                                 CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Spacing="4">
                                     <TextBlock Text="Destino" Foreground="White" FontSize="11"/>
-                                    <TextBox PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
+                                    <TextBox Classes="searchbar" PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
                                                 CornerRadius="8" Height="35"/>
                                 </StackPanel>
                             </Grid>
@@ -70,17 +70,17 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
                                     <TextBlock Text="Fecha de Solicitud" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,8,0">
                                     <TextBlock Text="Fecha Programada de Salida" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="2" Spacing="4">
                                     <TextBlock Text="Fecha Estimada de Entrega" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
                             </Grid>
 
@@ -88,19 +88,19 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Tipo de Servicio" Foreground="White" FontSize="11"/>
-                                    <TextBox PlaceholderText="Normal/Urgente" Background="White" Foreground="Black"
+                                    <TextBox Classes="searchbar" PlaceholderText="Normal/Urgente" Background="White" Foreground="Black"
                                                 CornerRadius="8" Height="35"/>
                                 </StackPanel>
 
                                 <StackPanel Grid.Column="1" Spacing="4">
                                     <TextBlock Text="Estado" Foreground="White" FontSize="11"/>
-                                    <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
                                 </StackPanel>
                             </Grid>
 
                             <StackPanel Spacing="4">
                                 <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
-                                <TextBox Background="White" Foreground="Black" CornerRadius="8" Height="50"/>
+                                <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="50"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,0,0">
@@ -112,7 +112,7 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1" Background="#1f2937" CornerRadius="10" Padding="20" VerticalAlignment="Top">
+                    <Border Grid.Column="1" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" VerticalAlignment="Top">
                         <StackPanel Spacing="12">
                             <TextBlock Text="Resumen del Servicio" Foreground="White" FontWeight="Bold" FontSize="15"/>
 
@@ -156,11 +156,11 @@
                     </Border>
                 </Grid>
 
-                <Border Grid.Row="2" Background="#1f2937" CornerRadius="10" Padding="15">
+                <Border Grid.Row="2" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="15">
                     <StackPanel Spacing="10">
                         <TextBlock Text="Servicios Registrados" Foreground="White" FontWeight="Bold" FontSize="15"/>
 
-                        <Grid Background="#12161f" Height="35" ColumnDefinitions="100, 120, 100,
+                        <Grid Background="{DynamicResource BackgroundBrush}" Height="35" ColumnDefinitions="100, 120, 100,
                         100, 80, 90, 110, 110, 100, *">
 
                             <TextBlock Grid.Column="0" Text="N° de Servicio" Foreground="White" FontWeight="Bold"

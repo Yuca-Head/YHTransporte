@@ -4,7 +4,7 @@
     xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels"
     x:DataType="vm:DashboardMenuViewModel">
 
-    <Border Grid.Row="1" Background="#12161f" Padding="20">
+    <Border Grid.Row="1" Background="{DynamicResource BackgroundColor}" Padding="20">
         <Grid RowDefinitions="110, *">
 
             <UniformGrid Grid.Row="0" Columns="6" Margin="0,0,0,15">
@@ -13,7 +13,7 @@
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Text="Servicios Pendientes" Foreground="Black" FontSize="11"
                                     HorizontalAlignment="Center" FontWeight="SemiBold"/>
-                        <TextBlock x:Name="txtServiciosPendientes" Text="0" Foreground="#0056D6" FontSize="22"
+                        <TextBlock x:Name="txtServiciosPendientes" Text="0" Foreground="{DynamicResource PrimaryButtonBrush}" FontSize="22"
                                     FontWeight="Bold" HorizontalAlignment="Center"/>
                         <TextBlock Text="Por Asignar" Foreground="Gray" FontSize="10" HorizontalAlignment="Center"
                                     FontWeight="SemiBold"/>
@@ -77,7 +77,7 @@
             </UniformGrid>
 
             <Grid Grid.Row="1">
-                <Border Background="#1d2531" >
+                <Border Background="{DynamicResource PrimaryBrush}" >
                     
                 </Border>
             </Grid>

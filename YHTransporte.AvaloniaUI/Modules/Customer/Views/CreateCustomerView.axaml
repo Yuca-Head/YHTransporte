@@ -4,20 +4,54 @@
     xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
     x:DataType="vm:CreateCustomerViewModel">
 
-    <Border Background="#29303A" Padding="15">
-        <Grid Background="Transparent" ColumnDefinitions="*, *" RowDefinitions="*,*,*">
-            <TextBox Grid.ColumnSpan="2" 
-            Text="{Binding NewCustomer.Name}" MaxHeight="40" MaxWidth="200"/>
+    
+    <Border Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1"  Height="500"
+    CornerRadius="10" Padding="24" Width="380">
+        <StackPanel Spacing="16">
+            <TextBlock Text="Registrar Nuevo Cliente" Foreground="White" FontSize="18" FontWeight="Bold"/>
 
-            <TextBlock  Grid.ColumnSpan="2" TextWrapping="Wrap"
-            Text="{Binding ResultMessage}" x:Name="ResultTextBlock" Grid.Row="1"/>
-            <Button Content="Create Customer" Background="#0056D6" HorizontalAlignment="Center"
-            Command="{Binding CreateCustomerCommand}" Grid.Row="2"/>
+            <StackPanel Spacing="6">
+                <TextBlock Text="Nombre / Razón Social *" Foreground="#CCD6F6" FontSize="16"/>
+                <TextBox Classes="searchbar" PlaceholderText="Ej. Juan Francisco" Text="{Binding NewCustomer.Name}" Background="White" Foreground="White"
+                BorderBrush="{DynamicResource PrimaryButtonBrush}" CornerRadius="6"
+                Height="38" VerticalContentAlignment="Center"/>
+            </StackPanel>
 
-            <Button Content="Close" Background="#C52727" HorizontalAlignment="Center"
-            Command="{Binding CloseCommand}" Grid.Row="2" Grid.Column="1"/>
-            
-        </Grid>
+            <StackPanel Spacing="6">
+                <TextBlock Text="Departamento *" Foreground="#CCD6F6" FontSize="14"/>
+                <ComboBox Background="White" Foreground="Black" BorderBrush="{DynamicResource PrimaryButtonBrush}"
+                CornerRadius="6" Height="38" HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Municipio *" Foreground="#CCD6F6" FontSize="14"/>
+                <ComboBox Background="White" Foreground="Black" BorderBrush="{DynamicResource PrimaryButtonBrush}"
+                CornerRadius="6" Height="38" HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Dirección *" Foreground="#CCD6F6" FontSize="14"/>
+                <TextBox Classes="searchbar"  PlaceholderText="Ej. Esquina Linda Vista 1c al sur" Background="White" Foreground="Black"
+                BorderBrush="{DynamicResource PrimaryButtonBrush}" CornerRadius="6"
+                Height="45" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top"/>
+            </StackPanel>
+
+            <TextBlock  Grid.ColumnSpan="2" TextWrapping="Wrap" x:Name="ResultTextBlock"
+            Text="{Binding ResultMessage}" Grid.Row="1"/>
+
+            <StackPanel Spacing="6">
+                <Grid ColumnDefinitions="*, 12, *">
+                    <Button Grid.Column="0" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="#CCD6F6" FontWeight="Bold"
+                    CornerRadius="6" Height="36" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
+
+                    <Button Grid.Column="2" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White" FontWeight="Bold"
+                    CornerRadius="6" Height="36" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" Command="{Binding CreateCustomerCommand}"/>
+                </Grid>
+            </StackPanel>
+                
+        </StackPanel>
     </Border>
 
 

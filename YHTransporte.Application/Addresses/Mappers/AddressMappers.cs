@@ -7,10 +7,10 @@ namespace YHTransporte.Application.Addresses.Mappers;
 internal static class AddressMappers
 {
     public static AddressDetailsDto AddressToDetailedDto(Address address)
-    => new(address.Key, MunicipalityToDto(address.Municipality));
+    => new(address.Key, address.Details, MunicipalityToDto(address.Municipality));
 
     public static MunicipalityDto MunicipalityToDto(Municipality municipality)
-    => new(municipality.Key, DepartmentToDto(municipality.Department));
+    => new(municipality.Key, municipality.Name, DepartmentToDto(municipality.Department));
 
     public static DepartmentDto DepartmentToDto(Department department)
     => new(department.Key, department.Name);
