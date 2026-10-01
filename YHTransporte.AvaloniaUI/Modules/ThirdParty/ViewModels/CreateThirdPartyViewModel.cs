@@ -7,19 +7,22 @@ using System.Threading.Tasks;
 using System.Timers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using OneOf.Types;
 using YHTransporte.Application.Shared.Results;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
-using YHTransporte.AvaloniaUI.Modules.Customer.Models;
+using YHTransporte.AvaloniaUI.Modules.ThirdParty.Models;
 using YHTransporte.AvaloniaUI.Shared;
+using YHTransporte.AvaloniaUI.Shared.Messaging;
 using YHTransporte.AvaloniaUI.ViewModels;
+using YHTransporte.Core.Entities;
 
-namespace YHTransporte.AvaloniaUI.Modules.Customer.ViewModels;
+namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 
-public partial class CreateCustomerViewModel : ViewModelBase
+public partial class CreateThirdPartyViewModel : ViewModelBase
 {
 
-    public CreateCustomerViewModel(CreateThirdPartyHandler useCase)
+    public CreateThirdPartyViewModel(CreateThirdPartyHandler useCase)
     {
         _useCase = useCase;
     }
@@ -29,7 +32,7 @@ public partial class CreateCustomerViewModel : ViewModelBase
     public partial Queue<string> ErrorMessages {get; set;} = [];
 
     [ObservableProperty]
-    public partial CreateCustomerModel NewCustomer{ get; set; } = new("");
+    public partial CreateThirdPartyModel NewThirdParty{ get; set; } = new("");
     private readonly CreateThirdPartyHandler _useCase;
     public event EventHandler? CustomerCreated;
 
@@ -53,7 +56,7 @@ public partial class CreateCustomerViewModel : ViewModelBase
     [RelayCommand]
     private async Task CreateCustomer()
     {
-        var result = await _useCase.Handle(new CreateThirdPartyCommand(NewCustomer.Name, true));
+        var result = await _useCase.Handle(new CreateThirdPartyCommand(NewThirdParty.Name, true));
 
         result.Switch
         (
@@ -61,6 +64,7 @@ public partial class CreateCustomerViewModel : ViewModelBase
             {
                 ResultMessage = "Cliente Creado con éxito";
                 CustomerCreated?.Invoke(HasError, EventArgs.Empty);
+                WeakReferenceMessenger.Default.Send<ThirdPartyUpdateMessage>(new(null, Shared.Enums.ContextChangeType.Creation));
                 Clear();
             },
 

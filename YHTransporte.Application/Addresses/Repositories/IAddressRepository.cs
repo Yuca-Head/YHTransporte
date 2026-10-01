@@ -16,4 +16,6 @@ public interface IAddressRepository : IRepository<int, Address>
 
     Task<IEnumerable<Municipality>> GetMunicipalitiesAsync();
     Task<IEnumerable<Department>> GetDepartmentsAsync();
+    Task<IEnumerable<(int ThirdPartyId, IEnumerable<Address> Addresses)>>
+    GetAddressesFromThirdParties(IEnumerable<int> thirdPartyIds, CancellationToken cancellationToken = default);
 }

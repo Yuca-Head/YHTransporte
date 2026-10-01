@@ -5,6 +5,7 @@ using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Core.Entities;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties.Dtos;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties.Mappers;
 
 namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
@@ -33,10 +34,11 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
         await connection.ExecuteAsync(command);
     }
     public async Task AddAsync(IEnumerable<ThirdParty> entities, CancellationToken cancellationToken = default)
+    => await Task.WhenAll(entities.Select(async x =>
     {
-        foreach(var e in entities)
-            await AddAsync(e, cancellationToken);
-    }
+        await AddAsync(x, cancellationToken);
+    }));
+    
     
     public Task<bool> Exists(int key)
     {
@@ -53,14 +55,44 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
         return [];
     }
 
-    public Task<IEnumerable<ThirdParty>> GetByKeysAsync(IEnumerable<int> key, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ThirdParty>> GetByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var connection = _factory.Create();
+
+        int[] cuteKeys = [.. keys];
+
+        if(/*there´s no*/ cuteKeys.Length == 0)
+            return [];
+
+        var command = new CommandDefinition(
+            """
+            SELECT
+                Id,
+                Name,
+                IsSupplier,
+                IsCustomer
+            FROM ThirdParties
+            WHERE Id IN @Keys;
+            """,
+            new { Keys = cuteKeys },
+            cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<ThirdPartySqlDto>(command);
+
+        return rows.Select(ThirdPartySqlMapper.ToEntity);
     }
 
-    public Task<IEnumerable<ThirdParty>> GetEverythingAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ThirdParty>> GetEverythingAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var connection = _factory.Create();
+
+        var thirdParties = await connection.QueryAsync<ThirdPartySqlDto>
+        (
+            "Select * from ThirdParties",
+            cancellationToken
+        );
+
+        return thirdParties.Select(ThirdPartySqlMapper.ToEntity);
     }
 
     public Task<IEnumerable<ThirdParty>> GetManyByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)

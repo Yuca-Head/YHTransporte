@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using YHTransporte.AvaloniaUI.Resources;
 
 namespace YHTransporte.AvaloniaUI.Modules.Home.Views;
 
@@ -27,9 +28,11 @@ public partial class HomeView : UserControl
 
     private void OnButtonClick(object? sender, RoutedEventArgs e)
     {
+        ControlsHelper.MarkSelectedButton(e.Source, ButtonsPanel.Children, _selectedColor);
+        /*
         if(e.Source is not Button a || string.IsNullOrWhiteSpace(a.Name))
             return;
         
-        MarkActive(a.Name);
+        MarkActive(a.Name);*/
     }
 }

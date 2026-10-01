@@ -1,15 +1,22 @@
+using YHTransporte.Application.Abstractions;
+using YHTransporte.Application.Addresses.AddressMappers;
 using YHTransporte.Application.ThirdParties.Dtos;
 using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.ThirdParties.Mappers;
 
-public static class ThirdPartyMappers
+public sealed class ThirdPartyDatilsMapper : IMapper<ThirdPartyDetailsDto, ThirdParty>
 {
-    public static ThirdParty ToThirdParty(ThirdPartyDetailsDto dto)
+
+
+    public static ThirdPartyDetailsDto ToValue(ThirdParty entity)
+    => new(entity.Name, entity.Key, entity.Customer, entity.Supplier);
+
+    public static ThirdParty ToEntity(ThirdPartyDetailsDto dto)
     {
         ThirdParty result = new(dto.Name){ Key = dto.Key};
 
-        result.AddAddresses(dto.Addresses ?? []);
+        result.AddAddresses(dto.Addresses.Select(AddressDetailsMapper.ToEntity));
         
         if(dto.Customer is not null)
             result.BecomeCustomer();
@@ -19,10 +26,4 @@ public static class ThirdPartyMappers
         return result;
         
     }
-
-    public static ThirdPartyDetailsDto ToDetailedDto(ThirdParty entity)
-    => new(entity.Name, entity.Addresses, entity.Key, entity.Customer, entity.Supplier);
-
-    public static ThirdPartyDto ToDto(ThirdParty entity)
-    => new(entity.Key, entity.Name);
 }

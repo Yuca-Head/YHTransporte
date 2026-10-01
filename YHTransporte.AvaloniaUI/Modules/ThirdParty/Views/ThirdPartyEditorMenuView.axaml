@@ -1,22 +1,27 @@
 <UserControl xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="YHTransporte.AvaloniaUI.Modules.Customer.Views.CustomerMenuView"
-    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
-    x:DataType="vm:CustomerMenuViewModel">
+    x:Class="YHTransporte.AvaloniaUI.Modules.ThirdParty.Views.ThirdPartyEditorMenuView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels"
+    x:DataType="vm:ThirdPartyEditorMenuViewModel">
     
-    <ScrollViewer>
+    <ScrollViewer Background="Aqua">
         <Grid>
             <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" Padding="25">
                 <Grid RowDefinitions="Auto, *, Auto">
 
-                    <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
+                    <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="Auto, 380, *, Auto">
+                        
+                        <Button Content="Regresar" Foreground="White" FontWeight="Bold" CornerRadius="8" 
+                        Padding="15,10" FontSize="14"  Margin="0,0,20,0" Classes="warning" Command="{Binding ExitCommand}" />
 
-                        <TextBox Classes="searchbar" Grid.Column="0" PlaceholderText="Buscar por nombre, cédula o código"
+                        <TextBox Classes="searchbar" Grid.Column="1" PlaceholderText="Buscar por nombre, cédula o código"
                                     Background="White" Foreground="Black" BorderBrush="#374151"
                                     CornerRadius="8" VerticalContentAlignment="Center" Height="40"/>
 
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="10">
                             <Button Content="+ Registrar Nuevo Cliente" Background="{DynamicResource PrimaryButtonBrush}" Command="{Binding OpenCustomerPopUpCommand}" Foreground="White"
+                                    FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                            <Button Content="Convertir" Background="{DynamicResource PrimaryButtonBrush}" Command="{Binding OpenConvertPopupCommand}" Foreground="White"
                                     FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
                             <Button Content="Modificar" Background="{DynamicResource TopBarBrush}" Foreground="White"
                             FontWeight="Bold" CornerRadius="8" Padding="15,10"/>    
@@ -34,8 +39,8 @@
                                         <Ellipse Grid.Column="0" Width="60" Height="60" Fill="#374151" Margin="0,0,15,0"/>
 
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
-                                            <TextBlock Text="Código de Cliente" Foreground="Gray" FontSize="11"/>
-                                            <TextBlock Text="Nombre / Razón Social" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                                            <TextBlock Text="{Binding ThirdParty.Key, StringFormat='Id: {0}'}" Foreground="Gray" FontSize="11"/>
+                                            <TextBlock Text="{Binding ThirdParty.Name}" Foreground="White" FontWeight="Bold" FontSize="15"/>
                                             <TextBlock Text="Cédula" Foreground="Gray" FontSize="11"/>
                                         </StackPanel>
                                     </Grid>
@@ -173,8 +178,17 @@
                     </StackPanel>
                 </Grid>
             </Border>
+            <!--TODO: TRASPASAR ESTO A LA LISTA
+            <Grid ZIndex="10" IsVisible="{Binding AnyPopupIsOpen}" MaxWidth="20" MaxHeight="50">
+                <Button Grid.Column="0" Content="Agregar Cliente" Background="#181F2C" Foreground="Gray"
+                x:Name="PopupConvertButton" FontWeight="Bold" CornerRadius="8,8,0,0" Padding="14,8" Margin="0,0,4,0"/>
 
-            <UserControl Content="{Binding CreateCustomer}" IsVisible="{Binding CreateCustomer.IsOpen}" ZIndex="100"/>
+                <Button Grid.Column="1" Content="Convertir Proveedor en Cliente" x:Name="PopupConvertButton" 
+                Foreground="White" FontWeight="Bold" CornerRadius="8,8,0,0" Padding="14,8"/>
+
+                <UserControl Content="{Binding CurrentPopup}"/>
+            </Grid>
+            -->
         </Grid>
     </ScrollViewer>
 </UserControl>

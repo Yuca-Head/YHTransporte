@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using Moq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
+using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.ThirdParties.Dtos;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
@@ -13,6 +14,9 @@ namespace YHTransporte.Testing.AppsTests;
 public class ThirdPartyUseCasesTests
 {
     private Mock<IThirdPartyRepository> RepositoryMock
+    {get;} = new();
+
+    private Mock<IAddressRepository> AddressRepository
     {get;} = new();
 
     private ITestOutputHelper _output;
@@ -55,7 +59,7 @@ public class ThirdPartyUseCasesTests
     [InlineData(4,2,1)]
     public async Task GetParties_ReturnsNotFound_WhenAtLeastOne_DoesNotExist(params int[] ids)
     {
-        var handler = new GetThirdPartyHandler(RepositoryMock.Object);
+        var handler = new GetThirdPartyHandler(RepositoryMock.Object, AddressRepository.Object);
 
         var query = ids.Select(x => new GetThirdPartyQuery(x)).ToArray();
 
@@ -77,7 +81,7 @@ public class ThirdPartyUseCasesTests
     public async Task GetParties_ReturnsValues_WhenEverythingIs_AllRight(params int[] ids)
     {
         // Given    
-        var handler = new GetThirdPartyHandler(RepositoryMock.Object);
+        var handler = new GetThirdPartyHandler(RepositoryMock.Object, AddressRepository.Object);
         var query = ids.Select(x => new GetThirdPartyQuery(x)).ToArray();
 
         // When

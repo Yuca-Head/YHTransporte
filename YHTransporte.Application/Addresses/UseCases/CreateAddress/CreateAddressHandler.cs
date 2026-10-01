@@ -6,8 +6,8 @@ using YHTransporte.Application.Shared;
 using YHTransporte.Application.Addresses.Comparers;
 using YHTransporte.Core.Entities;
 using YHTransporte.Application.Addresses.Dto;
-using YHTransporte.Application.Addresses.Mappers;
 using YHTransporte.Application.Addresses.Results;
+using YHTransporte.Application.Addresses.AddressMappers;
 
 namespace YHTransporte.Application.Addresses.UseCases.CreateAddress;
 
@@ -58,7 +58,7 @@ public sealed class CreateAddressHandler(IAddressRepository repository)
 
 
         //Success
-        await _repository.AddAsync(commands.Select(AddressMappers.AddressKeyToAddress));
+        await _repository.AddAsync(commands.Select(AddressKeyMappers.AddressMapper.ToEntity));
 
         return new Success();
     }   
@@ -103,7 +103,7 @@ public sealed class CreateAddressHandler(IAddressRepository repository)
 
 
         //Success
-        await _repository.AddMunicipalitiesAsync(commands.Select(AddressMappers.AddressKeyToMunicipality));
+        await _repository.AddMunicipalitiesAsync(commands.Select(AddressKeyMappers.MunicipalityMapper.ToEntity));
 
         return new Success();
     }   

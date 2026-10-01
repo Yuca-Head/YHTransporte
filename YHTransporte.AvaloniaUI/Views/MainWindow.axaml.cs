@@ -12,6 +12,7 @@ public partial class MainWindow : Window
         WeakReferenceMessenger.Default.Register<CloseApplicationMessage>
         (this, (_,_) => CloseApp());
     }
+    
 
     private void CloseApp()
     => this.Close();

@@ -1,8 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="YHTransporte.AvaloniaUI.Modules.Customer.Views.CreateCustomerView"
-    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Customer.ViewModels"
-    x:DataType="vm:CreateCustomerViewModel">
+    x:Class="YHTransporte.AvaloniaUI.Modules.ThirdParty.Views.CreateCustomerView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels"
+    x:DataType="vm:CreateThirdPartyViewModel">
 
     
     <Border Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1"  Height="500"
@@ -12,7 +12,7 @@
 
             <StackPanel Spacing="6">
                 <TextBlock Text="Nombre / Razón Social *" Foreground="#CCD6F6" FontSize="16"/>
-                <TextBox Classes="searchbar" PlaceholderText="Ej. Juan Francisco" Text="{Binding NewCustomer.Name}" Background="White" Foreground="White"
+                <TextBox Classes="searchbar" PlaceholderText="Ej. Juan Francisco" Text="{Binding NewThirdParty.Name}" Background="White" Foreground="White"
                 BorderBrush="{DynamicResource PrimaryButtonBrush}" CornerRadius="6"
                 Height="38" VerticalContentAlignment="Center"/>
             </StackPanel>

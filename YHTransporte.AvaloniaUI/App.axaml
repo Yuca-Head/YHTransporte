@@ -13,6 +13,7 @@
         <FluentTheme />
         <StyleInclude Source="/Resources/Styles/InputControls.axaml"/>
         <StyleInclude Source="/Resources/Styles/Collections.axaml"/>
+        <StyleInclude Source="/Resources/Styles/Buttons.axaml"/>
     </Application.Styles>
 
     <Application.Resources>

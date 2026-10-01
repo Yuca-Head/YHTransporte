@@ -218,6 +218,21 @@
 
 <!--/ListBox Common-->
 
+
+<!--Boring ListBox-->
+<Style Selector="ListBox.boring ListBoxItem /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+</Style>
+
+<Style Selector="ListBox.boring ListBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#48000000"/>
+
+</Style>
+
+
+
+<!--/Boring ListBox-->
+
 <!--ProductList-->
     <Style Selector="Grid.productList TextBlock">
         <Setter Property="Foreground" Value="black"/>

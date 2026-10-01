@@ -4,5 +4,7 @@ namespace YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 
 public partial class CargoMenuViewModel : ViewModelBase
 {
-    
+    public CargoMenuViewModel()
+    {
+    }
 }

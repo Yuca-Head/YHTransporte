@@ -28,7 +28,7 @@
 					</StackPanel.Styles>
 
 					<Button x:Name="btnInicio" Content="Inicio" Command="{Binding SetDashboardMenuCommand}"/>
-					<Button x:Name="btnClientes" Content="Clientes" Command="{Binding SetCustomerMenuCommand}"/>
+					<Button x:Name="btnTerceros" Content="Terceros" Command="{Binding SetThirdPartyMenuCommand}"/>
 					<Button x:Name="btnServicios" Content="Servicios" Command="{Binding SetShipmentMenuCommand}"/>
 					<Button x:Name="btnCargas" Content="Cargas" Command="{Binding SetCargoMenuCommand}"/>
 					<Button x:Name="btnVehiculos" Content="Vehículos" Command="{Binding SetVehicleMenuCommand}"/>

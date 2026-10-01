@@ -99,6 +99,8 @@ public class CreateAddressHandlerTests
             .ReturnsAsync(
                 (IEnumerable<int> ids, CancellationToken _) => [commands.FirstOrDefault(x => x.Key == ids.First())]
             );
+        _repository.Setup(r => r.GetEverythingAsync(It.IsAny<CancellationToken>())).
+        ReturnsAsync((CancellationToken _)=> commands);
         AddressContext context = new(_handler, new(_repository.Object));
     
         // When
@@ -106,13 +108,13 @@ public class CreateAddressHandlerTests
     
         // Then
         Assert.True(result.IsT0);
-        result.AsT0.Value.ToList().ForEach(x => _output.WriteLine(x.Name));
+        //result.AsT0.Value.ToList().ForEach(x => _output.WriteLine(x.Name));
 
-        foreach(var x in context.Addresses)
-            _output.WriteLine(x.Name);
-        //Assert.Null(result.AsT0.Value);
-        //Assert.Equal(2, result.AsT0.Value.First().Id);
+        Assert.NotNull(result.AsT0.Value);
+        Assert.Equal(2, result.AsT0.Value.First().Id);
+        Assert.Equal(2, context.Addresses.ToList()[1].Id);  
 
+        _repository.Verify(r => r.GetByKeysAsync(It.IsAny<IEnumerable<int>>()), Times.Never());
     }
 
 

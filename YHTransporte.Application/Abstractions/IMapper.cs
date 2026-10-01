@@ -9,6 +9,6 @@ namespace YHTransporte.Application.Abstractions;
 /// <typeparam name="TEntity"></typeparam>
 public interface IMapper<TValue, TEntity>
 {
-    TValue ToValue(TEntity enity);
-    TEntity ToEntity(TValue value);
+    static abstract TValue ToValue(TEntity entity);
+    static abstract TEntity ToEntity(TValue value);
 }

@@ -1,9 +1,9 @@
 
 using Avalonia.Controls;
 using Avalonia.Media;
-using YHTransporte.AvaloniaUI.Modules.Customer.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 
-namespace YHTransporte.AvaloniaUI.Modules.Customer.Views;
+namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.Views;
 
 public partial class CreateCustomerView : UserControl
 {
@@ -19,7 +19,7 @@ public partial class CreateCustomerView : UserControl
 
     private void AdaptContext()
     {
-        if(DataContext is CreateCustomerViewModel vm)
+        if(DataContext is CreateThirdPartyViewModel vm)
         {
             vm.PropertyChanged += (_, e) =>
             {

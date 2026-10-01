@@ -1,0 +1,18 @@
+<Styles xmlns="https://github.com/avaloniaui">
+
+    <!--Warning-->
+    <Style Selector="Button.warning:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Red"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style Selector="Button.warning:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="#BE0000"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <!--/Warning-->
+    
+</Styles>
+
+
+
+

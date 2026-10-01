@@ -59,7 +59,7 @@ CREATE TABLE [dbo].[Departments] (
 
 ALTER TABLE [dbo].[Departments] ADD CONSTRAINT [Unique_Name] UNIQUE ([Name])
 
-CREATE TABLE [dbo].[Municipality] (
+CREATE TABLE [dbo].[Municipalities] (
     [Id]     INT           IDENTITY (1, 1) NOT NULL,
     [Name]   NVARCHAR (50) NOT NULL UNIQUE,
     [IdDept] INT           NOT NULL,
@@ -170,10 +170,25 @@ CREATE TABLE [dbo].[ShipmentsDetails] (
 
 INSERT INTO [dbo].[ShipmentStatuses] VALUES ('Pending');--Other statuses will be added in future vesions
 
+EXEC sp_rename 'Municipality', 'Municipalities';
 
 INSERT INTO [dbo].[OrderStatuses] VALUES ('Pending'), ('In Progress'), ('Completed');
 
 DELETE FROM ThirdParties;
 
+INSERT INTO ThirdParties (Name, IsSupplier, IsCustomer) VALUES ('Supplier 1', 1, 0), 
+('Customer 1', 0, 1);
+
+INSERT INTO Departments (Name) VALUES ('Managua'), ('Masaya');
+
+INSERT INTO Municipalities (Name, IdDept) VALUES ('Ciudad Sandino', 1), ('Nindirí', 2);
+
+INSERT INTO Addresses (Details, IdMunicipality) VALUES ('Address 1', 1), ('Address 2', 2);
+
+INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (1, 1), (2, 2);
+
 DBCC CHECKIDENT ('ThirdParties', RESEED, 0);   
 SELECT * FROM ThirdParties;    
+
+SELECT * FROM ThirdPartiesAddresses;
+

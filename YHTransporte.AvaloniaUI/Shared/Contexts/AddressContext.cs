@@ -18,14 +18,13 @@ public enum AddressType
     Municipality
 }
 
-public sealed class AddressContext
+public sealed class AddressContext : IInitiableContext
 {
     
     public AddressContext(CreateAddressHandler createHandler, GetAddressHandler getHandler)
     {
         _createHandler = createHandler;
         _getHandler = getHandler;
-        //Init();
     }
 
     private readonly CreateAddressHandler _createHandler;
@@ -38,9 +37,6 @@ public sealed class AddressContext
 
     public IReadOnlyCollection<AddressDetailsDto> Addresses => _addresses.Values;
 
-    public event EventHandler<AddressType>? AddressAdded;
-    public event EventHandler<AddressType>? AddressModified;
-
     public async Task<
     OneOf<Success<IEnumerable<AddressDetailsDto>>, 
     NotFound<IEnumerable<int>>, 
@@ -48,6 +44,7 @@ public sealed class AddressContext
     (IEnumerable<GetAddressQuery> query)
     {
         /*
+        esto era por si el generic fallaba 
         int[] keys = [..query.Select(x => x.Id)];
         int[] existingIds = [.. _addresses.Keys.Intersect(keys)];
 
@@ -75,24 +72,51 @@ public sealed class AddressContext
 
         
         List<AddressDetailsDto> addresses = [];
-        if(await GenericContexts.TryGetAsync
+        var result = await GenericContexts.TryGetAsync
         (query, x => x.Id, _addresses, x => x.Id,
-        async (x,y) => _getHandler.GetAddressesByIdsAsync(x,y), addresses) is not OneOf<Success<IEnumerable<AddressDetailsDto>>, 
-        NotFound<IEnumerable<int>>, RepeatedValue<IEnumerable<RepeatedValue<int>.RepeatedKeyInformation>>> r)
-            return new Success<IEnumerable<AddressDetailsDto>>(addresses);
-        else
-            return r;
+        _getHandler.GetAddressesByIdsAsync, addresses);
         
+        if(result.IsT0 && result.AsT0.Value is null)
+            return new Success<IEnumerable<AddressDetailsDto>>(addresses);
+
+        return result;
     }
 
-    public async void GetMunicipalitiesByKeysAsync
+    public async Task<OneOf<Success<IEnumerable<MunicipalityDto>>, NotFound<IEnumerable<int>>, 
+    RepeatedValue<IEnumerable<RepeatedValue<int>.RepeatedKeyInformation>>>> GetMunicipalitiesByKeysAsync
     (IEnumerable<GetAddressQuery> query)
     {
+        List<MunicipalityDto> municipalities = [];
+        var result = await GenericContexts.TryGetAsync
+        (query, x => x.Id, _municipalities, x => x.Id,
+        _getHandler.GetMunicipalitiesByIdsAsync, municipalities);
         
+        if(result.IsT0 && result.AsT0.Value is null)
+            return new Success<IEnumerable<MunicipalityDto>>(municipalities);
+
+        return result;
     }
 
-    private async void Init()
+
+    public async Task<OneOf<Success<IEnumerable<DepartmentDto>>, NotFound<IEnumerable<int>>, 
+    RepeatedValue<IEnumerable<RepeatedValue<int>.RepeatedKeyInformation>>>>
+    GetDepartmentsByIdsAsync(IEnumerable<GetAddressQuery> query)
     {
+        List<DepartmentDto> departments = [];
+        
+        var result = await GenericContexts.TryGetAsync
+        (query, x => x.Id, _departments, x => x.Id,
+        _getHandler.GetDepartmentsByIdsAsync, departments);
+        
+        if(result.IsT0 && result.AsT0.Value is null)
+            return new Success<IEnumerable<DepartmentDto>>(departments);
+
+        return result;
+    }
+
+    public async Task Init()
+    {
+        
         foreach(var v in await _getHandler.GetAddressesAsync())
             _addresses.Add(v.Id, v);
         foreach(var v in await _getHandler.GetMunicipalitiesAsync())

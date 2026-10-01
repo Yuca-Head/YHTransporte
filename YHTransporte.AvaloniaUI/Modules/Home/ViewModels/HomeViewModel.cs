@@ -2,11 +2,11 @@ using System.Numerics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
-using YHTransporte.AvaloniaUI.Modules.Customer.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
+using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.Views;
 using YHTransporte.AvaloniaUI.ViewModels;
@@ -15,11 +15,11 @@ namespace YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 
 public partial class HomeViewModel : ViewModelBase
 {
-    public HomeViewModel(CustomerMenuViewModel customerMenu, DashboardMenuViewModel dashboardMenu,
+    public HomeViewModel(ThirdPartyMenuViewModel thirdPartyMenu,DashboardMenuViewModel dashboardMenu,
     CargoMenuViewModel cargoMenu, ShipmentMenuViewModel shipmentMenu, 
     DriverMenuViewModel driverMenu, VehicleMenuViewModel vehicleMenu)
     {
-        _customerMenu = customerMenu;
+        _thirdPartyMenu = thirdPartyMenu;
         _dashboardMenu = dashboardMenu;
         _cargoMenu = cargoMenu;
         _shipmentMenu = shipmentMenu;
@@ -28,7 +28,7 @@ public partial class HomeViewModel : ViewModelBase
         CurrentView = _dashboardMenu;
     }
 
-    private readonly CustomerMenuViewModel _customerMenu;
+    private readonly ThirdPartyMenuViewModel _thirdPartyMenu;
     private readonly DashboardMenuViewModel _dashboardMenu;
     private readonly CargoMenuViewModel _cargoMenu;
     private readonly ShipmentMenuViewModel _shipmentMenu;
@@ -39,8 +39,8 @@ public partial class HomeViewModel : ViewModelBase
     public partial ViewModelBase CurrentView {get; private set;}
 
     [RelayCommand]
-    public void SetCustomerMenu()
-    => ChangeView(_customerMenu);
+    public void SetThirdPartyMenu()
+    => ChangeView(_thirdPartyMenu);
 
     [RelayCommand]
     public void SetDashboardMenu()

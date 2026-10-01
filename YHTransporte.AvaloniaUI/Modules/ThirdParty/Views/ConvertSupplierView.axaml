@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.ThirdParty.Views.ConvertSupplierView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels"
+             x:DataType="vm:ConvertSupplierViewModel">
+
+    <Grid RowDefinitions="Auto, *" Width="420" Height="520" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}"
+                BorderThickness="1,0,1,1" CornerRadius="10" Padding="20" Margin="0,-2,0,0">
+            <Grid Grid.RowDefinitions="Auto, Auto, Auto, *, Auto">
+                <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,12">
+                    <TextBlock Text="Convertir Proveedor en Cliente" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                    <TextBlock Text="Selecciona el proveedor que deseas convertir a cliente" Foreground="#CCD6F6" FontSize="12"/>
+                </StackPanel>
+
+                <Border Grid.Row="1" Background="#161F30" CornerRadius="8" Padding="10,8" Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <Border Background="#DC2626" CornerRadius="6" Padding="8,4">
+                            <TextBlock Text="De Proveedor" Foreground="White" FontWeight="SemiBold" FontSize="11"/>
+                        </Border>
+                        <TextBlock Text="➔" Foreground="#CCD6F6" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Background="#1E293B" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1" CornerRadius="6" Padding="8,4">
+                            <TextBlock Text="Cliente" Foreground="#60A5FA" FontWeight="SemiBold" FontSize="11"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <TextBox Grid.Row="2"
+                         PlaceholderText="Buscar proveedor por nombre, cédula o código..."
+                         Background="White" Foreground="Black"
+                         BorderBrush="{DynamicResource PrimaryButtonBrush}"
+                         CornerRadius="6" Height="36" VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+
+                <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12">
+                    <StackPanel Spacing="6">
+                        <Border Background="#1E293B" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <RadioButton Grid.Column="0" IsChecked="True" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Proveedor 1" FontWeight="SemiBold" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="Cédula: 001-010101-0001" Foreground="#CCD6F6" FontSize="11" Margin="0,1,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Background="#1E293B" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <RadioButton Grid.Column="0" IsChecked="False" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Proveedor 2" FontWeight="SemiBold" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="Cédula: 001-010101-0001" Foreground="#CCD6F6" FontSize="11" Margin="0,1,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Background="#1E293B" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <RadioButton Grid.Column="0" IsChecked="False" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Proveedor 3" FontWeight="SemiBold" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="Cédula: 001-010101-0001" Foreground="#CCD6F6" FontSize="11" Margin="0,1,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Background="#1E293B" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
+                            <Grid ColumnDefinitions="Auto, *">
+                                <RadioButton Grid.Column="0" IsChecked="False" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="Proveedor 4" FontWeight="SemiBold" Foreground="White" FontSize="13"/>
+                                    <TextBlock Text="Cédula: 001-010101-0001" Foreground="#CCD6F6" FontSize="11" Margin="0,1,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Grid Grid.Row="4" ColumnDefinitions="*, 12, *">
+                    <Button Grid.Column="0" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}"
+                            Foreground="#CCD6F6" FontWeight="Bold" CornerRadius="6" Height="36" HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
+
+                    <Button Grid.Column="2" Content="Seleccionar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                            FontWeight="Bold" CornerRadius="6" Height="36" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+    </Grid>
+</UserControl>
