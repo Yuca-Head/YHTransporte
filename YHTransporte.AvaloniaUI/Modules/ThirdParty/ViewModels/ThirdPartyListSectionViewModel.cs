@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -14,25 +15,27 @@ namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 
 public partial class ThirdPartyListSectionViewModel : ViewModelBase
 {
-    public ThirdPartyListSectionViewModel(ThirdPartyContext context)
+    public ThirdPartyListSectionViewModel(ThirdPartyContext context, CreateThirdPartyViewModel vm)
     {
         _context = context;
+        CreateThirdParty = vm;
+        ThirdParties = [];
+        UpdateList();
+        _context.ThirdPartiesChanged += UpdateList;
 
-        ThirdParties = [.._context.ThirdParties];
-        WeakReferenceMessenger.Default.Register<ThirdPartyUpdateMessage>(this, (_, _)=>
-        ThirdParties = [.._context.ThirdParties]);  
-
-    
     }
 
     public event Action? SelectedPartyChanged;
+    
     private readonly ThirdPartyContext _context;
 
     [ObservableProperty]
     public partial ThirdPartyDetailsDto? SelectedThirdParty {get; set;}
 
-
-    public ObservableCollection<ThirdPartyDetailsDto> ThirdParties {get; private set;}
+    [ObservableProperty]
+    public partial CreateThirdPartyViewModel CreateThirdParty {get; set;}
+    [ObservableProperty]
+    public partial ObservableCollection<ThirdPartyDetailsDto> ThirdParties {get; private set;}
 
     [RelayCommand]
     public void ChangeSelectedParty()
@@ -40,5 +43,15 @@ public partial class ThirdPartyListSectionViewModel : ViewModelBase
         SelectedPartyChanged?.Invoke();
     }
 
+    [RelayCommand]
+    public void OpenCreator()
+    => CreateThirdParty.IsOpen = true;
 
+    private void UpdateList()
+    {
+        ThirdParties.Clear();
+
+        foreach(var tp in _context.ThirdParties)
+            ThirdParties.Add(tp);
+    }
 }

@@ -43,4 +43,9 @@ public sealed class GetAddressHandler(IAddressRepository repository)
     
     public async Task<IEnumerable<DepartmentDto>> GetDepartmentsAsync()
     => (await _repository.GetDepartmentsAsync()).Select(DepartmentMapper.ToValue);
+
+    public async Task<IEnumerable<AddressDetailsDto>> GetAddressesByDescription
+    (IEnumerable<string> descriptions, CancellationToken cancellationToken = default)
+    => (await _repository.GetAddressesByNamesAsync(descriptions, cancellationToken)).Select(AddressDetailsMapper.ToValue);
+
 }

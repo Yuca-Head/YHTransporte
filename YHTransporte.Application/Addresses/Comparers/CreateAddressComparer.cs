@@ -4,7 +4,7 @@ using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 
 namespace YHTransporte.Application.Addresses.Comparers;
 
-public sealed class CreateAddressComparer : IEqualityComparer<AddressKey>
+internal sealed class CreateAddressComparer : IEqualityComparer<AddressKey>
 {
     public bool Equals(AddressKey? x, AddressKey? y)
     => string.Equals(x?.Name, y?.Name, StringComparison.OrdinalIgnoreCase) &&

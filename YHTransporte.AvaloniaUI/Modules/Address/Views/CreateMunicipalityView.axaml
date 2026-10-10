@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Address.Views.CreateMunicipalityView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Address.ViewModels"
+    x:DataType="vm:CreateMunicipalityViewModel">
+
+
+    <StackPanel VerticalAlignment="Center">
+        <Border Padding="16" CornerRadius="8" BorderBrush="#2B304C" BorderThickness="1" Width="380" MinHeight="230"
+        Background="{DynamicResource BackgroundBrush}" MaxWidth="400" MaxHeight="500">
+            <Grid RowDefinitions="Auto, *, *, Auto"   ColumnDefinitions="*,*"> 
+
+                <Grid.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Styles>
+                <TextBlock Grid.ColumnSpan="2" Margin="0,8,0,20" Text="Crear Municipio" FontSize="20" FontWeight="Bold"/>
+
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Spacing="8">
+                    <TextBlock Text="Nombre del Municipio"/>
+                    <TextBox Text="{Binding Municipality.Name}" Width="150" Classes="searchbar" Margin="0,0,0,10" />
+                </StackPanel>
+                
+                <ComboBox Classes="common" Grid.Row="1" Margin="20, 25, 5, 0" Grid.Column="1"  PlaceholderText="Departamento" PlaceholderForeground="Black"
+                    FontSize="14" CornerRadius="4" Height="30" ItemsSource="{Binding Departments}" SelectedItem="{Binding SelectedDepartment}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="Black" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>  
+
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,10"
+                Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock" TextWrapping="WrapWithOverflow" FontSize="12" HorizontalAlignment="Center"/>
+                
+
+                <Button Grid.Row="3"  Content="Crear" HorizontalContentAlignment="Center" HorizontalAlignment="Left"
+                    Command="{Binding CreateCommand}" Width="120" Background="{DynamicResource PrimaryButtonBrush}" />
+
+                <Button Grid.Row="3" Grid.Column="1" Content="Cerrar" HorizontalContentAlignment="Center" HorizontalAlignment="Right"
+                    Command="{Binding CloseCommand}" Width="120" Background="{DynamicResource PrimaryDeclineButtonBrush}" />
+            </Grid>
+        </Border>
+    </StackPanel>
+</UserControl>

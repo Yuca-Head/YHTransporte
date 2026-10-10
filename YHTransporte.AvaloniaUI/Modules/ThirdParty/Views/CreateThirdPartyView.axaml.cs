@@ -2,13 +2,14 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
+using YHTransporte.AvaloniaUI.Resources;
 
 namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.Views;
 
-public partial class CreateCustomerView : UserControl
+public partial class CreateThirdPartyView : UserControl
 {
 
-    public CreateCustomerView()
+    public CreateThirdPartyView()
     {
 
         InitializeComponent();
@@ -24,10 +25,7 @@ public partial class CreateCustomerView : UserControl
             vm.PropertyChanged += (_, e) =>
             {
                 if(e.PropertyName is nameof(vm.HasError))
-                    if(vm.HasError)
-                        ResultTextBlock.Foreground = Brush.Parse("Red");
-                    else
-                        ResultTextBlock.Foreground = Brush.Parse("Green");
+                    ResultTextBlock.Foreground = ControlsHelper.ChangeColorByResult(vm.HasError);
             };
 
             ResultTextBlock.Foreground = vm.HasError? Brush.Parse("Red") : Brush.Parse("Green");

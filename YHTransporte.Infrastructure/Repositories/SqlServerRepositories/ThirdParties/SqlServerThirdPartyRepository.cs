@@ -1,6 +1,5 @@
-using System.Data;
 using Dapper;
-using YHTransporte.Application.ThirdParties.Dtos;
+using Microsoft.EntityFrameworkCore;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Core.Entities;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
@@ -9,60 +8,98 @@ using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdPartie
 
 namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
-public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) : IThirdPartyRepository
+public sealed class SqlServerThirdPartyRepository(
+    DbConnectionFactory factory,
+    IDbContextFactory<YHTransporteDbContext> contextFactory) : IThirdPartyRepository
 {
     private readonly DbConnectionFactory _factory = factory;
-    public async Task AddAsync(
-        ThirdParty entity,
-        CancellationToken cancellationToken = default)
+    private readonly IDbContextFactory<YHTransporteDbContext> _contextFactory = contextFactory;
+
+  
+    // Guardar (Entity Framework)
+    
+
+    public async Task AddAsync(ThirdParty entity, CancellationToken cancellationToken = default)
+    => await AddAsync([entity], cancellationToken);
+
+    public async Task AddAsync(IEnumerable<ThirdParty> entities, CancellationToken cancellationToken = default)
+    {
+       
+        ThirdPartySqlDto[] dtos = [.. entities.Select(ThirdPartySqlMapper.ToValue)];
+
+        if (dtos.Length == 0)
+            return;
+
+       
+        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        context.ThirdParties.AddRange(dtos);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+  
+    // Leer (Dapper)
+    
+
+    public async Task<bool> Exists(int key)
+    => await Exists(key, CancellationToken.None);
+
+    public async Task<bool> Exists(int key, CancellationToken cancellationToken = default)
     {
         using var connection = _factory.Create();
 
-        ThirdPartySqlDto dto = new(entity.Key, entity.Name, entity.Supplier != null, entity.Customer != null);
+        var command = new CommandDefinition(
+            """
+            SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM dbo.ThirdParties WHERE Id = @Key)
+                             THEN 1 ELSE 0 END AS BIT);
+            """,
+            new { Key = key },
+            cancellationToken: cancellationToken);
+
+        return await connection.ExecuteScalarAsync<bool>(command);
+    }
+
+    public async Task<bool> NameExists(string name, CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
 
         var command = new CommandDefinition(
-            "InsertThirdParty",
-        new
-        {
-            dto.Name,
-            dto.IsSupplier,
-            dto.IsCustomer
-        },
-        commandType: CommandType.StoredProcedure,
-        cancellationToken: cancellationToken);
+            """
+            SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM dbo.ThirdParties WHERE Name = @Name)
+                             THEN 1 ELSE 0 END AS BIT);
+            """,
+            new { Name = name.Trim() },
+            cancellationToken: cancellationToken);
 
-        await connection.ExecuteAsync(command);
-    }
-    public async Task AddAsync(IEnumerable<ThirdParty> entities, CancellationToken cancellationToken = default)
-    => await Task.WhenAll(entities.Select(async x =>
-    {
-        await AddAsync(x, cancellationToken);
-    }));
-    
-    
-    public Task<bool> Exists(int key)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Exists(int key, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
+        return await connection.ExecuteScalarAsync<bool>(command);
     }
 
     public async Task<IEnumerable<string>> FindExistingNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
-        return [];
+        string[] allNames = [.. names.Select(x => x.Trim())];
+
+        if (allNames.Length == 0)
+            return [];
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "SELECT Name FROM dbo.ThirdParties WHERE Name IN @Names;",
+            new { Names = allNames },
+            cancellationToken: cancellationToken);
+
+        var existing = await connection.QueryAsync<string>(command);
+
+        return existing.ToList();
     }
 
     public async Task<IEnumerable<ThirdParty>> GetByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)
     {
-        using var connection = _factory.Create();
+        int[] allKeys = [.. keys];
 
-        int[] cuteKeys = [.. keys];
-
-        if(/*there´s no*/ cuteKeys.Length == 0)
+        if (allKeys.Length == 0)
             return [];
+
+        using var connection = _factory.Create();
 
         var command = new CommandDefinition(
             """
@@ -71,42 +108,64 @@ public sealed class SqlServerThirdPartyRepository(DbConnectionFactory factory) :
                 Name,
                 IsSupplier,
                 IsCustomer
-            FROM ThirdParties
+            FROM dbo.ThirdParties
             WHERE Id IN @Keys;
             """,
-            new { Keys = cuteKeys },
+            new { Keys = allKeys },
             cancellationToken: cancellationToken);
 
         var rows = await connection.QueryAsync<ThirdPartySqlDto>(command);
 
-        return rows.Select(ThirdPartySqlMapper.ToEntity);
+        return rows.Select(ThirdPartySqlMapper.ToEntity).ToList();
     }
+
+    public async Task<IEnumerable<ThirdParty>> GetManyByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)
+    => await GetByKeysAsync(keys, cancellationToken);
 
     public async Task<IEnumerable<ThirdParty>> GetEverythingAsync(CancellationToken cancellationToken = default)
     {
-        var connection = _factory.Create();
+        using var connection = _factory.Create();
 
-        var thirdParties = await connection.QueryAsync<ThirdPartySqlDto>
-        (
-            "Select * from ThirdParties",
-            cancellationToken
-        );
+        var command = new CommandDefinition(
+            "SELECT Id, Name, IsSupplier, IsCustomer FROM dbo.ThirdParties;",
+            cancellationToken: cancellationToken);
 
-        return thirdParties.Select(ThirdPartySqlMapper.ToEntity);
+        var rows = await connection.QueryAsync<ThirdPartySqlDto>(command);
+
+        return rows.Select(ThirdPartySqlMapper.ToEntity).ToList();
     }
 
-    public Task<IEnumerable<ThirdParty>> GetManyByKeysAsync(IEnumerable<int> keys, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<ThirdParty>?> TakeManyAsync(int take, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
-    }
+        if (take <= 0)
+            return [];
 
-    public Task<bool> NameExists(string name, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+        using var connection = _factory.Create();
 
-    public Task<IEnumerable<ThirdParty>?> TakeManyAsync(int take, CancellationToken cancellationToken = default)
+        var command = new CommandDefinition(
+            """
+            SELECT TOP (@Take)
+                Id,
+                Name,
+                IsSupplier,
+                IsCustomer
+            FROM dbo.ThirdParties
+            ORDER BY Id;
+            """,
+            new { Take = take },
+            cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<ThirdPartySqlDto>(command);
+
+        return [.. rows.Select(ThirdPartySqlMapper.ToEntity)];
+    }
+    
+    public async Task AddAddressToThirdParty(int addressId, int thirdPartyId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+       
+        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        context.ThirdPartyAddressesTable.Add(new(thirdPartyId, addressId));
+        await context.SaveChangesAsync(cancellationToken);
+
     }
 }

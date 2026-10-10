@@ -10,15 +10,15 @@
 
                 <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
 
-                    <TextBox Classes="searchbar" Grid.Column="0" Watermark="Buscar por código de carga, servicio o descripción"
+                    <TextBox Classes="searchbar" Grid.Column="0" PlaceholderText="Buscar por código de carga, servicio o descripción"
                                 Background="White" Foreground="Black" BorderBrush="#374151"
                                 CornerRadius="8" VerticalAlignment="Center" Height="40"/>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
                         <Button Content="+ Registrar Nueva Carga" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                                 FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
-                        <Button Content="Exportar Lista" Background="#374151" Foreground="White"
-                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
+                        <!--Button Content="Exportar Lista" Background="{DynamicResource SecondaryButtonBrush}" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/-->
                     </StackPanel>
                 </Grid>
 
@@ -32,7 +32,7 @@
 
                                 <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
                                     <TextBlock Text="Código de Carga" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" Watermark="Ej. C-004" Background="White" Foreground="Black"
+                                    <TextBox Classes="searchbar" PlaceholderText="Ej. C-004" Background="White" Foreground="Black"
                                                 CornerRadius="8" Height="35" HorizontalAlignment="Stretch"/>
                                 </StackPanel>
 

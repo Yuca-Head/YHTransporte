@@ -7,4 +7,6 @@ public interface IThirdPartyRepository : IRepository<int, ThirdParty>
 {
     Task<bool> NameExists(string name, CancellationToken cancellationToken = default);
     Task<IEnumerable<string>>FindExistingNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default);
+
+    Task AddAddressToThirdParty(int addressId, int thirdPartyId, CancellationToken cancellationToken = default);
 }

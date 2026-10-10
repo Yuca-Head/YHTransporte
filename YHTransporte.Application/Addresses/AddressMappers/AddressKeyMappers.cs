@@ -19,7 +19,7 @@ public static class AddressKeyMappers
     public class AddressMapper : IMapper<AddressKey, Address>
     {
         public static Address ToEntity(AddressKey value)
-        => new(value.Name, new("-", null){Key = value.PlaceId});
+        => new(value.Name, new("-", new("-")){Key = value.PlaceId});
         public static AddressKey ToValue(Address entity)
         => new(entity.Details, entity.Municipality.Key);
     }

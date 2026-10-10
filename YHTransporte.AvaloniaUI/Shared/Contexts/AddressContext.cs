@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
 using OneOf;
 using OneOf.Types;
 using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Results;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.Shared.Results;
+using YHTransporte.AvaloniaUI.Shared.Messaging;
 
 namespace YHTransporte.AvaloniaUI.Shared.Contexts;
 
@@ -21,13 +24,33 @@ public enum AddressType
 public sealed class AddressContext : IInitiableContext
 {
     
-    public AddressContext(CreateAddressHandler createHandler, GetAddressHandler getHandler)
+    public AddressContext(GetAddressHandler getHandler)
     {
-        _createHandler = createHandler;
         _getHandler = getHandler;
+
+        WeakReferenceMessenger.Default.Register<AddressUpdateMessage>(this, async (_,_) =>
+        { 
+            await UpdateList(_addresses, _getHandler.GetAddressesAsync(), x => x.Id);
+            AddressesChanged?.Invoke();
+        });
+        
+        WeakReferenceMessenger.Default.Register<MuinicipalityUpdateMessage>(this, async (_,_) => 
+        {
+            await UpdateList(_municipalities, _getHandler.GetMunicipalitiesAsync(), x => x.Id);
+            MunicipalitiesChanged?.Invoke();
+        });
+
+        WeakReferenceMessenger.Default.Register<DepartmentUpdateMessage>(this, async (_,_) => 
+        {
+            await UpdateList(_departments, _getHandler.GetDepartmentsAsync(), x => x.Id);
+            DepartmentsChanged?.Invoke();
+        });
     }
 
-    private readonly CreateAddressHandler _createHandler;
+    public event Action? DepartmentsChanged;
+    public event Action? MunicipalitiesChanged;
+    public event Action? AddressesChanged;
+
     private readonly GetAddressHandler _getHandler;
     private readonly Dictionary<int, DepartmentDto> _departments = [];
 
@@ -36,6 +59,8 @@ public sealed class AddressContext : IInitiableContext
     private readonly Dictionary<int, AddressDetailsDto> _addresses = [];
 
     public IReadOnlyCollection<AddressDetailsDto> Addresses => _addresses.Values;
+    public IReadOnlyCollection<MunicipalityDto> Municipalities => _municipalities.Values;
+    public IReadOnlyCollection<DepartmentDto> Departments => _departments.Values;
 
     public async Task<
     OneOf<Success<IEnumerable<AddressDetailsDto>>, 
@@ -96,6 +121,7 @@ public sealed class AddressContext : IInitiableContext
 
         return result;
     }
+    
 
 
     public async Task<OneOf<Success<IEnumerable<DepartmentDto>>, NotFound<IEnumerable<int>>, 
@@ -123,6 +149,14 @@ public sealed class AddressContext : IInitiableContext
             _municipalities.Add(v.Id, v);
         foreach(var v in await _getHandler.GetDepartmentsAsync())
             _departments.Add(v.Id, v);
+    }
+
+    private static async Task UpdateList<T>(Dictionary<int, T> dict, Task<IEnumerable<T>> collection, Func<T, int> selector)
+    {
+        dict.Clear();
+
+        foreach(var value in await collection)
+            dict.Add(selector(value), value);
     }
 
 }

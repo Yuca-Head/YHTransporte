@@ -1,3 +1,5 @@
+USE YHTransporte
+
 CREATE TABLE [dbo].[ThirdParties] (
     [Id]         INT           IDENTITY (1, 1) NOT NULL,
     [Name]       NVARCHAR (120) NOT NULL UNIQUE,
@@ -15,6 +17,8 @@ CREATE TABLE [dbo].[ThirdPartiesAddresses] (
     CONSTRAINT [FK_ThirdPartiesAddresses_ThirdParties] FOREIGN KEY ([IdThirdParty]) REFERENCES [dbo].[ThirdParties] ([Id])
 );
 
+SELECT * FROM Municipalities;
+
 CREATE TABLE [dbo].[Addresses] (
     [Id]            INT            IDENTITY (1, 1) NOT NULL,
     [Details]       NVARCHAR (125) NOT NULL,
@@ -23,7 +27,7 @@ CREATE TABLE [dbo].[Addresses] (
 --  [IdThirdParty] INT NOT NULL,
     CONSTRAINT [PK_Addresses] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Addresses_IdMunicipality] FOREIGN KEY ([IdMunicipality])
-    REFERENCES [dbo].[Municipality] ([Id]),
+    REFERENCES [dbo].[Municipalities] ([Id]),
 --  CONSTRAINT [FK_Addresses_ThirdParties] FOREIGN KEY ([IdThirdParty])
 --  REFERENCES [dbo].[ThirdParties] ([Id])
 );
@@ -67,6 +71,10 @@ CREATE TABLE [dbo].[Municipalities] (
     CONSTRAINT [FK_Municipality_Departments] FOREIGN KEY ([IdDept]) REFERENCES [dbo].[Departments] ([Id])
 );
 
+
+DROP TABLE Municipalities
+
+SELECT * FROM Municipalities
 
 CREATE TABLE [dbo].[Vehicles] (
     [Id]          INT            IDENTITY (1, 1) NOT NULL,
@@ -185,10 +193,22 @@ INSERT INTO Municipalities (Name, IdDept) VALUES ('Ciudad Sandino', 1), ('Nindir
 
 INSERT INTO Addresses (Details, IdMunicipality) VALUES ('Address 1', 1), ('Address 2', 2);
 
+INSERT INTO Addresses (Details, IdMunicipality) VALUES ('De la Esquina Sur, dos Cuadras al este', 1), ('Del parque un anden abajo', 2);
+
 INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (1, 1), (2, 2);
 
-DBCC CHECKIDENT ('ThirdParties', RESEED, 0);   
-SELECT * FROM ThirdParties;    
+INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (3, 3), (2, 4);
 
-SELECT * FROM ThirdPartiesAddresses;
+DBCC CHECKIDENT ('Addresses', RESEED, 12);   
+
+DELETE FROM Addresses WHERE Id > 4;
+ 
+SELECT * FROM Departments;    
+
+SELECT * FROM THirdParties;
+
+DELETE FROM Addresses WHERE Id = 13;
+
+
+
 

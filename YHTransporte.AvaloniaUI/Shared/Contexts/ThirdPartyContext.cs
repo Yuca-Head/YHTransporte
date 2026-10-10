@@ -16,6 +16,8 @@ public sealed class ThirdPartyContext : IInitiableContext
 {
     private readonly GetThirdPartyHandler _queryHandler;
     private readonly Dictionary<int, ThirdPartyDetailsDto> _parties = [];
+
+    public event Action? ThirdPartiesChanged;
     
     //public IReadOnlyCollection<ThirdPartyDetailsDto> Customers => [.. _parties.Values.Where(x => x.Customer is not null)];
     public IReadOnlyCollection<ThirdPartyDetailsDto> ThirdParties => [.. _parties.Values];
@@ -29,6 +31,7 @@ public sealed class ThirdPartyContext : IInitiableContext
             if(m.ChangeType is Enums.ContextChangeType.Creation)
             {
                 await ReDoThirdParties();
+                ThirdPartiesChanged?.Invoke();
                 return;
             }
         
@@ -41,6 +44,7 @@ public sealed class ThirdPartyContext : IInitiableContext
                 if(!result.IsT0)
                     throw new InvalidOperationException("Every ThirdParty key was expected to exist");
 
+                ThirdPartiesChanged?.Invoke();
                 return result.AsT0.Value;
 
             }, d => d.Key);
@@ -57,8 +61,10 @@ public sealed class ThirdPartyContext : IInitiableContext
     {
         _parties.Clear();
 
-        foreach(var party in await _queryHandler.LoadThirdParties())
+        var parties = await _queryHandler.LoadThirdParties();
+        foreach(var party in parties)
             _parties.Add(party.Key, party);
+        
     }
 
     public ThirdPartyDetailsDto? GetById(int id) 

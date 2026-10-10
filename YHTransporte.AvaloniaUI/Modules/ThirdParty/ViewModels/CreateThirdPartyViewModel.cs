@@ -13,6 +13,7 @@ using YHTransporte.Application.Shared.Results;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.Models;
 using YHTransporte.AvaloniaUI.Shared;
+using YHTransporte.AvaloniaUI.Shared.Contexts;
 using YHTransporte.AvaloniaUI.Shared.Messaging;
 using YHTransporte.AvaloniaUI.ViewModels;
 using YHTransporte.Core.Entities;
@@ -22,19 +23,23 @@ namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 public partial class CreateThirdPartyViewModel : ViewModelBase
 {
 
-    public CreateThirdPartyViewModel(CreateThirdPartyHandler useCase)
+    public CreateThirdPartyViewModel(CreateThirdPartyHandler useCase, AddressContext addressContext)
     {
         _useCase = useCase;
+        _addressContext = addressContext;
     }
 
     
     [ObservableProperty]
     public partial Queue<string> ErrorMessages {get; set;} = [];
 
+    private readonly AddressContext _addressContext;
+
+
+
     [ObservableProperty]
-    public partial CreateThirdPartyModel NewThirdParty{ get; set; } = new("");
+    public partial CreateThirdPartyCommand NewThirdParty{ get; set; } = new();
     private readonly CreateThirdPartyHandler _useCase;
-    public event EventHandler? CustomerCreated;
 
     [ObservableProperty]
     public partial string ResultMessage {get; private set;} = "";
@@ -54,46 +59,54 @@ public partial class CreateThirdPartyViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task CreateCustomer()
+    private async Task Create()
     {
-        var result = await _useCase.Handle(new CreateThirdPartyCommand(NewThirdParty.Name, true));
+        if(!NewThirdParty.IsSupplier && !NewThirdParty.IsCustomer)
+        {
+            ResultMessage = "Para crear un tercero se le debe asignar al menos un rol";
+            HasError = true;
+            return;
+        }
+        var result = await _useCase.Handle(NewThirdParty);
 
         result.Switch
         (
             success => 
             {
-                ResultMessage = "Cliente Creado con éxito";
-                CustomerCreated?.Invoke(HasError, EventArgs.Empty);
+                ResultMessage = "Tercero Creado con éxito";
+    
                 WeakReferenceMessenger.Default.Send<ThirdPartyUpdateMessage>(new(null, Shared.Enums.ContextChangeType.Creation));
                 Clear();
             },
 
-            alreadyExists => MarkErrors(alreadyExists, (m) =>
+            alreadyExists => 
             {
-                if(m.Count() == 1)
-                    return $"Ya existe un tercero con ese nombre {m.First()}";
-
+                var args = alreadyExists.Argument.ToArray();
+                if(args.Length == 1)
+                {
+                    ResultMessage = $"Ya existe un tercero con ese nombre ({args.First()})";
+                    return;
+                }
                 var sb = new StringBuilder();
                 
                 sb.Append("Ya existen los siguientes terceros ingresados: ");
-                foreach(var msg in m)
+                foreach(var msg in args)
                     sb.Append($"{msg}, ");
                 
-                return sb.ToString();
-            }
-            ),
+                ResultMessage = sb.ToString();
+            },
 
-            validationError => MarkErrors(validationError.Errors, (m) =>
+            validationError =>
             {
-                var sb = new StringBuilder();
+                var args = validationError.Errors;
+                var sb = new StringBuilder("Se han identificado los siguientes errores: ");
 
-                foreach(var msg in m)
+                foreach(var msg in args)
                     sb.Append(msg);
                 
-                return sb.ToString();
-            }
-            ),
-            repeatedValue => MarkErrors(repeatedValue, (m) => $"Se ingresaron dos clientes de mismo nombre {m}")
+                ResultMessage = sb.ToString();
+            },
+            repeatedValue => ResultMessage = $"Se ingresaron dos clientes de mismo nombre {repeatedValue.Argument.FirstOrDefault()}"
         );
     }
     
@@ -116,6 +129,7 @@ public partial class CreateThirdPartyViewModel : ViewModelBase
     {
         ErrorMessages.Clear();
         HasError = false;
+        NewThirdParty = new();
     }
     
 }

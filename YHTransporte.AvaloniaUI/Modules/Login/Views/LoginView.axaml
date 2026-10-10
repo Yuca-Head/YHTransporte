@@ -3,7 +3,7 @@
         xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Login.ViewModels"
         x:Class="YHTransporte.AvaloniaUI.Modules.Login.Views.LoginView"
         x:DataType="vm:LoginViewModel"
-        >
+        >   
 
     <Grid Background="#111111">
 

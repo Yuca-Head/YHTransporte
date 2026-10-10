@@ -5,18 +5,19 @@
     x:DataType="vm:ThirdPartyListSectionViewModel">
     
     <Grid>
+        
         <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" Padding="25">
             <Grid RowDefinitions="Auto, 24, *">
 
                 <Grid Grid.Row="0" ColumnDefinitions="380, *, Auto" Margin="0,0,0,20">
                     <TextBox Grid.Column="0" PlaceholderText="Buscar por nombre, cédula o código" Background="White"
-                             Foreground="Black" BorderBrush="#374151" CornerRadius="8"
+                             Foreground="Black" BorderBrush="#374151" CornerRadius="8" Classes="searchbar"
                              VerticalContentAlignment="Center" Height="40"/>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
                         <Button Content="+ Registrar Nuevo Tercero" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                                 FontWeight="Bold" CornerRadius="8" Height="40" Padding="16,0"
-                                VerticalContentAlignment="Center"/>
+                                VerticalContentAlignment="Center" Command="{Binding OpenCreatorCommand}"/>
 
                         <Button Content="Ordenar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                                 FontWeight="Bold" CornerRadius="8" Height="40" Padding="16,0"
@@ -39,11 +40,11 @@
                                         <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,12">
                                             <TextBlock Grid.Column="0" Text="{Binding Key}" Foreground="#8B93AF" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
 
-                                            <Button Grid.Column="2" Background="#D9534F" Foreground="White" Width="28" Height="28" CornerRadius="14" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                            <Button Grid.Column="2" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="White" Width="28" Height="28" CornerRadius="14" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                                                 <TextBlock Text="X" FontSize="11" FontWeight="Bold"/>
                                             </Button>
                                         </Grid>
-
+                                        
                                         <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto, Auto, Auto" VerticalAlignment="Center">
 
                                             <Border Grid.Column="0" Background="#2B304C" CornerRadius="36" Width="72" Height="72" Margin="0,0,24,0" VerticalAlignment="Center">
@@ -58,17 +59,13 @@
 
                                             <StackPanel Grid.Column="2" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="0,0,32,0">
                                                 <TextBlock Text="Cliente" Foreground="#A2A9C0" FontSize="13" HorizontalAlignment="Center"/>
-                                                <ToggleSwitch IsChecked="True" OnContent="" OffContent=""/>
+                                                <TextBlock Text="{Binding IsCustomer, Converter={StaticResource BoolToEmojiConverter}}" HorizontalAlignment="Center"/>
                                             </StackPanel>
 
                                             <StackPanel Grid.Column="3" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="0,0,36,0">
                                                 <TextBlock Text="Proveedor" Foreground="#A2A9C0" FontSize="13" HorizontalAlignment="Center"/>
-                                                <ToggleSwitch IsChecked="True" OnContent="" OffContent=""/>
+                                                <TextBlock Text="{Binding IsSupplier, Converter={StaticResource BoolToEmojiConverter}}" HorizontalAlignment="Center"/>
                                             </StackPanel>
-
-                                            <Button Grid.Column="4" Background="#2B304C" Foreground="White" Width="64" Height="36" CornerRadius="8" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock Text="Edit" FontSize="14" FontWeight="Medium"/>
-                                            </Button>
 
                                         </Grid>
                                     </Grid>
@@ -78,7 +75,13 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </ScrollViewer>
+                
             </Grid>
         </Border>
+        
+        <!--If view is not loading, is probably by this part-->
+        <Grid>
+            <UserControl Content="{Binding CreateThirdParty}" ZIndex="10" IsVisible="{Binding CreateThirdParty.IsOpen}"/>
+        </Grid>
     </Grid>
 </UserControl>

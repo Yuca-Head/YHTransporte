@@ -8,4 +8,13 @@ namespace YHTransporte.Application.Addresses.Dto;
 /// <remarks>
 /// <paramref name="PlaceId"/> does not apply for departments.
 /// </remarks>
-public sealed record AddressKey(string Name, int PlaceId);
+public sealed record AddressKey
+{
+    public AddressKey(string name, int placeId)
+    {
+        Name = name;
+        PlaceId = placeId;
+    }
+    public string Name{get; init => field = value.Trim();} = "";
+    public int PlaceId {get; init;}
+}

@@ -1,5 +1,6 @@
 using YHTransporte.Application.Abstractions;
 using YHTransporte.Core.Entities;
+using YHTransporte.Core.Exceptions;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses.Dtos;
 
 namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses.Mappers;

@@ -65,5 +65,18 @@ public sealed class GetThirdPartyHandler(IThirdPartyRepository repository, IAddr
     }
 
     public async Task<IEnumerable<ThirdPartyDetailsDto>> LoadThirdParties()
-    => (await _repository.GetEverythingAsync()).Select(ThirdPartyDatilsMapper.ToValue);
+    {
+        var parties = (await _repository.GetEverythingAsync()).Select(ThirdPartyDatilsMapper.ToValue).ToDictionary(x => x.Key);
+
+        var pairs = (await _addressRepository.GetAddressesFromThirdParties(parties.Select(x => x.Key))).ToList();
+
+        pairs.ForEach(p =>
+        {
+            var party = parties.GetValueOrDefault(p.ThirdPartyId);
+            
+            party?.Addresses = [..p.Addresses.Select(AddressDetailsMapper.ToValue)]; 
+        });
+
+        return parties.Values;
+    }
 }

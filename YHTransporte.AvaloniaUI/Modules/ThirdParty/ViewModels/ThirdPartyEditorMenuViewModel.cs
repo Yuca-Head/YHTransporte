@@ -1,7 +1,12 @@
 using System;
+using System.Collections.Specialized;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using YHTransporte.Application.ThirdParties.Dtos;
+using YHTransporte.AvaloniaUI.Modules.Address.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.ThirdParty.Extra;
+using YHTransporte.AvaloniaUI.Shared.Abstractions;
+using YHTransporte.AvaloniaUI.Shared.Contexts;
 using YHTransporte.AvaloniaUI.ViewModels;
 
 namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
@@ -9,63 +14,76 @@ namespace YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
 {
 
-    public ThirdPartyEditorMenuViewModel(CreateThirdPartyViewModel createCustomer, ConvertSupplierViewModel convertSupplier)
+    public ThirdPartyEditorMenuViewModel(CreateThirdPartyViewModel createCustomer, AddressContext addressContext, 
+    ThirdPartyAddressCreator addressCreator, CreateMunicipalityViewModel createMunicipalityVM, 
+    CreateDepartmentViewModel createDepartmentVM)
     {
         CreateThirdParty = createCustomer;
+        AddressContext = addressContext;
+        AddressCreator = addressCreator;
 
-        ConvertSupplier = convertSupplier;
+        _createDepartmentVM = createDepartmentVM;
+        _createMunicipalityVM = createMunicipalityVM;
 
-        ConvertSupplier.PropertyChanged += (_, p) =>
+        _createMunicipalityVM.PropertyChanged += (_,e) =>
         {
-            if(p.PropertyName is nameof(ConvertSupplierViewModel.IsOpen) && !ConvertSupplier.IsOpen)
-                SetPopup(Popups.None);
+            if(e.PropertyName is nameof(_createMunicipalityVM.IsOpen))
+                if(_createMunicipalityVM.IsOpen)
+                {
+                    _createDepartmentVM.IsOpen = false;
+                    CurrentPopup = _createMunicipalityVM;
+                }
+                else if(!_createDepartmentVM.IsOpen)
+                    CurrentPopup = null;
         };
 
-        CreateThirdParty.PropertyChanged += (_,p) =>
+        _createDepartmentVM.PropertyChanged += (_, e) =>
         {
-            if(p.PropertyName is nameof(CreateThirdPartyViewModel.IsOpen) && !CreateThirdParty.IsOpen)
-                SetPopup(Popups.None);
+            if(e.PropertyName is nameof(_createDepartmentVM.IsOpen))
+                if(_createDepartmentVM.IsOpen)
+                {
+                    _createMunicipalityVM.IsOpen = false;
+                    CurrentPopup = _createDepartmentVM;
+                }
+                else if(!_createMunicipalityVM.IsOpen)
+                    CurrentPopup = null;
         };
-    
     }
-    private enum Popups
-    {
-        NewCustomer = 1,
-        FromSupplier = 2,
-        None = 0
-    }
+
 
     public CreateThirdPartyViewModel CreateThirdParty {get;}
-    public ConvertSupplierViewModel ConvertSupplier {get;}
+
+    //Supposed to be never changed, I hope so...
+    [ObservableProperty]
+    public partial ThirdPartyAddressCreator AddressCreator {get; private set;}
+
+    [ObservableProperty]
+    public partial AddressContext AddressContext {get; private set;}
     public event Action? ViewIsClosed;
-    public bool AnyPopupIsOpen => CurrentPopup != null;
+
+    private CreateMunicipalityViewModel _createMunicipalityVM;
+
+    private CreateDepartmentViewModel _createDepartmentVM;
 
     [ObservableProperty]
     public partial ThirdPartyDetailsDto? ThirdParty { get; set; }
 
+    partial void OnThirdPartyChanged(ThirdPartyDetailsDto? oldValue, ThirdPartyDetailsDto? newValue)
+    {
+        if(newValue is null)
+            return;
 
-    [ObservableProperty]
+        AddressCreator.ThirdParty = newValue;
+    }
+
+    public bool AnyPopupIsOpen => CurrentPopup != null;
+
+    [ObservableProperty]    
     [NotifyPropertyChangedFor(nameof(AnyPopupIsOpen))]
     public partial ViewModelBase? CurrentPopup {get; private set;}
 
     [ObservableProperty]
     public partial bool IsAddAddressOptionOpen {get; set;}
-    
-    [RelayCommand]
-    private void OpenCustomerPopUp()
-    => SetPopup(Popups.NewCustomer);
-
-    [RelayCommand]
-    private void CloseCustomerPopUp()
-    => SetPopup(Popups.None);
-
-    [RelayCommand]
-    private void OpenConvertPopup()
-    => SetPopup(Popups.FromSupplier);
-
-    [RelayCommand]
-    private void CloseConvertPopup()
-    => SetPopup(Popups.None);
 
     [RelayCommand]
     private void ShowAddAddress()
@@ -73,37 +91,25 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
 
     [RelayCommand]
     private void CancelAddAddress()
-    => IsAddAddressOptionOpen = false;
-
-    private void SetPopup(Popups popup)
     {
-        switch (popup)
-        {
-            case Popups.FromSupplier: 
-                CreateThirdParty.IsOpen = false;
-                ConvertSupplier.IsOpen = true;
-                CurrentPopup = ConvertSupplier;
-            break;   
+        IsAddAddressOptionOpen = false;
+        AddressCreator.Clear(); 
+    } 
 
-            case Popups.NewCustomer:
-                CreateThirdParty.IsOpen = true;
-                ConvertSupplier.IsOpen = false;
-                CurrentPopup = CreateThirdParty;
-            break;
-
-            default:
-                CreateThirdParty.IsOpen = false;
-                ConvertSupplier.IsOpen = false;
-                CurrentPopup = null;
-            break;
-        };
-    }
-    
     [RelayCommand]
-    public void Exit()
+    private void OpenDepartmentCreator()
+    => _createDepartmentVM.IsOpen = true;
+
+    [RelayCommand]
+    private void OpenMunicipalityCreator()
+    => _createMunicipalityVM.IsOpen = true;
+
+   
+    [RelayCommand]
+    private void Exit()
     {
         ThirdParty = null;
-
+        CancelAddAddress();
         ViewIsClosed?.Invoke();
     }
 }

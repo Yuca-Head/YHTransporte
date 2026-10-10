@@ -1,4 +1,5 @@
 using Avalonia;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,7 +13,9 @@ using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
+using YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;
 using YHTransporte.Application.ThirdParties.UseCases.GetThirdParty;
+using YHTransporte.AvaloniaUI.Modules.Address.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
@@ -20,6 +23,7 @@ using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
+using YHTransporte.AvaloniaUI.Modules.ThirdParty.Extra;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
 using YHTransporte.AvaloniaUI.Shared.Contexts;
@@ -31,7 +35,7 @@ using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdPartie
 
 namespace YHTransporte.AvaloniaUI;
 
-sealed class Program
+public sealed class Program
 {
     public static IHost Host { get; private set; } = null!;
 
@@ -54,10 +58,14 @@ sealed class Program
 
         var contexts =  Host.Services.GetServices<IInitiableContext>();
 
-    
         foreach(var c in contexts)   
             await c.Init();
+
+        var createUC = Host.Services.GetService<CreateAddressHandler>();
         
+        //await createUC.HandleDepartment([new("Matagalpa", -1)]);
+        //await createUC.HandleMunicipality([new("Ciudad Darío", 3)]);
+        //await createUC.HandleAddress([new("De la venta \"La Bonicua\" dos cuadras abajo", 3)]);
         /*
         var tps = Host.Services.GetRequiredService<ThirdPartyContext>();
         var rp = Host.Services.GetRequiredService<GetThirdPartyHandler>();
@@ -99,9 +107,10 @@ sealed class Program
         services.AddTransient<CreateThirdPartyViewModel>();
         services.AddTransient<DriverMenuViewModel>();
         services.AddTransient<VehicleMenuViewModel>();
-        services.AddTransient<ConvertSupplierViewModel>();
         services.AddTransient<ThirdPartyListSectionViewModel>();
         services.AddTransient<ThirdPartyEditorMenuViewModel>();
+        services.AddTransient<CreateMunicipalityViewModel>();
+        services.AddTransient<CreateDepartmentViewModel>();
 
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);
@@ -115,6 +124,7 @@ sealed class Program
         services.AddSingleton<GetThirdPartyHandler>();
         services.AddSingleton<CreateAddressHandler>();
         services.AddSingleton<GetAddressHandler>();
+        services.AddSingleton<CreateThirdPartyAddressHandler>();
 
 
         //Repositories
@@ -122,8 +132,13 @@ sealed class Program
         services.AddSingleton<IAddressRepository, SqlServerAddressRepository>();
 
 
-        //Others
+        //dbRelated
         services.AddSingleton<DbConnectionFactory>();
+        services.AddDbContextFactory<YHTransporteDbContext>((sp, options) =>
+        options.UseSqlServer(sp.GetRequiredService<IConfiguration>().GetConnectionString("AzureConnection")));
+
+        //Others
+        services.AddTransient<ThirdPartyAddressCreator>();
 
     }
             

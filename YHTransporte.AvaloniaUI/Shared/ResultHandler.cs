@@ -21,4 +21,7 @@ public static class ResultHandler
         
         return results.Any();
     }
+
+
+
 }

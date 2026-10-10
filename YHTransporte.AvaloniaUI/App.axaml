@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="YHTransporte.AvaloniaUI.App"
              xmlns:local="using:YHTransporte.AvaloniaUI"
+             xmlns:converters="using:YHTransporte.AvaloniaUI.Resources.Converters"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -16,11 +17,16 @@
         <StyleInclude Source="/Resources/Styles/Buttons.axaml"/>
     </Application.Styles>
 
+    
     <Application.Resources>
-    <ResourceDictionary>
-        <ResourceDictionary.MergedDictionaries>
-            <ResourceInclude Source="/Resources/Themes/MainTheme.axaml"/>
-        </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-</Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/Themes/MainTheme.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToEmojiConverter x:Key="BoolToEmojiConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    
 </Application>
