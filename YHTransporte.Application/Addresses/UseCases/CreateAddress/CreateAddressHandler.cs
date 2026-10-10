@@ -5,7 +5,7 @@ using YHTransporte.Application.Shared.Results;
 using YHTransporte.Application.Shared;
 using YHTransporte.Application.Addresses.Comparers;
 using YHTransporte.Core.Entities;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.Results;
 using YHTransporte.Application.Addresses.AddressMappers;
 

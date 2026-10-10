@@ -147,9 +147,9 @@ CREATE TABLE [dbo].[Shipments] (
     [CodeOrder]           NVARCHAR (12)      NOT NULL,
     [IdVehicle]           INT                NULL,
     [IdDriver]            INT                NULL,
-    [EstimatedPickupAt] DATETIMEOFFSET (7)  NULL,
-    [PickedUpAt]        DATETIMEOFFSET (7) NULL,
-    [DeliveredAt]      DATETIMEOFFSET (7) NULL,
+    [EstimatedPickupAt] DATETIMEOFFSET (7)   NULL,
+    [PickedUpAt]        DATETIMEOFFSET (7)   NULL,
+    [DeliveredAt]       DATETIMEOFFSET (7)   NULL,
     [IdStatus]            INT                NOT NULL    CONSTRAINT [DEFAULT_Shipment_IdStatus] DEFAULT 1,
     [Description]         NVARCHAR (120)     NULL,
     CONSTRAINT [PK_Shipments] PRIMARY KEY CLUSTERED ([Code] ASC),
@@ -205,7 +205,7 @@ DELETE FROM Addresses WHERE Id > 4;
  
 SELECT * FROM Departments;    
 
-SELECT * FROM THirdParties;
+SELECT * FROM ShipmentsDetails;
 
 DELETE FROM Addresses WHERE Id = 13;
 

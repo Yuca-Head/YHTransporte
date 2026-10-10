@@ -1,5 +1,5 @@
 using YHTransporte.Application.Abstractions;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.Addresses.AddressMappers;

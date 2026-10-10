@@ -43,11 +43,11 @@ public sealed class ThirdPartyContext : IInitiableContext
 
                 if(!result.IsT0)
                     throw new InvalidOperationException("Every ThirdParty key was expected to exist");
-
-                ThirdPartiesChanged?.Invoke();
                 return result.AsT0.Value;
 
             }, d => d.Key);
+
+            ThirdPartiesChanged?.Invoke();
         });
     }   
 

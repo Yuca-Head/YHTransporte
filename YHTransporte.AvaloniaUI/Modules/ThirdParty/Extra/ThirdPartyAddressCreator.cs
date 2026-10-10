@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.ThirdParties.Dtos;
@@ -34,6 +34,7 @@ public partial class ThirdPartyAddressCreator : ObservableObject, IResultProvide
         UpdateDepts();
 
         _context.DepartmentsChanged += UpdateDepts;
+        _context.MunicipalitiesChanged += UpdateMunicipalities;
     }    
     private readonly AddressContext _context;
     private readonly CreateAddressHandler _createHandler;
@@ -63,8 +64,10 @@ public partial class ThirdPartyAddressCreator : ObservableObject, IResultProvide
     partial void OnThirdPartyChanged(ThirdPartyDetailsDto? oldValue, ThirdPartyDetailsDto? newValue)
     {
         if(oldValue is not null && addressCreatedOnSession)
+        {
             WeakReferenceMessenger.Default.Send<ThirdPartyUpdateMessage>(new([oldValue.Key], Shared.Enums.ContextChangeType.Modification));
-
+            WeakReferenceMessenger.Default.Send<AddressUpdateMessage>(new([], Shared.Enums.ContextChangeType.Creation));
+        }
         if(newValue is null)
             return;
 
@@ -95,6 +98,18 @@ public partial class ThirdPartyAddressCreator : ObservableObject, IResultProvide
             Departments.Add(d); 
         SelectedDepartment = null; 
         SelectedMunicipality = null;
+    }
+
+    private void UpdateMunicipalities()
+    {
+        if(SelectedDepartment is null)
+            return;
+        
+        SelectedMunicipality = null;
+
+        Municipalities.Clear();
+        foreach(var m in _context.Municipalities.Where(x => x.Department.Id == SelectedDepartment.Id))
+            Municipalities.Add(m);
     }
 
 

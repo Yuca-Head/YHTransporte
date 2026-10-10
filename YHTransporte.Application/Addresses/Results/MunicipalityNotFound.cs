@@ -1,4 +1,4 @@
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Shared.Results;
 using YHTransporte.Core.Entities;
 

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 
 namespace YHTransporte.AvaloniaUI.Shared.Messaging;
 

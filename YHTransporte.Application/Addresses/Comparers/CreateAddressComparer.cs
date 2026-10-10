@@ -1,5 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 
 namespace YHTransporte.Application.Addresses.Comparers;

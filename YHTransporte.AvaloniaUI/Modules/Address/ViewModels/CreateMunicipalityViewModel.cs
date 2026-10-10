@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using OneOf.Types;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.AvaloniaUI.Shared;
 using YHTransporte.AvaloniaUI.Shared.Abstractions;

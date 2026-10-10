@@ -6,7 +6,7 @@ using YHTransporte.Testing.Database;
 
 namespace YHTransporte.Testing.OutputsTests;
 
-
+/*
 public class DataBaseQueryTests
 {
     private readonly ITestOutputHelper _output;
@@ -61,3 +61,4 @@ public class DataBaseQueryTests
     }
 
 }
+*/

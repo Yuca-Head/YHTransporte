@@ -132,7 +132,7 @@ public sealed class SqlServerThirdPartyRepository(
 
         var rows = await connection.QueryAsync<ThirdPartySqlDto>(command);
 
-        return rows.Select(ThirdPartySqlMapper.ToEntity).ToList();
+        return [.. rows.Select(ThirdPartySqlMapper.ToEntity)];
     }
 
     public async Task<IEnumerable<ThirdParty>?> TakeManyAsync(int take, CancellationToken cancellationToken = default)

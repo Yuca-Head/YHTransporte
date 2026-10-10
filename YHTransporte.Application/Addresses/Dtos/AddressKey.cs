@@ -1,4 +1,4 @@
-namespace YHTransporte.Application.Addresses.Dto;
+namespace YHTransporte.Application.Addresses.Dtos;
 
 /// <summary>
 /// Command for creating an address of any kind.

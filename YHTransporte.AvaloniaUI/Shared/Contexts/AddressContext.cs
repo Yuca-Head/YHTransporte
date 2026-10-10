@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
 using OneOf;
 using OneOf.Types;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.Results;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;

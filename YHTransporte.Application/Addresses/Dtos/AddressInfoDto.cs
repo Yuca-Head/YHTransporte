@@ -1,4 +1,4 @@
-namespace YHTransporte.Application.Addresses.Dto;
+namespace YHTransporte.Application.Addresses.Dtos;
 
 public sealed record AddressInfoDto(int Id, int MunicipalityId, int DepartmentId);
 

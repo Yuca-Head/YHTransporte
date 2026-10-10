@@ -1,7 +1,7 @@
 using OneOf;
 using OneOf.Types;
 using YHTransporte.Application.Addresses.Comparers;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Shared;
 using YHTransporte.Application.Shared.Results;
 

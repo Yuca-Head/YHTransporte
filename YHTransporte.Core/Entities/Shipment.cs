@@ -22,6 +22,11 @@ public class Shipment : IEntity<string>
     
     public Vehicle Vehicle{get; init;}
     public Driver Driver {get; init;}
+
+    public ShipmentStatuses Status {get; private set;} = ShipmentStatuses.Pending;
+
+    public string Description {get; set;} = "";
+
     public DateTimeOffset? EstimatedPickUpAt 
     {
         get;
@@ -88,9 +93,6 @@ public class Shipment : IEntity<string>
         }
     }
 
-    public ShipmentStatuses Status {get; private set;} = ShipmentStatuses.Pending;
-
-    public string Description {get; set;} = "";
     
 
     public void AddPackages(params IEnumerable<Package> packages)

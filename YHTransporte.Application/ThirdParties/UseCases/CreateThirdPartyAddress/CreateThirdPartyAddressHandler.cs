@@ -7,7 +7,6 @@ using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Shared.Results;
 using YHTransporte.Core.Entities;
 using YHTransporte.Application.ThirdParties.Dtos;
-using YHTransporte.Application.Addresses.Dto;
 using YHTransporte.Application.ThirdParties.Mappers;
 
 namespace YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;

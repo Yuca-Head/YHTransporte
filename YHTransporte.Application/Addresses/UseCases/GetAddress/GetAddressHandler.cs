@@ -1,5 +1,5 @@
 using OneOf;
-using YHTransporte.Application.Addresses.Dto;
+using YHTransporte.Application.Addresses.Dtos;
 using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Shared;
 using YHTransporte.Application.Shared.Results;
