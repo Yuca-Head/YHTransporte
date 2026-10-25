@@ -1,12 +1,6 @@
-using System;
-using System.ComponentModel;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
-using YHTransporte.AvaloniaUI.Shared;
-using YHTransporte.AvaloniaUI.Shared.Abstractions;
-using YHTransporte.AvaloniaUI.ViewModels;
 
 namespace YHTransporte.AvaloniaUI.Resources;
 

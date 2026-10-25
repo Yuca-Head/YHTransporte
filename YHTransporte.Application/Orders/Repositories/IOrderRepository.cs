@@ -9,9 +9,9 @@ public interface IOrderRepository : IRepository<string, Order>
 
     Task AddPackage(string shipmentCode, Package package, CancellationToken cancellationToken = default);
     
-    Task<string> GetLastCode(CancellationToken cancellationToken = default);
+    Task<string?> GetLastCode(CancellationToken cancellationToken = default);
 
-    Task<string> GetLastShipmentCode(CancellationToken cancellationToken = default);
+    Task<string?> GetLastShipmentCode(CancellationToken cancellationToken = default);
     
     
 

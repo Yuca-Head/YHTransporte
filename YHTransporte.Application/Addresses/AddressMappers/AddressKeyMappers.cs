@@ -5,7 +5,7 @@ using YHTransporte.Core.Entities;
 namespace YHTransporte.Application.Addresses.AddressMappers;
 
 
-public static class AddressKeyMappers
+internal static class AddressKeyMappers
 {
     public class MunicipalityMapper : IMapper<AddressKey, Municipality>
     {

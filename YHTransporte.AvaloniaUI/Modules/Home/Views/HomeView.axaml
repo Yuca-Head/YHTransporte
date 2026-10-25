@@ -29,12 +29,9 @@
 
 					<Button x:Name="btnInicio" Content="Inicio" Command="{Binding SetDashboardMenuCommand}"/>
 					<Button x:Name="btnTerceros" Content="Terceros" Command="{Binding SetThirdPartyMenuCommand}"/>
-					<Button x:Name="btnServicios" Content="Servicios" Command="{Binding SetShipmentMenuCommand}"/>
-					<Button x:Name="btnCargas" Content="Cargas" Command="{Binding SetCargoMenuCommand}"/>
+					<Button x:Name="btnServicios" Content="Servicios" Command="{Binding SetOrderMenuCommand}"/>
 					<Button x:Name="btnVehiculos" Content="Vehículos" Command="{Binding SetVehicleMenuCommand}"/>
 					<Button x:Name="btnConductores" Content="Conductores" Command="{Binding SetDriverMenuCommand}"/>
-					<Button x:Name="btnRutas" Content="Rutas"/>
-					<Button x:Name="btnSeguimiento" Content="Seguimiento"/>
 					<Button x:Name="btnReportes" Content="Reportes"/>
 
 				</StackPanel>

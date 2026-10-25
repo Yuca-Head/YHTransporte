@@ -7,6 +7,7 @@
     <Color x:Key="TopBarColor">#35455e</Color>
     <Color x:Key="TextColor">#252329</Color>
     <Color x:Key="PrimaryButtonColor">#0056D6</Color>
+    <Color x:Key="SecundaryButtonColor">#518FEA</Color>
     <Color x:Key="PrimaryDeclineButtonColor">#F14D1F</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
@@ -14,6 +15,7 @@
     <SolidColorBrush x:Key="TopBarBrush" Color="{DynamicResource TopBarColor}" />
     <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource TextColor}" />
     <SolidColorBrush x:Key="PrimaryButtonBrush" Color="{DynamicResource PrimaryButtonColor}" />
+    <SolidColorBrush x:Key="SecundaryButtonBrush" Color="{DynamicResource SecundaryButtonColor}" />
     <SolidColorBrush x:Key="PrimaryDeclineButtonBrush" Color="{DynamicResource PrimaryDeclineButtonColor}"/>
 
 </ResourceDictionary>

@@ -4,8 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
-using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
-using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
+using YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Order.Views;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.Views;
@@ -16,13 +16,13 @@ namespace YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 public partial class HomeViewModel : ViewModelBase
 {
     public HomeViewModel(ThirdPartyMenuViewModel thirdPartyMenu,DashboardMenuViewModel dashboardMenu,
-    CargoMenuViewModel cargoMenu, ShipmentMenuViewModel shipmentMenu, 
+    CargoMenuViewModel cargoMenu, OrderMenuViewModel orderMenu, 
     DriverMenuViewModel driverMenu, VehicleMenuViewModel vehicleMenu)
     {
         _thirdPartyMenu = thirdPartyMenu;
         _dashboardMenu = dashboardMenu;
         _cargoMenu = cargoMenu;
-        _shipmentMenu = shipmentMenu;
+        _orderMenu = orderMenu;
         _driverMenu = driverMenu;
         _vehicleMenu = vehicleMenu;
         CurrentView = _dashboardMenu;
@@ -31,11 +31,11 @@ public partial class HomeViewModel : ViewModelBase
     private readonly ThirdPartyMenuViewModel _thirdPartyMenu;
     private readonly DashboardMenuViewModel _dashboardMenu;
     private readonly CargoMenuViewModel _cargoMenu;
-    private readonly ShipmentMenuViewModel _shipmentMenu;
+    private readonly OrderMenuViewModel _orderMenu;
     private readonly DriverMenuViewModel _driverMenu;
     private readonly VehicleMenuViewModel _vehicleMenu;
 
-    [ObservableProperty]
+    [ObservableProperty]    
     public partial ViewModelBase CurrentView {get; private set;}
 
     [RelayCommand]
@@ -51,8 +51,8 @@ public partial class HomeViewModel : ViewModelBase
     => ChangeView(_cargoMenu);
 
     [RelayCommand]
-    public void SetShipmentMenu()
-    => ChangeView(_shipmentMenu);
+    public void SetOrderMenu()
+    => ChangeView(_orderMenu);
 
     [RelayCommand]
     public void SetDriverMenu()

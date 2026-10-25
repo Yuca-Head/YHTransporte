@@ -48,7 +48,8 @@
                                         <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto, Auto, Auto" VerticalAlignment="Center">
 
                                             <Border Grid.Column="0" Background="#2B304C" CornerRadius="36" Width="72" Height="72" Margin="0,0,24,0" VerticalAlignment="Center">
-                                                <TextBlock Text="Foto" Foreground="#A2A9C0" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <Image Source="avares://YHTransporte.AvaloniaUI/Assets/cliente_o_proveedor.png"
+                                                Stretch="UniformToFill"/>
                                             </Border>
 
                                             <StackPanel Grid.Column="1" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="0,0,24,0">

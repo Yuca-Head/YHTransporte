@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UserSecretsId>12fc672e-e456-4fab-8eea-5ff18ea20067</UserSecretsId>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\YHTransporte.Application\YHTransporte.Application.csproj" />
     <ProjectReference Include="..\YHTransporte.Core\YHTransporte.Core.csproj" />

@@ -61,9 +61,9 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
     public partial AddressContext AddressContext {get; private set;}
     public event Action? ViewIsClosed;
 
-    private CreateMunicipalityViewModel _createMunicipalityVM;
+    private readonly CreateMunicipalityViewModel _createMunicipalityVM;
 
-    private CreateDepartmentViewModel _createDepartmentVM;
+    private readonly CreateDepartmentViewModel _createDepartmentVM;
 
     [ObservableProperty]
     public partial ThirdPartyDetailsDto? ThirdParty { get; set; }
@@ -104,7 +104,7 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
     private void OpenMunicipalityCreator()
     => _createMunicipalityVM.IsOpen = true;
 
-   
+
     [RelayCommand]
     private void Exit()
     {

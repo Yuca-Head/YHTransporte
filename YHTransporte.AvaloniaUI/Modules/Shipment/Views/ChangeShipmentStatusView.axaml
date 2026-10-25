@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            x:Class="YHTransporte.AvaloniaUI.Modules.Shipment.Views.ChangeShipmentStatusView"
+            xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels"
+            x:DataType="vm:ChangeShipmentStatusViewModel">
+
+    <Grid>
+        <Border Background="{DynamicResource BackgroundBrush}" BorderThickness="1.5" CornerRadius="10" Width="460"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Padding="25">
+
+            <StackPanel Spacing="16">
+                <Grid ColumnDefinitions="*, Auto">
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Estado de Envío" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Orden" Foreground="#8A92A6" FontSize="12"/>
+                            <TextBlock Text=" (ID)" Foreground="#8A92A6" FontSize="12"/>
+                            <TextBlock Text=" • " Foreground="#8A92A6" FontSize="12"/>
+                            <TextBlock Text="(Nombre)" Foreground="#8A92A6" FontSize="12"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Content="X" FontWeight="Bold" Background="Transparent" Foreground="#DA1212"
+                            FontSize="16" Padding="5"/>
+                </Grid>
+
+                <Separator Background="#2E394C" Margin="0,5"/>
+
+                <TextBlock Text="Seleccione el nuevo estado para el envío:" Foreground="#8A92A6" FontSize="13"/>
+
+                <StackPanel Spacing="10">
+
+                    <Border Background="#1A2230" CornerRadius="8" Padding="12">
+                        <RadioButton GroupName="ShipmentStatus" IsChecked="True" Foreground="White">
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="En Espera" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="El paquete está registrado y en almacén" Foreground="#8A92A6" FontSize="11"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Border>
+
+                    <Border Background="#1A2230" CornerRadius="8" Padding="12">
+                        <RadioButton GroupName="ShipmentStatus" IsChecked="True" Foreground="White">
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="En Tránsito" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="La unidad va en ruta hacia la sucursal de destino" Foreground="#8A92A6" FontSize="11"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Border>
+
+                    <Border Background="#1A2230" CornerRadius="8" Padding="12">
+                        <RadioButton GroupName="ShipmentStatus" IsChecked="True" Foreground="White">
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="En Reparto" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="El paquete salió a ruta de entrega final con el repartidor" Foreground="#8A92A6" FontSize="11"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Border>
+
+                    <Border Background="#1A2230" CornerRadius="8" Padding="12">
+                        <RadioButton GroupName="ShipmentStatus" IsChecked="True" Foreground="White">
+                            <StackPanel Margin="10,0,0,0">
+                                <TextBlock Text="Entregado" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="El envío fue entregado exitosamente al destinatario" Foreground="#8A92A6" FontSize="11"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Border>
+
+                </StackPanel>
+
+                <Separator Background="#2E394C" Margin="0,5"/>
+
+                <Grid ColumnDefinitions="Auto, *, Auto, Auto" Margin="0,5,0,0">
+                    <Button Grid.Column="0" Content="Cancelar Envío" Background="{DynamicResource PrimaryDeclineButtonBrush}"
+                    Foreground="White" FontWeight="Bold" Height="38" CornerRadius="6" Padding="10,0" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+
+                    <Button Grid.Column="3"
+                    Content="Guardar Cambios" Background="{DynamicResource PrimaryButtonBrush}"
+                    Foreground="White" FontWeight="Bold" Height="38" CornerRadius="6" Padding="15,0" HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center" />
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

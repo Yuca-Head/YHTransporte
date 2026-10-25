@@ -4,7 +4,7 @@ using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.Addresses.AddressMappers;
 
-public class AddressDetailsMapper : IMapper<AddressDetailsDto, Address>
+internal class AddressDetailsMapper : IMapper<AddressDetailsDto, Address>
 {
 
     public static Address ToEntity(AddressDetailsDto value)

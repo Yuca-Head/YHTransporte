@@ -4,7 +4,7 @@ using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.Addresses.AddressMappers;
 
-public class DepartmentMapper : IMapper<DepartmentDto, Department>
+internal class DepartmentMapper : IMapper<DepartmentDto, Department>
 {
     public static Department ToEntity(DepartmentDto value)
     => new(value.Name) {Key = value.Id};

@@ -22,35 +22,50 @@ IAddressRepository addressRepo, IThirdPartyRepository thirdPartyRepo)
 
     public async Task<OneOf<Success, AddressNotFound, CustomerNotFound, SupplierNotFound, NotFound<string>>>
     Handle(CreateOrderCommand command, CancellationToken cancellationToken = default)
-    {
-        if(! await _addressRepo.Exists(command.OriginId, cancellationToken))
+    {   
+
+        var addresses = await _addressRepo.GetByKeysAsync([command.OriginId, command.DestinationId], cancellationToken);
+
+        var origin = addresses.FirstOrDefault(x => x.Key == command.OriginId);
+        var destination = addresses.FirstOrDefault(x => x.Key == command.DestinationId);
+
+        if(origin is null)
             return new AddressNotFound(command.OriginId);
-        if(! await _addressRepo.Exists(command.DestinationId, cancellationToken))
+        if(destination is null)
             return new AddressNotFound(command.DestinationId);
         
-        var customerTask = _thirdPartyRepo.GetByKeysAsync([command.CustomerId], cancellationToken);
-        var supplierTask = _thirdPartyRepo.GetByKeysAsync([command.SupplierId], cancellationToken);
+        var thirdParties = await _thirdPartyRepo.GetByKeysAsync([command.CustomerId, command.SupplierId], cancellationToken);
+        
 
-        ThirdParty? customer = (await customerTask).FirstOrDefault();
-        ThirdParty? supplier = (await supplierTask).FirstOrDefault();
+        ThirdParty? customer = thirdParties.FirstOrDefault(x => x.Key == command.CustomerId);
+        ThirdParty? supplier = thirdParties.FirstOrDefault(x => x.Key == command.SupplierId);
 
         if(customer is null || customer?.Customer is null)
             return new CustomerNotFound(command.CustomerId);
         if(supplier is null || supplier?.Supplier is null)
             return new SupplierNotFound(command.SupplierId);
+        
+        var thirdParyAddresses = (await _addressRepo.GetAddressesFromThirdParties([supplier.Key, customer.Key], cancellationToken))
+        .ToList();
 
+
+        var result = thirdParyAddresses.Select(x =>
+        {
+            if(x.ThirdPartyId == supplier.Key && !x.Addresses.Any(y => y.Key == origin.Key))
+                return new NotFound<string>($"El proveedor {supplier.Name} no contiene la dirección: {destination.Details} en {destination.Municipality}");
+            
+            if(x.ThirdPartyId == customer.Key && !x.Addresses.Any(y => y.Key == destination.Key))
+                return new NotFound<string>($"El cliente {customer.Name} no contiene la dirección: {destination.Details} en {destination.Municipality}");
+
+            return new(null!);
+        });
+        
+        if(result.Any(x => x != default || x.Argument != null))
+            return result.First(x => x != default || x.Argument != null);
         
 
-        var origin = new Address("-", new("-", new("-"))) {Key = command.OriginId};
-        var destination = new Address("-", new("-", new("-"))) {Key = command.DestinationId};
-
-        if(!customer.Addresses.Any(x => x.Key == destination.Key))
-            return new NotFound<string>($"El cliente {customer.Name} no contiene la dirección: {destination.Details} en {destination.Municipality}");
-        if(!supplier.Addresses.Any(x => x.Key == origin.Key))
-            return new NotFound<string>($"El proveedor {supplier.Name} no contiene la dirección: {destination.Details} en {destination.Municipality}");
-        
-
-        var order = new Order(supplier.Supplier, customer.Customer, origin, destination){Description = command.Description!};
+        var order = new Order(supplier.Supplier, customer.Customer, origin, destination)
+        {Description = command.Description!};
 
         await _repository.AddAsync(order, cancellationToken);
         return new Success();

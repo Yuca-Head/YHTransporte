@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
+using YHTransporte.Application.Orders.Repositories;
+using YHTransporte.Application.Orders.UseCases.CreateOrder;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;
@@ -21,8 +23,7 @@ using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
-using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
-using YHTransporte.AvaloniaUI.Modules.Shipment.Views;
+using YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.Extra;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
@@ -30,6 +31,7 @@ using YHTransporte.AvaloniaUI.Shared.Contexts;
 using YHTransporte.AvaloniaUI.ViewModels;
 using YHTransporte.AvaloniaUI.Views;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Orders;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
@@ -61,24 +63,6 @@ public sealed class Program
         foreach(var c in contexts)   
             await c.Init();
 
-        var createUC = Host.Services.GetService<CreateAddressHandler>();
-        
-        //await createUC.HandleDepartment([new("Matagalpa", -1)]);
-        //await createUC.HandleMunicipality([new("Ciudad Darío", 3)]);
-        //await createUC.HandleAddress([new("De la venta \"La Bonicua\" dos cuadras abajo", 3)]);
-        /*
-        var tps = Host.Services.GetRequiredService<ThirdPartyContext>();
-        var rp = Host.Services.GetRequiredService<GetThirdPartyHandler>();
-
-
-
-        await rp.LoadThirdParties();
-
-        //(await rp.LoadThirdParties()).ToList().ForEach(x => System.Console.WriteLine(x.Name));
-        tps.Customers.ToList().ForEach(x => System.Console.WriteLine(x.Name));
-
-        System.Console.WriteLine(tps.Customers.Count);
-        */
         
         BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
@@ -103,7 +87,7 @@ public sealed class Program
         services.AddTransient<ThirdPartyMenuViewModel>();
         services.AddTransient<DashboardMenuViewModel>();
         services.AddTransient<CargoMenuViewModel>();
-        services.AddTransient<ShipmentMenuViewModel>();
+        services.AddTransient<OrderMenuViewModel>();
         services.AddTransient<CreateThirdPartyViewModel>();
         services.AddTransient<DriverMenuViewModel>();
         services.AddTransient<VehicleMenuViewModel>();
@@ -111,6 +95,9 @@ public sealed class Program
         services.AddTransient<ThirdPartyEditorMenuViewModel>();
         services.AddTransient<CreateMunicipalityViewModel>();
         services.AddTransient<CreateDepartmentViewModel>();
+        services.AddTransient<OrderListSectionViewModel>();
+        services.AddTransient<OrderEditorViewModel>();
+        services.AddTransient<CreateOrderViewModel>();
 
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);
@@ -125,11 +112,12 @@ public sealed class Program
         services.AddSingleton<CreateAddressHandler>();
         services.AddSingleton<GetAddressHandler>();
         services.AddSingleton<CreateThirdPartyAddressHandler>();
-
+        services.AddSingleton<CreateOrderHandler>();
 
         //Repositories
         services.AddSingleton<IThirdPartyRepository, SqlServerThirdPartyRepository>();
         services.AddSingleton<IAddressRepository, SqlServerAddressRepository>();
+        services.AddSingleton<IOrderRepository, SqlServerOrderRepository>();
 
 
         //dbRelated

@@ -205,6 +205,7 @@ public partial class ThirdPartyAddressCreator : ObservableObject, IResultProvide
         ThirdParty = null;
         SelectedDepartment = null;
         SelectedMunicipality = null;
+        NewAddress = "";
     });
     
 

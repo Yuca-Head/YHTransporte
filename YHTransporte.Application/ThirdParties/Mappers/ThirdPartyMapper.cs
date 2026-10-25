@@ -5,7 +5,7 @@ using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.ThirdParties.Mappers;
 
-public sealed class ThirdPartyDatilsMapper : IMapper<ThirdPartyDetailsDto, ThirdParty>
+internal sealed class ThirdPartyDatilsMapper : IMapper<ThirdPartyDetailsDto, ThirdParty>
 {
 
 

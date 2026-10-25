@@ -6,15 +6,19 @@ using YHTransporte.Core.Shared;
 
 namespace YHTransporte.Core.Entities;
 
+
 public class Order : IEntity<string>
 {
 
-
     private readonly Dictionary<string, Shipment> _shipments = [];
-    
+
     public IEnumerable<Shipment> Shipments => _shipments.Values;
 
-    public Order(SupplierRole supplier, CustomerRole customer, Address origin, Address destination)
+    // CAMBIO: ahora la orden recibe también el Id del proveedor y del cliente (las columnas
+    // SupplierId y CustomerId de la tabla Orders). Antes solo recibía los roles, que no tienen Id,
+    // y por eso no se podía guardar ni reconstruir una orden desde la base de datos.
+    public Order(SupplierRole supplier, CustomerRole customer,
+                 Address origin, Address destination)
     {
         ArgumentNullException.ThrowIfNull(supplier);
         ArgumentNullException.ThrowIfNull(customer);
@@ -30,17 +34,26 @@ public class Order : IEntity<string>
 
     public string Key {get; init;} = "-1";
 
-    public DateTimeOffset CreatedAt {get;} = DateTimeOffset.UtcNow;
+    // CAMBIO: de {get;} a {get; init;} para poder restaurar la fecha que viene de la base de datos.
+    public DateTimeOffset CreatedAt {get; init;} = DateTimeOffset.UtcNow;
 
-    public SupplierRole Supplier {get; init;} 
-    
+    /// <summary>Id del tercero que es proveedor (columna Orders.SupplierId).</summary>
+    public int SupplierId => Supplier.ThirdPartyKey;
+
+    /// <summary>Id del tercero que es cliente (columna Orders.CustomerId).</summary>
+    public int CustomerId => Customer.ThirdPartyKey;
+
+    public SupplierRole Supplier {get; init;}
+
     public CustomerRole Customer {get; init;}
 
     public Address OriginDirection {get; init;}
-    
+
     public Address DestinationDirection {get; init;}
 
-    public OrderStatuses Status {get; private set;} = OrderStatuses.Pending;
+    // CAMBIO: de "private set" a "init" para poder restaurar el estado que viene de la base de datos
+    // (el cambio de estado real lo hace el procedimiento almacenado ChangeOrderStatus).
+    public OrderStatuses Status {get; init;} = OrderStatuses.Pending;
 
     public string Description {get; set;}  = "";
 
@@ -59,11 +72,11 @@ public class Order : IEntity<string>
 
             if(_shipments.ContainsKey(s.Key))
                 throw new OrderException(DomainErrors.OrderAlreadyHasShipment);
-            
+
             _shipments.Add(s.Key, s);
         }
     }
 
-    
+
 
 }

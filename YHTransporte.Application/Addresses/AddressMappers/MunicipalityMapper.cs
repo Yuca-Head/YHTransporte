@@ -4,7 +4,7 @@ using YHTransporte.Core.Entities;
 
 namespace YHTransporte.Application.Addresses.AddressMappers;  
 
-public class MunicipalityMapper : IMapper<MunicipalityDto, Municipality>
+internal class MunicipalityMapper : IMapper<MunicipalityDto, Municipality>
 {
     
     public static MunicipalityDto ToValue(Municipality municipality)

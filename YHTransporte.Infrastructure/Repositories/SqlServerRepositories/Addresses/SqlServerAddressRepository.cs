@@ -46,7 +46,7 @@ public sealed class SqlServerAddressRepository(
         var command = new CommandDefinition(
             """
             SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM dbo.Addresses WHERE Id = @Key)
-                             THEN 1 ELSE 0 END AS BIT);
+                            THEN 1 ELSE 0 END AS BIT);
             """,
             new { Key = key },
             cancellationToken: cancellationToken);
