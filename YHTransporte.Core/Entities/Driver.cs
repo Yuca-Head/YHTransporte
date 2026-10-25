@@ -11,10 +11,9 @@ public class Driver : IEntity<int>
     {
         Code = code;
         Name = name;
-        LastName = name;
+        LastName = lastName;
         MiddleName = (middleName ?? string.Empty).Trim();
         SecondLastName = (secondLastName ?? string.Empty).Trim();
-        
     }
     public int Key {get; init;}
 

@@ -1,0 +1,17 @@
+using YHTransporte.Application.Abstractions;
+using YHTransporte.Application.Addresses.Dtos;
+using YHTransporte.Core.Entities;
+
+namespace YHTransporte.Application.Addresses.AddressMappers;  
+
+internal class MunicipalityMapper : IMapper<MunicipalityDto, Municipality>
+{
+    
+    public static MunicipalityDto ToValue(Municipality municipality)
+    => new(municipality.Key, municipality.Name, DepartmentMapper.ToValue(municipality.Department));
+
+    public static Municipality ToEntity(MunicipalityDto dto)
+    => new(dto.Name, DepartmentMapper.ToEntity(dto.Department)) {Key = dto.Id};
+
+
+}

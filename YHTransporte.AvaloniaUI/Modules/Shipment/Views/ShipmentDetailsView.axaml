@@ -1,0 +1,124 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Shipment.Views.ShipmentDetailsView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels"
+             x:DataType="vm:ShipmentDetailsViewModel"
+             Background="#111622">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid RowDefinitions="Auto, *" Margin="20">
+
+            <Grid Grid.Row="1" ColumnDefinitions="320, *">
+                <Grid Grid.Column="0" RowDefinitions="Auto, *" Margin="0,0,20,0">
+                    <TextBlock Grid.Row="0" Text="Envío Actual" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0,0,0,10"/>
+                    <StackPanel Grid.Row="1" Spacing="15">
+                        <Button Content="Regresar" Foreground="White" FontWeight="Bold" CornerRadius="8"
+                                Padding="15,10" FontSize="14" Classes="warning" />
+
+                        <Border Background="#1A2230" CornerRadius="8" Padding="15">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="450">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="Información del Envío" Foreground="White" FontWeight="Bold" FontSize="15"/>
+
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <Border Background="#3A4659" Width="48" Height="48" CornerRadius="24">
+                                            <Image Source="avares://YHTransporte.AvaloniaUI/Assets/personaM.png"
+                                                   Stretch="UniformToFill"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Código de Envío" Foreground="#8B93AF" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="Nombre" Foreground="White" FontSize="12"/>
+                                            <TextBlock Text="Cédula" Foreground="#8B93AF" FontSize="11"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Separator Background="#2E394C" Margin="0,5"/>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="Descripción:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <TextBlock Text="******" Foreground="#8B93AF" FontWeight="SemiBold" TextWrapping="Wrap"/>
+
+                                        <TextBlock Text="Código de Orden:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <TextBlock Text="*****" Foreground="#8B93AF" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="Conductor:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <TextBlock Text="****" Foreground="#8B93AF" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="Fecha de Solicitud:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <TextBlock Text="*****" Foreground="#8B93AF" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="Fecha Estimada de Entrega:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <TextBlock Text="******" Foreground="#8B93AF" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="Estado Actual:" Foreground="White" FontWeight="Bold" Margin="0,4,0,0"/>
+                                        <Border Background="#108043" CornerRadius="10" Padding="10,4" HorizontalAlignment="Left">
+                                            <TextBlock Text="En Tránsito" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                                        </Border>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+
+                        <Button Content="Cambiar Estado" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Height="40" CornerRadius="6"
+                                FontWeight="Bold" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="1" RowDefinitions="Auto, Auto, Auto">
+
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto" Margin="0,0,0,20">
+                        <TextBox Grid.Column="0" PlaceholderText="Buscar por código o cliente..." Width="320" HorizontalAlignment="Left" Background="White"
+                                 Foreground="Black" CornerRadius="6"/>
+                        <Button Grid.Column="1" Content="+ Crear Nuevo Envío" Background="{DynamicResource PrimaryButtonBrush}"
+                                Foreground="White" CornerRadius="6" Margin="10,0" FontWeight="Bold" Height="34"/>
+                    </Grid>
+
+                    <TextBlock Grid.Row="1" Text="Paquetes " Margin="0,0,0,10" Foreground="White" FontWeight="Bold" FontSize="16"/>
+
+                    <StackPanel Grid.Row="2" Spacing="12">
+                        <Border Background="{DynamicResource BackgroundBrush}" Padding="15" CornerRadius="8">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="500">
+                                <ListBox Background="Transparent" ItemsSource="True" SelectedItem="True">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#1A2230" Padding="20" CornerRadius="12" Margin="0,0,0,16">
+                                                <Grid RowDefinitions="Auto, *">
+                                                    <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,12">
+                                                        <TextBlock Grid.Column="0" Text="Código" Foreground="#8B93AF" FontWeight="SemiBold" FontSize="14"
+                                                                   VerticalAlignment="Center"/>
+                                                        <Button Grid.Column="2" Background="#E05252" Foreground="White" Width="28"
+                                                                Height="28" CornerRadius="14" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                                            <TextBlock Text="X" FontSize="11" FontWeight="Bold"/>
+                                                        </Button>
+                                                    </Grid>
+
+                                                    <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto, Auto, Auto" VerticalAlignment="Center">
+                                                        <Border Grid.Column="0" Width="50" Height="50" CornerRadius="25" ClipToBounds="True" >
+                                                            <Image Source="avares://YHTransporte.AvaloniaUI/Assets/paquete.png"
+                                                                   Stretch="UniformToFill"/>
+                                                        </Border>
+                                                        <StackPanel Grid.Column="1" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="15,0,24,0">
+                                                            <TextBlock Text="Cliente" Foreground="White" FontSize="13" FontWeight="Bold"/>
+                                                            <TextBlock Text="Peso" Foreground="#8B93AF" FontSize="12"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Border>
+
+                        <Button Content="Finalizar Envío" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                                FontWeight="Bold" FontSize="14" Height="45" Width="180" CornerRadius="6" HorizontalAlignment="Right"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                Margin="0,0,10,10"/>
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

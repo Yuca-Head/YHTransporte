@@ -27,5 +27,5 @@ public class Address : IEntity<int>
     }
     public Municipality Municipality {get; init;}
 
-    public int Key {get;}
+    public int Key {get; init;}
 }

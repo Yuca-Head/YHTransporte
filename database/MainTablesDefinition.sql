@@ -1,27 +1,43 @@
+USE YHTransporte
+
 CREATE TABLE [dbo].[ThirdParties] (
     [Id]         INT           IDENTITY (1, 1) NOT NULL,
     [Name]       NVARCHAR (120) NOT NULL UNIQUE,
     [IsSupplier] BIT           NOT NULL,
-    [IsCustomer] BIT           NOT NULL
+    [IsCustomer] BIT           NOT NULL,
     CONSTRAINT [PK_ThirdParties] PRIMARY KEY CLUSTERED ([Id] ASC)   
 );
 
+
+CREATE TABLE [dbo].[ThirdPartiesAddresses] (
+    [IdThirdParty] INT NOT NULL,
+    [IdAddress]    INT NOT NULL,
+    CONSTRAINT [PK_ThirdPartiesAddresses] PRIMARY KEY CLUSTERED ([IdThirdParty] ASC, [IdAddress] ASC),
+    CONSTRAINT [FK_ThirdPartiesAddresses_Addresses] FOREIGN KEY ([IdAddress]) REFERENCES [dbo].[Addresses] ([Id]),
+    CONSTRAINT [FK_ThirdPartiesAddresses_ThirdParties] FOREIGN KEY ([IdThirdParty]) REFERENCES [dbo].[ThirdParties] ([Id])
+);
+
+SELECT * FROM Municipalities;
 
 CREATE TABLE [dbo].[Addresses] (
     [Id]            INT            IDENTITY (1, 1) NOT NULL,
     [Details]       NVARCHAR (125) NOT NULL,
     [IdMunicipality ] INT  NOT NULL,
 --  [Dept]          NVARCHAR (50)  NOT NULL, (DROPPED)
-    [IdThirdParty] INT NOT NULL,
+--  [IdThirdParty] INT NOT NULL,
     CONSTRAINT [PK_Addresses] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Addresses_IdMunicipality] FOREIGN KEY ([IdMunicipality])
-    REFERENCES [dbo].[Municipality] ([Id]),
-    CONSTRAINT [FK_Addresses_ThirdParties] FOREIGN KEY ([IdThirdParty])
-    REFERENCES [dbo].[ThirdParties] ([Id])
+    REFERENCES [dbo].[Municipalities] ([Id]),
+--  CONSTRAINT [FK_Addresses_ThirdParties] FOREIGN KEY ([IdThirdParty])
+--  REFERENCES [dbo].[ThirdParties] ([Id])
 );
+
 
 --Changes:
 /*
+*   ALTER TABLE [Addresses] DROP CONSTRAINT [FK_Addresses_ThirdParties]
+*   ALTER TABLE [Addresses] DROP COLUMN [IdThirdParty]
+*
 *   --Now Addresses connects to other table (municipality) and municipality to Departaments
 *   ALTER TABLE Addresses ALTER COLUMN Municipality INT NOT NULL;
 *   EXEC sp_rename 'Addresses.Municipality', 'IdMunicipality', 'COLUMN';   
@@ -47,7 +63,7 @@ CREATE TABLE [dbo].[Departments] (
 
 ALTER TABLE [dbo].[Departments] ADD CONSTRAINT [Unique_Name] UNIQUE ([Name])
 
-CREATE TABLE [dbo].[Municipality] (
+CREATE TABLE [dbo].[Municipalities] (
     [Id]     INT           IDENTITY (1, 1) NOT NULL,
     [Name]   NVARCHAR (50) NOT NULL UNIQUE,
     [IdDept] INT           NOT NULL,
@@ -56,9 +72,9 @@ CREATE TABLE [dbo].[Municipality] (
 );
 
 
+DROP TABLE Municipalities
 
-
-
+SELECT * FROM Municipalities
 
 CREATE TABLE [dbo].[Vehicles] (
     [Id]          INT            IDENTITY (1, 1) NOT NULL,
@@ -131,9 +147,9 @@ CREATE TABLE [dbo].[Shipments] (
     [CodeOrder]           NVARCHAR (12)      NOT NULL,
     [IdVehicle]           INT                NULL,
     [IdDriver]            INT                NULL,
-    [EstimatedPickupAt] DATETIMEOFFSET (7)  NULL,
-    [PickedUpAt]        DATETIMEOFFSET (7) NULL,
-    [DeliveredAt]      DATETIMEOFFSET (7) NULL,
+    [EstimatedPickupAt] DATETIMEOFFSET (7)   NULL,
+    [PickedUpAt]        DATETIMEOFFSET (7)   NULL,
+    [DeliveredAt]       DATETIMEOFFSET (7)   NULL,
     [IdStatus]            INT                NOT NULL    CONSTRAINT [DEFAULT_Shipment_IdStatus] DEFAULT 1,
     [Description]         NVARCHAR (120)     NULL,
     CONSTRAINT [PK_Shipments] PRIMARY KEY CLUSTERED ([Code] ASC),
@@ -162,8 +178,39 @@ CREATE TABLE [dbo].[ShipmentsDetails] (
 
 INSERT INTO [dbo].[ShipmentStatuses] VALUES ('Pending');--Other statuses will be added in future vesions
 
+EXEC sp_rename 'Municipality', 'Municipalities';
 
 INSERT INTO [dbo].[OrderStatuses] VALUES ('Pending'), ('In Progress'), ('Completed');
 
+DELETE FROM ThirdParties;
 
-SELECT * FROM Shipments;    
+INSERT INTO ThirdParties (Name, IsSupplier, IsCustomer) VALUES ('Supplier 1', 1, 0), 
+('Customer 1', 0, 1);
+
+INSERT INTO Departments (Name) VALUES ('Managua'), ('Masaya');
+
+INSERT INTO Municipalities (Name, IdDept) VALUES ('Ciudad Sandino', 1), ('Nindirí', 2);
+
+INSERT INTO Addresses (Details, IdMunicipality) VALUES ('Address 1', 1), ('Address 2', 2);
+
+INSERT INTO Addresses (Details, IdMunicipality) VALUES ('De la Esquina Sur, dos Cuadras al este', 1), ('Del parque un anden abajo', 2);
+
+INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (1, 1), (2, 2);
+
+INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (3, 3), (2, 4);
+
+DBCC CHECKIDENT ('Addresses', RESEED, 12);   
+
+DELETE FROM Addresses WHERE Id > 4;
+ 
+SELECT * FROM ThirdPartiesAddresses;  
+SELECT * FROM ThirdParties;    
+
+SELECT * FROM Orders;
+
+
+DELETE FROM Addresses WHERE Id = 13;
+
+
+
+

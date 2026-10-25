@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Vehicle.Views.VehicleMenuView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels"
+    x:DataType="vm:VehicleMenuViewModel">
+
+    
+    <Button Background="Transparent" Padding="0">
+            <Image Source="avares://YHTransporte.AvaloniaUI/Assets/12225881.png" Width="46"/>
+    </Button>
+
+</UserControl>

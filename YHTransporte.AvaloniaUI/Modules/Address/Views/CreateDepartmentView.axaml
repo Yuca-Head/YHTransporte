@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Address.Views.CreateDepartmentView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Address.ViewModels"
+    x:DataType="vm:CreateDepartmentViewModel">
+    
+    <StackPanel VerticalAlignment="Center">
+        <Border CornerRadius="8" BorderBrush="#2B304C" BorderThickness="1" Padding="16" Background="{DynamicResource BackgroundBrush}" Width="300" MinHeight="230"  MaxWidth="400" MaxHeight="500">
+            <Grid RowDefinitions="Auto, *, Auto, Auto" ColumnDefinitions="*,*" Margin="16" > 
+
+                <Grid.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                    </Style>
+                </Grid.Styles>
+                <TextBlock Grid.ColumnSpan="2" Text="Crear Departamento" FontSize="20" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Vertical" Spacing="8">
+                    <TextBlock Text="Nombre del Departamento:"/>
+                    <TextBox Text="{Binding Department.Name}" Classes="searchbar" Width="200" Margin="0,0,0,10" />
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,10"
+                Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center"/>
+                
+                <Button Grid.Row="3"  Content="Crear" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                    Command="{Binding CreateCommand}" Width="100" Background="{DynamicResource PrimaryButtonBrush}" />
+
+                <Button Grid.Row="3" Grid.Column="1" Content="Cerrar" HorizontalContentAlignment="Center" HorizontalAlignment="Center"
+                    Command="{Binding CloseCommand}" Width="100" Background="{DynamicResource PrimaryDeclineButtonBrush}" />
+            </Grid>
+        </Border>
+    </StackPanel>
+</UserControl> 

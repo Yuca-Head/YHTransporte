@@ -1,3 +1,4 @@
 namespace YHTransporte.Application.Shared.Results;
 
-public record NotFound(object? Argument = null);
+public abstract record NotFound(object? Argument = null);
+public readonly record struct NotFound<T>(T Argument);

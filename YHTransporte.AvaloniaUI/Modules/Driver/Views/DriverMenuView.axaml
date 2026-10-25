@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Driver.Views.DriverMenuView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Driver.ViewModels"
+    x:DataType="vm:DriverMenuViewModel">
+
+    <Grid>
+        <Image Source="avares://YHTransporte.AvaloniaUI/Assets/Full-logo.png" Stretch="Fill"/>
+    </Grid>
+
+</UserControl>

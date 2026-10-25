@@ -1,5 +1,7 @@
 <Solution>
+  <Project Path="YHTransporte.AvaloniaUI/YHTransporte.AvaloniaUI.csproj" />
   <Project Path="YHTransporte.Core/YHTransporte.Core.csproj" />
   <Project Path="YHTransporte.Testing/YHTransporte.Testing.csproj" />
-  <Project Path="YHTransporte.Application/YHTransporte.Application.csproj"/>
+  <Project Path="YHTransporte.Application/YHTransporte.Application.csproj" />
+  <Project Path="YHTransporte.Infrastructure/YHTransporte.Infrastructure.csproj" />
 </Solution>

@@ -1,0 +1,85 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            x:Class="YHTransporte.AvaloniaUI.Modules.Order.Views.CreateOrderView"
+            xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Order.ViewModels"
+            x:DataType="vm:CreateOrderViewModel">
+
+    <Border  Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1.5"
+    CornerRadius="10" Width="480" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="25" >
+
+        <StackPanel Spacing="16">
+            <TextBlock Text="Registrar Nuevo Servicio" Foreground="White" FontSize="20" FontWeight="Bold"
+            Margin="0,0,0,5"/>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Cliente *" Foreground="#8A92A6" FontSize="13"/>
+                <ComboBox PlaceholderText="Seleccionar cliente..." Classes="common" HorizontalAlignment="Stretch" Background="White"
+                Foreground="Black" CornerRadius="6" SelectedItem="{Binding SelectedCustomer}" Height="38" ItemsSource="{Binding Customers}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            
+            <StackPanel Spacing="6">
+                <TextBlock Text="Origen *" Foreground="#8A92A6" FontSize="13"/>
+                <ComboBox PlaceholderText="Seleccionar Destino..."  SelectedItem="{Binding Destination}" Classes="common" HorizontalAlignment="Stretch" Background="White"
+                Foreground="Black" CornerRadius="6"  Height="38" ItemsSource="{Binding SelectedCustomer.Addresses}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Remitente *" Foreground="#8A92A6" FontSize="13"/>
+                <ComboBox PlaceholderText="Seleccionar remitente..." Classes="common" HorizontalAlignment="Stretch" Background="White"
+                Foreground="Black" CornerRadius="6" SelectedItem="{Binding SelectedSupplier}" Height="38" ItemsSource="{Binding Suppliers}">
+                <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Origen *" Foreground="#8A92A6" FontSize="13"/>
+                <ComboBox PlaceholderText="Seleccionar Origen..." SelectedItem="{Binding Origin}" Classes="common" HorizontalAlignment="Stretch" Background="White"
+                Foreground="Black" CornerRadius="6"  Height="38" ItemsSource="{Binding SelectedSupplier.Addresses}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock Text="Fecha Solicitud" Foreground="#8A92A6" FontSize="13"/>
+                <DatePicker Classes="common" CornerRadius="6" SelectedDate="{Binding Order.Creation}" HorizontalAlignment="Stretch"/>
+            </StackPanel>
+
+            <!--StackPanel Spacing="6"> Quizás no se termine de usar
+                <TextBlock Text="Fecha Estimada" Foreground="#8A92A6" FontSize="13"/>
+                <DatePicker Classes="common" CornerRadius="6" HorizontalAlignment="Stretch"/>
+            </StackPanel-->
+
+            <Grid ColumnDefinitions="*, 12, *" Margin="0,15,0,0">
+
+                <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                        FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"/>
+
+                <Button Grid.Column="2" Command="{Binding CloseCommand}"
+                        Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="White"
+                        FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

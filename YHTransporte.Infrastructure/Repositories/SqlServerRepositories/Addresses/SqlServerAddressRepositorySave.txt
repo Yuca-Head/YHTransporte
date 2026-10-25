@@ -1,0 +1,131 @@
+using Dapper;
+using YHTransporte.Application.Addresses.Repositories;
+using YHTransporte.Core.Entities;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses.Dtos;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses.Mappers;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
+
+namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses;
+
+public sealed class SqlServerAddressRepository(DbConnectionFactory factory) : IAddressRepository
+{
+    private readonly DbConnectionFactory _factory = factory;
+    public Task AddAsync(Address entity, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddAsync(IEnumerable<Address> entities, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddDepartmentsAsync(IEnumerable<Department> department, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddMunicipalitiesAsync(IEnumerable<Municipality> municipality, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Exists(int key, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Address>> GetAddressesByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Address>> GetByKeysAsync(IEnumerable<int> key, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Department>> GetDepartmentsAsync()
+    {
+                //...
+        await Task.Delay(100);
+        return [];
+    }
+
+    public Task<IEnumerable<Department>> GetDepartmentsByIdsAsync(IEnumerable<int> id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Department>> GetDepartmentsByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<Address>> GetEverythingAsync(CancellationToken cancellationToken = default)
+    {
+        var connection = _factory.Create();
+
+        var addresses = await connection.QueryAsync<AddressSqlDto>(
+        "SELECT * FROM dbo.AddressDetails");
+
+        return addresses.Select(AddressSqlMapper.ToEntity);
+    }
+
+    public async Task<IEnumerable<Municipality>> GetMunicipalitiesAsync()
+    {
+        var connection = _factory.Create();
+
+        var municipalities = await connection.QueryAsync<MunicipalitySqlDto>(
+        "SELECT * FROM vw_MunicipalityDetails");
+
+        return municipalities.Select(MunicipalitySqlMapper.ToEntity);
+    }
+
+    public Task<IEnumerable<Municipality>> GetMunicipalitiesByIdsAsync(IEnumerable<int> id, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Municipality>> GetMunicipalitiesByNameAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<(int ThirdPartyId, IEnumerable<Address> Addresses)>>
+    GetAddressesFromThirdParties(
+        IEnumerable<int> thirdPartyIds,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            """
+            SELECT
+                tpa.IdThirdParty,
+                a.Id,
+                a.Details,
+                a.IdMunicipality,
+                a.MunicipalityName,
+                a.DepartmentId,
+                a.DepartmentName
+            FROM ThirdPartiesAddresses tpa
+            INNER JOIN vw_ThirdPartyAddress a   
+                ON a.Id = tpa.IdThirdParty
+            WHERE tpa.IdThirdParty IN @ThirdPartyIds;
+            """,
+            new { ThirdPartyIds = thirdPartyIds },
+            cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<ThirdPartyAddressSqlDto>(command);
+
+        return rows
+            .GroupBy(x => x.IdThirdParty)
+            .Select(group => (
+                ThirdPartyId: group.Key,
+                Addresses: group.Select( x => new Address(x.Details, 
+                new Municipality(x.MunicipalityName, new Department(x.DepartmentName)
+                {Key = x.DepartmentId}){Key = x.IdMunicipality}){Key = x.Id})
+            ));
+    }
+}

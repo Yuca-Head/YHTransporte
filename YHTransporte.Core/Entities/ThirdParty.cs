@@ -39,9 +39,9 @@ public class ThirdParty : IEntity<int>
     public CustomerRole? Customer {get; private set;}
 
     public void BecomeCustomer()
-    => Customer ??= new();
+    => Customer ??= new(this.Key);
     public void BecomeSupplier()
-    => Supplier ??= new();
+    => Supplier ??= new(this.Key);
 
     public void AddAddresses(params IEnumerable<Address> addresses)
     {
