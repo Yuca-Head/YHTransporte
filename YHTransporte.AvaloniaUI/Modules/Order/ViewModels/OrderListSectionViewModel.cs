@@ -12,8 +12,9 @@ public partial class OrderListSectionViewModel : ViewModelBase
 
     public OrderListSectionViewModel(CreateOrderViewModel ordercreator)
     {
-        var uno = new OrderCode(OrderCode.Generate("0001"));
-        OrderList = [uno, new(OrderCode.Generate(uno.Code))];
+        var uno = new OrderCode(OrderCode.Generate("0001-311026%"));
+        var two = new OrderCode(OrderCode.Generate(uno.Code));
+        OrderList = [uno, two, new (OrderCode.Generate(two.Code))];
         Creator = ordercreator;
     }
     public event Action? SelectedOrderChanged;

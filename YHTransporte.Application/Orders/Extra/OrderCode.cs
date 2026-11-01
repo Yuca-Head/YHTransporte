@@ -10,13 +10,18 @@ public readonly record struct OrderCode(string Code)
     public static string Generate(string? lastCode)
     {
         int serie = 0;
+
+        if(lastCode is null)
+            return $"{serie++:D4}-{DateTimeOffset.UtcNow:ddMMyy}%"; 
+        
         var now = DateTimeOffset.UtcNow;
         if(lastCode is not null && int.TryParse(lastCode[..4], out var id) &&
-        now.Date == DateOnly.ParseExact(lastCode.Substring(5, 6), "ddMMyy", CultureInfo.InvariantCulture).ToDateTime(default))
+        now.Date == DateOnly.ParseExact
+        (lastCode.Substring(5, 6), "ddMMyy", CultureInfo.InvariantCulture).ToDateTime(default).ToUniversalTime().Date)
             serie = id;
 
         serie++;
-        
+
         return $"{serie:D4}-{now:ddMMyy}%";
     }
 }
