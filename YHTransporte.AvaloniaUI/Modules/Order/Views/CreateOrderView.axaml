@@ -59,11 +59,6 @@
                 </ComboBox>
             </StackPanel>
 
-            <StackPanel Spacing="6">
-                <TextBlock Text="Fecha Solicitud" Foreground="#8A92A6" FontSize="13"/>
-                <DatePicker Classes="common" CornerRadius="6" SelectedDate="{Binding Order.Creation}" HorizontalAlignment="Stretch"/>
-            </StackPanel>
-
             <!--StackPanel Spacing="6"> Quizás no se termine de usar
                 <TextBlock Text="Fecha Estimada" Foreground="#8A92A6" FontSize="13"/>
                 <DatePicker Classes="common" CornerRadius="6" HorizontalAlignment="Stretch"/>

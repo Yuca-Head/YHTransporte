@@ -19,9 +19,10 @@ public sealed class GetOrderHandler(IOrderRepository repository)
 
         if(orders.Count != 0)
             return new NotFound();
-
         else
             return new Success<OrderDto>(OrderMapper.ToValue(orders.First()));
-        
     }
+
+    public Task<IEnumerable<Order>> GetEverythingAsync(CancellationToken cancellationToken = default)
+    => _repository.GetEverythingAsync(cancellationToken);
 }

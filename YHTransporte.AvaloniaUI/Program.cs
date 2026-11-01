@@ -13,6 +13,7 @@ using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.Orders.Repositories;
 using YHTransporte.Application.Orders.UseCases.CreateOrder;
+using YHTransporte.Application.Reports;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;
@@ -24,6 +25,7 @@ using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Reports.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.Extra;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
@@ -32,6 +34,7 @@ using YHTransporte.AvaloniaUI.ViewModels;
 using YHTransporte.AvaloniaUI.Views;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Orders;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Reports;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
@@ -98,6 +101,7 @@ public sealed class Program
         services.AddTransient<OrderListSectionViewModel>();
         services.AddTransient<OrderEditorViewModel>();
         services.AddTransient<CreateOrderViewModel>();
+        services.AddTransient<ReportsMenuViewModel>();
 
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);
@@ -118,7 +122,7 @@ public sealed class Program
         services.AddSingleton<IThirdPartyRepository, SqlServerThirdPartyRepository>();
         services.AddSingleton<IAddressRepository, SqlServerAddressRepository>();
         services.AddSingleton<IOrderRepository, SqlServerOrderRepository>();
-
+        services.AddSingleton<IShipmentReportRepository, EfShipmentReportRepository>();
 
         //dbRelated
         services.AddSingleton<DbConnectionFactory>();

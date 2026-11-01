@@ -32,6 +32,7 @@ public partial class ThirdPartyAddressCreator : ObservableObject, IResultProvide
 
         
         UpdateDepts();
+        WeakReferenceMessenger.Default.Register<AddressUpdateMessage>(this, (_,_) => UpdateDepts());
 
         _context.DepartmentsChanged += UpdateDepts;
         _context.MunicipalitiesChanged += UpdateMunicipalities;

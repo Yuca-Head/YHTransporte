@@ -72,7 +72,7 @@ CREATE TABLE [dbo].[Municipalities] (
 );
 
 
-DROP TABLE Municipalities
+--DROP TABLE Municipalities
 
 SELECT * FROM Municipalities
 
@@ -82,6 +82,10 @@ CREATE TABLE [dbo].[Vehicles] (
     [Description] NVARCHAR (120) NULL,
     CONSTRAINT [PK_Vehicles] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+--ALTER TABLE Vehicles ADD InUse BIT DEFAULT 0 NOT NULL
+
+SELECT * FROM Products
 
 CREATE TABLE [dbo].[Products] (
     [Id]   INT           IDENTITY (1, 1) NOT NULL,
@@ -126,6 +130,11 @@ CREATE TABLE [dbo].[Drivers] (
     [SecondLastName] NVARCHAR (15) NULL,
     CONSTRAINT [PK_Drivers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
+--ALTER TABLE Drivers ADD InUse BIT DEFAULT 0 NOT NULL
+
+
 
 
 CREATE TABLE [dbo].[OrderStatuses] (
@@ -202,7 +211,7 @@ INSERT INTO ThirdPartiesAddresses (IdThirdParty, IdAddress) VALUES (3, 3), (2, 4
 DBCC CHECKIDENT ('Addresses', RESEED, 12);   
 
 DELETE FROM Addresses WHERE Id > 4;
- 
+
 SELECT * FROM ThirdPartiesAddresses;  
 SELECT * FROM ThirdParties;    
 

@@ -18,7 +18,7 @@ public class Order : IEntity<string>
     // SupplierId y CustomerId de la tabla Orders). Antes solo recibía los roles, que no tienen Id,
     // y por eso no se podía guardar ni reconstruir una orden desde la base de datos.
     public Order(SupplierRole supplier, CustomerRole customer,
-                 Address origin, Address destination)
+    Address origin, Address destination)
     {
         ArgumentNullException.ThrowIfNull(supplier);
         ArgumentNullException.ThrowIfNull(customer);

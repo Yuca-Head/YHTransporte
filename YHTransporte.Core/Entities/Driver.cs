@@ -7,7 +7,7 @@ namespace YHTransporte.Core.Entities;
 public class Driver : IEntity<int>
 {
 
-    public Driver(string code, string name, string? middleName, string lastName, string secondLastName)
+    public Driver(string code, string name, string? middleName, string lastName, string? secondLastName)
     {
         Code = code;
         Name = name;
@@ -16,7 +16,6 @@ public class Driver : IEntity<int>
         SecondLastName = (secondLastName ?? string.Empty).Trim();
     }
     public int Key {get; init;}
-
 
     public string Code 
     {
@@ -38,4 +37,6 @@ public class Driver : IEntity<int>
         throw new DomainException(ValidationErrors.ImplementRequiredField("Conductor", "Apellido"));
     }
     public string SecondLastName {get; init;}
+
+    public bool InUse {get; set;}
 }

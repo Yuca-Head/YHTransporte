@@ -26,8 +26,9 @@ public partial class CreateOrderViewModel : ViewModelBase
 
         _tpContext.ThirdPartiesChanged += UpdateParties;
     }
+
     [ObservableProperty]
-    public partial CreateOrderCommand Order{get; set;} = new(){ Creation = DateTime.Now};
+    public partial CreateOrderCommand Order{get; set;} = new();
 
     [ObservableProperty]
     public partial bool IsOpen {get; set;}

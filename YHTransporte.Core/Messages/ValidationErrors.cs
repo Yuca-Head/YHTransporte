@@ -11,11 +11,11 @@ public static class ValidationErrors
     => $"Para modificar {className} debe ingresar {fieldName}.";
 
     public static string LowerDateThanAllowed(InvalidDateInfo info)
-    => $"No se permite una fecha inferior a {info.ExpectedLimit:dd/mm/yyyy} para {info.FieldName} en {info.ClassName} "+
-    $"(fecha ingresada: {info.InvalidDate:dd/mm/yyyy})";    
+    => $"No se permite una fecha inferior a {info.ExpectedLimit:dd/MM/yyyy} para {info.FieldName} en {info.ClassName} "+
+    $"(fecha ingresada: {info.InvalidDate:dd/MM/yyyy})";    
 
     public static string DateIsAlreadyCreated(InvalidDateInfo info)
-    => $"{info.ClassName} ya tiene una fecha para {info.FieldName} ({info.ExpectedLimit:dd/mm/yyyy})";
+    => $"{info.ClassName} ya tiene una fecha para {info.FieldName} ({info.ExpectedLimit:dd/MM/yyyy})";
 
     /// <summary>
     /// Contains Info about an invalid date.

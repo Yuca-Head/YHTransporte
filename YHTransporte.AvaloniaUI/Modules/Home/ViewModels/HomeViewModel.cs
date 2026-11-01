@@ -6,6 +6,7 @@ using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Order.Views;
+using YHTransporte.AvaloniaUI.Modules.Reports.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.Views;
@@ -17,7 +18,7 @@ public partial class HomeViewModel : ViewModelBase
 {
     public HomeViewModel(ThirdPartyMenuViewModel thirdPartyMenu,DashboardMenuViewModel dashboardMenu,
     CargoMenuViewModel cargoMenu, OrderMenuViewModel orderMenu, 
-    DriverMenuViewModel driverMenu, VehicleMenuViewModel vehicleMenu)
+    DriverMenuViewModel driverMenu, VehicleMenuViewModel vehicleMenu, ReportsMenuViewModel reportsMenu)
     {
         _thirdPartyMenu = thirdPartyMenu;
         _dashboardMenu = dashboardMenu;
@@ -25,6 +26,7 @@ public partial class HomeViewModel : ViewModelBase
         _orderMenu = orderMenu;
         _driverMenu = driverMenu;
         _vehicleMenu = vehicleMenu;
+        _reportsMenu = reportsMenu;
         CurrentView = _dashboardMenu;
     }
 
@@ -34,6 +36,7 @@ public partial class HomeViewModel : ViewModelBase
     private readonly OrderMenuViewModel _orderMenu;
     private readonly DriverMenuViewModel _driverMenu;
     private readonly VehicleMenuViewModel _vehicleMenu;
+    private readonly ReportsMenuViewModel _reportsMenu;
 
     [ObservableProperty]    
     public partial ViewModelBase CurrentView {get; private set;}
@@ -61,6 +64,9 @@ public partial class HomeViewModel : ViewModelBase
     [RelayCommand]
     public void SetVehicleMenu()
     => ChangeView(_vehicleMenu);
+    [RelayCommand]
+    public void SetReportsMenu()
+    => ChangeView(_reportsMenu);
     private void ChangeView(ViewModelBase viewModel)
     {
         if (CurrentView! != viewModel)

@@ -26,7 +26,7 @@ public sealed class AddressContext : IInitiableContext
     
     public AddressContext(GetAddressHandler getHandler)
     {
-        _getHandler = getHandler;
+        _getHandler = getHandler;       
 
         WeakReferenceMessenger.Default.Register<AddressUpdateMessage>(this, async (_,_) =>
         { 

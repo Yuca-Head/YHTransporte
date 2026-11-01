@@ -4,7 +4,7 @@ namespace YHTransporte.Core.Entities;
 
 public record Package : IEntity<int>
 {
-    public Package(Product product, decimal weight, decimal productAmount)
+    public Package(Product product, decimal weight, int productAmount)
     {
         Product = product;
         Weight = weight;
@@ -17,5 +17,7 @@ public record Package : IEntity<int>
 
     public decimal Weight {get; init;}
 
-    public decimal ProductAmount {get; init;}
+    public int ProductAmount {get; init;}
+
+    public string ShipmentCode {get; init;}
 }

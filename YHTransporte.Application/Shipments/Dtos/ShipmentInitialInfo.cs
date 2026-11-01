@@ -1,6 +1,6 @@
 using YHTransporte.Core.Exceptions;
 
-namespace YHTransporte.Application.Orders.Dtos;
+namespace YHTransporte.Application.Shipments.Dtos;
 
 public readonly record struct ShipmentInitialInfo
 {

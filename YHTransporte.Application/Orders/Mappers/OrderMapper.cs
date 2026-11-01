@@ -10,10 +10,10 @@ internal sealed class OrderMapper : IMapper<OrderDto, Order>
 {
     public static Order ToEntity(OrderDto value)
     => new(SupplierRoleMapper.ToEntity(value.Supplier), CustomerRoleMapper.ToEntity(value.Customer),
-    AddressDetailsMapper.ToEntity(value.Origin), AddressDetailsMapper.ToEntity(value.Destination));
+    AddressDetailsMapper.ToEntity(value.Origin), AddressDetailsMapper.ToEntity(value.Destination)){ Status = value.Status};
 
     public static OrderDto ToValue(Order entity)
     => new(SupplierRoleMapper.ToValue(entity.Supplier), CustomerRoleMapper.ToValue(entity.Customer),
-    AddressDetailsMapper.ToValue(entity.OriginDirection), AddressDetailsMapper.ToValue(entity.DestinationDirection));
+    AddressDetailsMapper.ToValue(entity.OriginDirection), AddressDetailsMapper.ToValue(entity.DestinationDirection), entity.Status);
     
 }

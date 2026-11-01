@@ -21,4 +21,6 @@ public class Vehicle() : IEntity<int>
     }
 
     public string Description {get; set;} = "";
+
+    public bool InUse {get; set;}
 }

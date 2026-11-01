@@ -24,10 +24,6 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
     private const string OrderColumns =
         "Code, CreatedAt, Description, IdStatus, SupplierId, CustomerId, IdOriginDir, IdDestinationDir";
 
-    private const string ShipmentColumns =
-        "Code, CodeOrder, Description, IdStatus, IdVehicle, IdDriver, EstimatedPickupAt, PickedUpAt, DeliveredAt";
-
-   
     private const string LastOrderCodeLocked =
         """
         SELECT TOP 1 Code FROM dbo.Orders WITH (UPDLOCK, HOLDLOCK)
@@ -58,27 +54,7 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         }, cancellationToken);
     }
 
-    public async Task AddShipment(string orderCode, Shipment shipment, CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(orderCode);
-        ArgumentNullException.ThrowIfNull(shipment);
 
-        await InTransactionAsync(async (connection, transaction) =>
-        {
-            await InsertShipmentAsync(connection, transaction, orderCode, shipment, cancellationToken);
-        }, cancellationToken);
-    }
-
-    public async Task AddPackage(string shipmentCode, Package package, CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(shipmentCode);
-        ArgumentNullException.ThrowIfNull(package);
-
-        await InTransactionAsync(async (connection, transaction) =>
-        {
-            await InsertPackageAsync(connection, transaction, shipmentCode, package, cancellationToken);
-        }, cancellationToken);
-    }
 
     public async Task<bool> Exists(string key, CancellationToken cancellationToken = default)
     {
@@ -87,7 +63,7 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         var command = new CommandDefinition(
             """
             SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM dbo.Orders WHERE Code = @Key)
-                             THEN 1 ELSE 0 END AS BIT);
+            THEN 1 ELSE 0 END AS BIT);
             """,
             new { Key = key },
             cancellationToken: cancellationToken);
@@ -139,65 +115,10 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         return await connection.QueryFirstOrDefaultAsync<string>(command);
     }
 
-    public async Task<string?> GetLastShipmentCode(CancellationToken cancellationToken = default)
-    {
-        using var connection = _factory.Create();
-
-        var command = new CommandDefinition(
-            "GetLastShipmentCode",
-            commandType: CommandType.StoredProcedure,
-            cancellationToken: cancellationToken);
-
-        return await connection.QueryFirstOrDefaultAsync<string>(command);
-    }
 
 
 
-    public async IAsyncEnumerable<Shipment> GetOrderShipments(
-        string orderId,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        using var connection = _factory.Create();
 
-        var command = new CommandDefinition(
-            $"SELECT {ShipmentColumns} FROM dbo.vw_ShipmentDetails WHERE CodeOrder = @OrderId ORDER BY Code;",
-            new { OrderId = orderId },
-            cancellationToken: cancellationToken);
-
-        var rows = (await connection.QueryAsync<ShipmentSqlRow>(command)).ToList();
-
-        var (drivers, vehicles) = await LoadDriversAndVehiclesAsync(connection, rows, cancellationToken);
-
-        foreach (var row in rows)
-        {
-            Driver? driver = row.IdDriver is int driverId && drivers.TryGetValue(driverId, out var d) ? d : null;
-            Vehicle? vehicle = row.IdVehicle is int vehicleId && vehicles.TryGetValue(vehicleId, out var v) ? v : null;
-
-            yield return ShipmentSqlMapper.ToEntity(row, driver, vehicle);
-        }
-    }
-
-    public async IAsyncEnumerable<Package> GetShipmentPackages(
-        string shipmentId,
-        [EnumeratorCancellation] CancellationToken cancellationToken = default)
-    {
-        using var connection = _factory.Create();
-
-        var command = new CommandDefinition(
-            """
-            SELECT Id, IdProduct, ProductCode, ProductName, WeightKg, ProductAmount
-            FROM dbo.vw_PackageDetails
-            WHERE ShipmentCode = @ShipmentId
-            ORDER BY Id;
-            """,
-            new { ShipmentId = shipmentId },
-            cancellationToken: cancellationToken);
-
-        var rows = await connection.QueryAsync<PackageSqlRow>(command);
-
-        foreach (var row in rows)
-            yield return PackageSqlMapper.ToEntity(row);
-    }
 
     // ============================================================
     // Helpers: guardar
@@ -310,8 +231,8 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         }
     }
 
-    private static string? NullIfEmpty(string? value)
-    => string.IsNullOrWhiteSpace(value) ? null : value;
+        private static string? NullIfEmpty(string? value)
+        => string.IsNullOrWhiteSpace(value) ? null : value;
 
     // En el Core ProductAmount es decimal, pero en SQL (ShipmentsDetails.ProductAmount) es INT.
     private static int ToWholeAmount(decimal amount)
@@ -348,40 +269,18 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         return [.. rows.Select(r => OrderSqlMapper.ToEntity(r, addresses[r.IdOriginDir], addresses[r.IdDestinationDir]))];
     }
 
-    private static async Task<(Dictionary<int, Driver> Drivers, Dictionary<int, Vehicle> Vehicles)>
-    LoadDriversAndVehiclesAsync(
-        SqlConnection connection, List<ShipmentSqlRow> rows, CancellationToken cancellationToken)
+    public Task ChangeOrderState(string orderCode, CancellationToken cancellationToken = default)
     {
-        int[] driverIds = [.. rows.Where(r => r.IdDriver.HasValue).Select(r => r.IdDriver!.Value).Distinct()];
-        int[] vehicleIds = [.. rows.Where(r => r.IdVehicle.HasValue).Select(r => r.IdVehicle!.Value).Distinct()];
+        throw new NotImplementedException();
+    }
 
-        Dictionary<int, Driver> drivers = [];
-        Dictionary<int, Vehicle> vehicles = [];
+    public Task CancelateOrder(string orderCode, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 
-        if (driverIds.Length > 0)
-        {
-            var command = new CommandDefinition(
-                "SELECT Id, Code, Name, MiddleName, LastName, SecondLastName FROM dbo.Drivers WHERE Id IN @Ids;",
-                new { Ids = driverIds },
-                cancellationToken: cancellationToken);
-
-            drivers = (await connection.QueryAsync<DriverSqlRow>(command))
-                .Select(DriverSqlMapper.ToEntity)
-                .ToDictionary(d => d.Key);
-        }
-
-        if (vehicleIds.Length > 0)
-        {
-            var command = new CommandDefinition(
-                "SELECT Id, Plate, Description FROM dbo.Vehicles WHERE Id IN @Ids;",
-                new { Ids = vehicleIds },
-                cancellationToken: cancellationToken);
-
-            vehicles = (await connection.QueryAsync<VehicleSqlRow>(command))
-                .Select(VehicleSqlMapper.ToEntity)
-                .ToDictionary(v => v.Key);
-        }
-
-        return (drivers, vehicles);
+    public Task<OrderStatuses> GetOrderStatus(string orderCode, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

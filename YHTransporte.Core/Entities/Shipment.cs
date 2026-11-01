@@ -12,7 +12,7 @@ public class Shipment : IEntity<string>
     // CAMBIO: Driver y Vehicle ahora pueden ser null. En la base de datos las columnas
     // Shipments.IdDriver e IdVehicle aceptan NULL (un envío "Pending" aún puede no tener
     // conductor ni vehículo; el procedimiento ChangeShipmentStatus los exige hasta pasar a "On way").
-    public Shipment(Driver? driver = null, Vehicle? vehicle = null  )
+    public Shipment(Driver? driver = null, Vehicle? vehicle = null)
     {
         Driver = driver;
         Vehicle = vehicle;
@@ -27,7 +27,7 @@ public class Shipment : IEntity<string>
     public string Key {get; init;} = "-1";
 
     /// <summary>Código de la orden a la que pertenece (columna Shipments.CodeOrder). Se asigna al restaurar desde la BD.</summary>
-    public string? OrderKey {get; init;}
+    public string OrderKey {get; init;} = "";
 
     public Vehicle? Vehicle{get; init;}
     public Driver? Driver {get; init;}
@@ -84,6 +84,7 @@ public class Shipment : IEntity<string>
             _pickedUpAt = value;
         }
     }
+    
     public DateTimeOffset? DeliveredAt
     {
         get => _deliveredAt;
@@ -110,8 +111,8 @@ public class Shipment : IEntity<string>
         }
     }
 
-   
-    internal static Shipment Restore(
+
+    public static Shipment Restore(
         string key,
         string orderKey,
         ShipmentStatuses status,
@@ -120,9 +121,10 @@ public class Shipment : IEntity<string>
         string? description,
         DateTimeOffset? estimatedPickUpAt,
         DateTimeOffset? pickedUpAt,
-        DateTimeOffset? deliveredAt)
+        DateTimeOffset? deliveredAt,
+        params IEnumerable<Package> packages)
     {
-        return new Shipment(driver, vehicle)
+        var shipment = new Shipment(driver, vehicle)
         {
             Key = key,
             OrderKey = orderKey,
@@ -130,8 +132,12 @@ public class Shipment : IEntity<string>
             Status = status,
             _estimatedPickUpAt = estimatedPickUpAt,
             _pickedUpAt = pickedUpAt,
-            _deliveredAt = deliveredAt
+            _deliveredAt = deliveredAt,
         };
+
+        shipment.AddPackages(packages);
+
+        return shipment;
     }
 
 

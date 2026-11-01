@@ -32,7 +32,7 @@
 					<Button x:Name="btnServicios" Content="Servicios" Command="{Binding SetOrderMenuCommand}"/>
 					<Button x:Name="btnVehiculos" Content="Vehículos" Command="{Binding SetVehicleMenuCommand}"/>
 					<Button x:Name="btnConductores" Content="Conductores" Command="{Binding SetDriverMenuCommand}"/>
-					<Button x:Name="btnReportes" Content="Reportes"/>
+					<Button x:Name="btnReportes" Content="Reportes" Command="{Binding SetReportsMenuCommand}" />
 
 				</StackPanel>
 				
