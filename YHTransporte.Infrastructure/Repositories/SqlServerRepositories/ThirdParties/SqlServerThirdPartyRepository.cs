@@ -168,4 +168,24 @@ public sealed class SqlServerThirdPartyRepository(
         await context.SaveChangesAsync(cancellationToken);
 
     }
+
+    public IAsyncEnumerable<Product> GetSupplierProducts(int supplierId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Product?> GetProductByCode(string code, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Product> AddProduct(Product product, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddProductToSupplier(int productId, int supplierId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
 }
