@@ -69,7 +69,7 @@ public sealed class AddressContext : IInitiableContext
     (IEnumerable<GetAddressQuery> query)
     {
         /*
-        esto era por si el generic fallaba 
+        esto era por si el generic fallaba  (Y NI SIQUIERA SE USA ESTE MÉTODO NI NINGUNO DE ESTE TIPO::::::XÑLDMKÑMFKDSMFKDMKLAMALSKFJLKSAKSJKSJKAJKASJDKSJDKASJDKASJDKASJDKLASJDLKASJDKLASJDKLASDKSADLKSJDJKSJDKSJDKASDKASKDSKDJSKLDJSKDJSLKDJSKLDASKLDASKLDSKDJKSJDKSJDKLSKDJSKDSALKDSKDSALKDASKDJJASKLDJLASKKSDKLaskdlsakldsakdsajlkdsadklsdlkasdksjdklajdkljLKJLKkljjklskaldsakldakldLKSKLDJAKLDKLASDKLADAKLJKLDSKLAKDKLADLAKLKLJ Xavlegbmaofffassssitimiwoamndutroabcwapwaeiippohfffx dklsklaskdpsAREuAFRAIDOFLOVEksxkkdflkskcklmakwhueifjasnkjsnajsj'causeIdo..kdskaskdskklasdjskdjskdljafkdñsañldk)
         int[] keys = [..query.Select(x => x.Id)];
         int[] existingIds = [.. _addresses.Keys.Intersect(keys)];
 
@@ -97,6 +97,7 @@ public sealed class AddressContext : IInitiableContext
 
         
         List<AddressDetailsDto> addresses = [];
+        
         var result = await GenericContexts.TryGetAsync
         (query, x => x.Id, _addresses, x => x.Id,
         _getHandler.GetAddressesByIdsAsync, addresses);

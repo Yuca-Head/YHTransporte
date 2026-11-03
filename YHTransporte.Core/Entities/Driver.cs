@@ -7,15 +7,14 @@ namespace YHTransporte.Core.Entities;
 public class Driver : IEntity<int>
 {
 
-    public Driver(string code, string name, string? middleName, string lastName, string? secondLastName)
+    public Driver(string name, string? middleName, string lastName, string? secondLastName)
     {
-        Code = code;
         Name = name;
         LastName = lastName;
         MiddleName = (middleName ?? string.Empty).Trim();
         SecondLastName = (secondLastName ?? string.Empty).Trim();
     }
-    public int Key {get; init;}
+    public int Key {get; init;} = -1;
 
     public string Code 
     {

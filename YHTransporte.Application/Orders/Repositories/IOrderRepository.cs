@@ -17,14 +17,22 @@ public interface IOrderRepository : IRepository<string, Order>
 
 
     /// <summary>
-    /// Cancelates an order.
+    /// Cancelates an order, but only if none of its shipments is on its way.
+    /// </summary>
+    /// <param name="orderCode"></param>
+    /// <returns>True if it could be cancelated correctly</returns>
+    /// <remarks>
+    /// Also cancelates the order's pending shipments. If a shipment is on its way, nothing is changed and an error is thrown.
+    /// </remarks>
+    Task<bool> CancelateOrderSafe(string orderCode, CancellationToken cancellationToken = default);
+
+
+    /// <summary>
+    /// Cancelates an order and every shipment that is not delivered yet, including the ones on their way.
     /// </summary>
     /// <param name="orderCode"></param>
     /// <returns>Nothing</returns>
-    /// <remarks>
-    /// also cancelates order's shipments if they are not completed.
-    /// </remarks>
-    Task CancelateOrder(string orderCode, CancellationToken cancellationToken = default);
+    Task CancelateOrderUnsafe(string orderCode, CancellationToken cancellationToken = default);
 
 
     Task<OrderStatuses> GetOrderStatus(string orderCode, CancellationToken cancellationToken = default);

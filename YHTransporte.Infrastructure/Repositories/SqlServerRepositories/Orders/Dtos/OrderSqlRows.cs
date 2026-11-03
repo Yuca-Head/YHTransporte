@@ -28,6 +28,7 @@ public sealed record ShipmentSqlRow(
 
 /// <summary>Fila de dbo.vw_PackageDetails.</summary>
 public sealed record PackageSqlRow(
+    string ShipmentCode,
     int Id,
     int IdProduct,
     string ProductCode,
@@ -42,10 +43,12 @@ public sealed record DriverSqlRow(
     string Name,
     string? MiddleName,
     string LastName,
-    string? SecondLastName);
+    string? SecondLastName,
+    bool InUse);
 
 /// <summary>Fila de dbo.Vehicles.</summary>
 public sealed record VehicleSqlRow(
     int Id,
     string Plate,
-    string? Description);
+    string? Description,
+    bool InUse);

@@ -23,6 +23,6 @@ public sealed class GetOrderHandler(IOrderRepository repository)
             return new Success<OrderDto>(OrderMapper.ToValue(orders.First()));
     }
 
-    public Task<IEnumerable<Order>> GetEverythingAsync(CancellationToken cancellationToken = default)
-    => _repository.GetEverythingAsync(cancellationToken);
+    public async Task<IEnumerable<OrderDto>> GetEverythingAsync(CancellationToken cancellationToken = default)
+    => (await _repository.GetEverythingAsync(cancellationToken)).Select(OrderMapper.ToValue);
 }

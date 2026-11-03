@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using OneOf;
 using OneOf.Types;
 using YHTransporte.Application.Orders.Repositories;
@@ -43,7 +44,7 @@ public sealed class UpdateOrderHandler(IOrderRepository repository, IShipmentRep
     }
 
 
-    public async Task<OneOf<Success, OneOf.Types.NotFound, ValidationError>> CancelateOrder(string orderCode, CancellationToken cancellationToken = default)
+    public async Task<OneOf<Success, OneOf.Types.NotFound, ShipmentsUncompleted, ValidationError>> CancelateOrder(string orderCode, CancellationToken cancellationToken = default)
     {
         if(! await _repository.Exists(orderCode, cancellationToken))
             return new OneOf.Types.NotFound();
@@ -51,7 +52,8 @@ public sealed class UpdateOrderHandler(IOrderRepository repository, IShipmentRep
         if(await _repository.GetOrderStatus(orderCode, cancellationToken) is OrderStatuses.Canceled or OrderStatuses.Completed)
             return new ValidationError("Status");
 
-        await _repository.CancelateOrder(orderCode, cancellationToken);
+        if(!await _repository.CancelateOrderSafe(orderCode, cancellationToken))
+            return new ShipmentsUncompleted();
 
         return new Success();
     }

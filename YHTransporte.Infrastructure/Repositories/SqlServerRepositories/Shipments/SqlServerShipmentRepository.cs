@@ -14,12 +14,14 @@ namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shipmen
 
 public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : IShipmentRepository
 {
-    
+
     private readonly DbConnectionFactory _factory = factory;
 
     private const string UnsavedKey = "-1";
     private const string ShipmentColumns =
         "Code, CodeOrder, Description, IdStatus, IdVehicle, IdDriver, EstimatedPickupAt, PickedUpAt, DeliveredAt";
+    private const string PackageColumns =
+        "ShipmentCode, Id, IdProduct, ProductCode, ProductName, WeightKg, ProductAmount";
     private const string LastOrderCodeLocked =
     """
     SELECT TOP 1 Code FROM dbo.Orders WITH (UPDLOCK, HOLDLOCK)
@@ -30,6 +32,17 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
     SELECT TOP 1 Code FROM dbo.Shipments WITH (UPDLOCK, HOLDLOCK)
     ORDER BY TRY_CAST(LEFT(Code, 4) AS INT) DESC;
     """;
+
+    // Conductor y vehículo de un envío: se bloquea la fila hasta terminar la transacción para que
+    // dos envíos creados a la vez no puedan tomar el mismo conductor o el mismo vehículo.
+    private const string VehicleInUseLocked = "SELECT InUse FROM dbo.Vehicles WITH (UPDLOCK, HOLDLOCK) WHERE Id = @Id;";
+    private const string DriverInUseLocked = "SELECT InUse FROM dbo.Drivers WITH (UPDLOCK, HOLDLOCK) WHERE Id = @Id;";
+    private const string SetVehicleInUse = "UPDATE dbo.Vehicles SET InUse = 1 WHERE Id = @Id;";
+    private const string SetDriverInUse = "UPDATE dbo.Drivers SET InUse = 1 WHERE Id = @Id;";
+
+    // ============================================================
+    // Leer
+    // ============================================================
 
     public async Task<string?> GetLastShipmentCode(CancellationToken cancellationToken = default)
     {
@@ -43,7 +56,70 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         return await connection.QueryFirstOrDefaultAsync<string>(command);
     }
 
-        public async IAsyncEnumerable<Shipment> GetOrderShipments(
+    public async Task<bool> Exists(string key, CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            """
+            SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM dbo.Shipments WHERE Code = @Key)
+            THEN 1 ELSE 0 END AS BIT);
+            """,
+            new { Key = key },
+            cancellationToken: cancellationToken);
+
+        return await connection.ExecuteScalarAsync<bool>(command);
+    }
+
+    public async Task<IEnumerable<Shipment>> GetByKeysAsync(IEnumerable<string> key, CancellationToken cancellationToken = default)
+    {
+        string[] keys = [.. key];
+
+        if (keys.Length == 0)
+            return [];
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            $"SELECT {ShipmentColumns} FROM dbo.vw_ShipmentDetails WHERE Code IN @Keys ORDER BY Code;",
+            new { Keys = keys },
+            cancellationToken: cancellationToken);
+
+        var rows = (await connection.QueryAsync<ShipmentSqlRow>(command)).ToList();
+
+        return await BuildShipmentsAsync(connection, rows, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Shipment>> GetEverythingAsync(CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            $"SELECT {ShipmentColumns} FROM dbo.vw_ShipmentDetails ORDER BY Code;",
+            cancellationToken: cancellationToken);
+
+        var rows = (await connection.QueryAsync<ShipmentSqlRow>(command)).ToList();
+
+        return await BuildShipmentsAsync(connection, rows, cancellationToken);
+    }
+
+    public async Task<ShipmentStatuses> GetShipmentStatus(string code, CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "SELECT IdStatus FROM dbo.Shipments WHERE Code = @Code;",
+            new { Code = code },
+            cancellationToken: cancellationToken);
+
+        int? idStatus = await connection.QuerySingleOrDefaultAsync<int?>(command);
+
+        return idStatus is int id
+            ? SqlStatusMapper.ToShipmentStatus(id)
+            : throw new KeyNotFoundException($"No existe el envío con código {code}.");
+    }
+
+    public async IAsyncEnumerable<Shipment> GetOrderShipments(
         string orderId,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
@@ -67,7 +143,7 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         }
     }
 
-    
+
     public async IAsyncEnumerable<Package> GetShipmentPackages(
         string shipmentId,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -75,12 +151,7 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         using var connection = _factory.Create();
 
         var command = new CommandDefinition(
-            """
-            SELECT Id, IdProduct, ProductCode, ProductName, WeightKg, ProductAmount
-            FROM dbo.vw_PackageDetails
-            WHERE ShipmentCode = @ShipmentId
-            ORDER BY Id;
-            """,
+            $"SELECT {PackageColumns} FROM dbo.vw_PackageDetails WHERE ShipmentCode = @ShipmentId ORDER BY Id;",
             new { ShipmentId = shipmentId },
             cancellationToken: cancellationToken);
 
@@ -90,7 +161,39 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
             yield return PackageSqlMapper.ToEntity(row);
     }
 
-    
+    /// <summary>Arma los envíos con su conductor, su vehículo y sus paquetes (un envío puede no tener ninguno de los dos primeros).</summary>
+    private static async Task<IEnumerable<Shipment>> BuildShipmentsAsync(
+        SqlConnection connection, List<ShipmentSqlRow> rows, CancellationToken cancellationToken)
+    {
+        if (rows.Count == 0)
+            return [];
+
+        var (drivers, vehicles) = await LoadDriversAndVehiclesAsync(connection, rows, cancellationToken);
+        var packages = await LoadPackagesAsync(connection, [.. rows.Select(r => r.Code)], cancellationToken);
+
+        return [.. rows.Select(row =>
+        {
+            Driver? driver = row.IdDriver is int driverId && drivers.TryGetValue(driverId, out var d) ? d : null;
+            Vehicle? vehicle = row.IdVehicle is int vehicleId && vehicles.TryGetValue(vehicleId, out var v) ? v : null;
+
+            return ShipmentSqlMapper.ToEntity(row, driver, vehicle, packages[row.Code]);
+        })];
+    }
+
+    private static async Task<ILookup<string, Package>> LoadPackagesAsync(
+        SqlConnection connection, string[] shipmentCodes, CancellationToken cancellationToken)
+    {
+        var command = new CommandDefinition(
+            $"SELECT {PackageColumns} FROM dbo.vw_PackageDetails WHERE ShipmentCode IN @Codes ORDER BY ShipmentCode, Id;",
+            new { Codes = shipmentCodes },
+            cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<PackageSqlRow>(command);
+
+        return rows.ToLookup(r => r.ShipmentCode, PackageSqlMapper.ToEntity);
+    }
+
+
     private static async Task<(Dictionary<int, Driver> Drivers, Dictionary<int, Vehicle> Vehicles)>
     LoadDriversAndVehiclesAsync(
         SqlConnection connection, List<ShipmentSqlRow> rows, CancellationToken cancellationToken)
@@ -104,7 +207,7 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         if (driverIds.Length > 0)
         {
             var command = new CommandDefinition(
-                "SELECT Id, Code, Name, MiddleName, LastName, SecondLastName FROM dbo.Drivers WHERE Id IN @Ids;",
+                "SELECT Id, Code, Name, MiddleName, LastName, SecondLastName, InUse FROM dbo.Drivers WHERE Id IN @Ids;",
                 new { Ids = driverIds },
                 cancellationToken: cancellationToken);
 
@@ -116,7 +219,7 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         if (vehicleIds.Length > 0)
         {
             var command = new CommandDefinition(
-                "SELECT Id, Plate, Description FROM dbo.Vehicles WHERE Id IN @Ids;",
+                "SELECT Id, Plate, Description, InUse FROM dbo.Vehicles WHERE Id IN @Ids;",
                 new { Ids = vehicleIds },
                 cancellationToken: cancellationToken);
 
@@ -128,6 +231,37 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         return (drivers, vehicles);
     }
 
+    // ============================================================
+    // Guardar
+    // ============================================================
+
+    public async Task AddAsync(Shipment entity, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        await AddAsync([entity], cancellationToken);
+    }
+
+    public async Task AddAsync(IEnumerable<Shipment> entities, CancellationToken cancellationToken = default)
+    {
+        Shipment[] shipments = [.. entities];
+
+        if (shipments.Length == 0)
+            return;
+
+        foreach (var shipment in shipments)
+        {
+            ArgumentNullException.ThrowIfNull(shipment);
+            ArgumentException.ThrowIfNullOrWhiteSpace(shipment.OrderKey);
+        }
+
+        // Una sola transacción: si falla un envío, no se guarda ninguno (ni se cambia el InUse de nadie).
+        await InTransactionAsync(async (connection, transaction) =>
+        {
+            foreach (var shipment in shipments)
+                await InsertShipmentAsync(connection, transaction, shipment.OrderKey, shipment, cancellationToken);
+        }, cancellationToken);
+    }
 
     public async Task AddPackage(string shipmentCode, Package package, CancellationToken cancellationToken = default)
     {
@@ -139,6 +273,51 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
             await InsertPackageAsync(connection, transaction, shipmentCode, package, cancellationToken);
         }, cancellationToken);
     }
+
+    // ============================================================
+    // Cambios de estado
+    // ============================================================
+
+    /// <summary>Pasa el envío al siguiente estado: Pending -> OnWay -> Delivered. Las reglas las valida ChangeShipmentStatus.</summary>
+    public async Task ChangeState(string shipmentCode, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(shipmentCode);
+
+        var current = await GetShipmentStatus(shipmentCode, cancellationToken);
+
+        ShipmentStatuses next = current switch
+        {
+            ShipmentStatuses.Pending => ShipmentStatuses.OnWay,
+            ShipmentStatuses.OnWay => ShipmentStatuses.Delivered,
+            _ => throw new InvalidOperationException($"Un envío en estado {current} ya no puede cambiar de estado.")
+        };
+
+        await ChangeStatusAsync(shipmentCode, next, cancellationToken);
+    }
+
+    public async Task CancelateShipment(string shipmentCode, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(shipmentCode);
+
+        await ChangeStatusAsync(shipmentCode, ShipmentStatuses.Canceled, cancellationToken);
+    }
+
+    private async Task ChangeStatusAsync(string shipmentCode, ShipmentStatuses status, CancellationToken cancellationToken)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "ChangeShipmentStatus",
+            new { Code = shipmentCode, IdStatus = (int)status },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
+    }
+
+    // ============================================================
+    // Helpers: guardar
+    // ============================================================
 
     private async Task InTransactionAsync(
         Func<SqlConnection, IDbTransaction, Task> work, CancellationToken cancellationToken)
@@ -160,7 +339,7 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         }
     }
 
-    
+
     private static async Task InsertShipmentAsync(
         SqlConnection connection, IDbTransaction transaction, string orderCode, Shipment shipment,
         CancellationToken cancellationToken)
@@ -169,6 +348,13 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         if (shipment.Status != ShipmentStatuses.Pending)
             throw new InvalidOperationException(
                 "Un envío nuevo solo se puede guardar en estado Pending. Use el procedimiento ChangeShipmentStatus para cambiarlo.");
+
+        // Se comprueba antes de guardar que el vehículo y el conductor estén libres.
+        if (shipment.Vehicle is not null)
+            await EnsureIsFreeAsync(connection, transaction, VehicleInUseLocked, shipment.Vehicle.Key, "El vehículo", cancellationToken);
+
+        if (shipment.Driver is not null)
+            await EnsureIsFreeAsync(connection, transaction, DriverInUseLocked, shipment.Driver.Key, "El conductor", cancellationToken);
 
         string code = shipment.Key != UnsavedKey
             ? shipment.Key
@@ -187,8 +373,31 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
             },
             transaction, cancellationToken));
 
+        // Al crear el envío, el vehículo y el conductor pasan a "In Use".
+        if (shipment.Vehicle is not null)
+            await connection.ExecuteAsync(new CommandDefinition(
+                SetVehicleInUse, new { Id = shipment.Vehicle.Key }, transaction, cancellationToken: cancellationToken));
+
+        if (shipment.Driver is not null)
+            await connection.ExecuteAsync(new CommandDefinition(
+                SetDriverInUse, new { Id = shipment.Driver.Key }, transaction, cancellationToken: cancellationToken));
+
         foreach (var package in shipment.Packages)
             await InsertPackageAsync(connection, transaction, code, package, cancellationToken);
+    }
+
+    private static async Task EnsureIsFreeAsync(
+        SqlConnection connection, IDbTransaction transaction, string lockSql, int id, string name,
+        CancellationToken cancellationToken)
+    {
+        bool? inUse = await connection.QuerySingleOrDefaultAsync<bool?>(new CommandDefinition(
+            lockSql, new { Id = id }, transaction, cancellationToken: cancellationToken));
+
+        if (inUse is null)
+            throw new InvalidOperationException($"{name} con Id {id} no existe.");
+
+        if (inUse.Value)
+            throw new InvalidOperationException($"{name} con Id {id} ya se encuentra en uso.");
     }
 
     private static async Task InsertPackageAsync(
@@ -224,58 +433,18 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         private static string? NullIfEmpty(string? value)
     => string.IsNullOrWhiteSpace(value) ? null : value;
 
-        private static async Task<string?> GetLastCodeAsync(
+    private static async Task<string?> GetLastCodeAsync(
         SqlConnection connection, IDbTransaction transaction, string sql, CancellationToken cancellationToken)
-    => await connection.QueryFirstOrDefaultAsync<string>(
-        new CommandDefinition(sql, transaction: transaction, cancellationToken: cancellationToken));
+    { 
 
+        var utcDate = DateTimeOffset.UtcNow;
+        var todayPattern = $"____-{utcDate:ddMMyy}%";
 
-
-    public async Task AddAsync(Shipment entity, CancellationToken cancellationToken = default)
-    {
-        var orderCode = entity.OrderKey;
-        ArgumentException.ThrowIfNullOrWhiteSpace(orderCode);
-        ArgumentNullException.ThrowIfNull(entity);
-
-        await InTransactionAsync(async (connection, transaction) =>
-        {
-            await InsertShipmentAsync(connection, transaction, orderCode, entity, cancellationToken);
-        }, cancellationToken);
-    }
-
-//Handle all these cases
-    public Task AddAsync(IEnumerable<Shipment> entities, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Shipment>> GetByKeysAsync(IEnumerable<string> key, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Shipment>> GetEverythingAsync(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Exists(string key, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task ChangeState(string shipmentCode, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ShipmentStatuses> GetShipmentStatus(string code, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task CancelateShipment(string shipmentCode, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
+        return await connection.QueryFirstOrDefaultAsync<string>(
+        new CommandDefinition(
+            sql,
+            new { TodayPattern = todayPattern },
+            transaction: transaction,
+            cancellationToken: cancellationToken));
     }
 }

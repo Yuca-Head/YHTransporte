@@ -25,11 +25,12 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         "Code, CreatedAt, Description, IdStatus, SupplierId, CustomerId, IdOriginDir, IdDestinationDir";
 
     private const string LastOrderCodeLocked =
-        """
-        SELECT TOP 1 Code FROM dbo.Orders WITH (UPDLOCK, HOLDLOCK)
-        ORDER BY TRY_CAST(LEFT(Code, 4) AS INT) DESC;
-        """;
-
+    """
+    SELECT TOP (1) Code
+    FROM dbo.Orders WITH (UPDLOCK, HOLDLOCK)
+    WHERE Code LIKE @TodayPattern
+    ORDER BY TRY_CAST(LEFT(Code, 4) AS INT) DESC;
+    """;
     private const string LastShipmentCodeLocked =
         """
         SELECT TOP 1 Code FROM dbo.Shipments WITH (UPDLOCK, HOLDLOCK)
@@ -203,9 +204,18 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
 
     private static async Task<string?> GetLastCodeAsync(
         SqlConnection connection, IDbTransaction transaction, string sql, CancellationToken cancellationToken)
-    => await connection.QueryFirstOrDefaultAsync<string>(
-        new CommandDefinition(sql, transaction: transaction, cancellationToken: cancellationToken));
+    { 
 
+        var utcDate = DateTimeOffset.UtcNow;
+        var todayPattern = $"____-{utcDate:ddMMyy}%";
+
+        return await connection.QueryFirstOrDefaultAsync<string>(
+        new CommandDefinition(
+            sql,
+            new { TodayPattern = todayPattern },
+            transaction: transaction,
+            cancellationToken: cancellationToken));
+    }
     private static CommandDefinition Procedure(
         string name, object parameters, IDbTransaction transaction, CancellationToken cancellationToken)
     => new(name, parameters, transaction, commandType: CommandType.StoredProcedure, cancellationToken: cancellationToken);
@@ -269,18 +279,84 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         return [.. rows.Select(r => OrderSqlMapper.ToEntity(r, addresses[r.IdOriginDir], addresses[r.IdDestinationDir]))];
     }
 
-    public Task ChangeOrderState(string orderCode, CancellationToken cancellationToken = default)
+    // ============================================================
+    // Cambios de estado
+    // ============================================================
+
+    public async Task<OrderStatuses> GetOrderStatus(string orderCode, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "SELECT IdStatus FROM dbo.Orders WHERE Code = @Code;",
+            new { Code = orderCode },
+            cancellationToken: cancellationToken);
+
+        int? idStatus = await connection.QuerySingleOrDefaultAsync<int?>(command);
+
+        return idStatus is int id
+            ? SqlStatusMapper.ToOrderStatus(id)
+            : throw new KeyNotFoundException($"No existe la orden con código {orderCode}.");
     }
 
-    public Task CancelateOrder(string orderCode, CancellationToken cancellationToken = default)
+    /// <summary>Pasa la orden al siguiente estado: Pending -> InProgress -> Completed. Las reglas las valida ChangeOrderStatus.</summary>
+    public async Task ChangeOrderState(string orderCode, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        ArgumentException.ThrowIfNullOrWhiteSpace(orderCode);
+
+        var current = await GetOrderStatus(orderCode, cancellationToken);
+
+        OrderStatuses next = current switch
+        {
+            OrderStatuses.Pending => OrderStatuses.InProgress,
+            OrderStatuses.InProgress => OrderStatuses.Completed,
+            _ => throw new InvalidOperationException($"Una orden en estado {current} ya no puede cambiar de estado.")
+        };
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "ChangeOrderStatus",
+            new { Code = orderCode, IdStatus = (int)next },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
     }
 
-    public Task<OrderStatuses> GetOrderStatus(string orderCode, CancellationToken cancellationToken = default)
+    /// <summary>
+    /// Cancela la orden y sus envíos pendientes. Si hay un envío en camino no cancela nada (lo valida CancelOrderSafe).
+    /// </summary>
+    public async Task<bool> CancelateOrderSafe(string orderCode, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await CancelOrderAsync("CancelOrderSafe", orderCode, cancellationToken);
+            return true;
+        }catch (SqlException ex) when (ex.Number == 50040)
+        {
+            return false;
+        }
+    }
+    /// <summary>
+    /// Cancela la orden y todos sus envíos que no estén entregados, también los que van en camino (CancelOrderUnsafe).
+    /// </summary>
+    public Task CancelateOrderUnsafe(string orderCode, CancellationToken cancellationToken = default)
+    => CancelOrderAsync("CancelOrderUnsafe", orderCode, cancellationToken);
+
+    // Toda la cancelación ocurre dentro del procedimiento, en una sola transacción.
+    private async Task CancelOrderAsync(string procedureName, string orderCode, CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(orderCode);
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            procedureName,
+            new { Code = orderCode },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
     }
 }

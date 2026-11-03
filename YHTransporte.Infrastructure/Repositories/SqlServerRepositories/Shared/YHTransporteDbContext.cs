@@ -4,13 +4,14 @@ using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Reports.Ent
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties.Dtos;
 
 namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
-
 public sealed class YHTransporteDbContext(DbContextOptions<YHTransporteDbContext> options)
     : DbContext(options)
 {
     internal DbSet<DepartmentSqlDto> Departments => Set<DepartmentSqlDto>();
     internal DbSet<ThirdPartySqlDto> ThirdParties => Set<ThirdPartySqlDto>();
     internal DbSet<ThirdPartyAddressSqlRow> ThirdPartyAddressesTable => Set<ThirdPartyAddressSqlRow>();
+    internal DbSet<ProductSqlRow> Products => Set<ProductSqlRow>();
+    internal DbSet<SupplierProductSqlRow> SupplierProducts => Set<SupplierProductSqlRow>();
 
     // Entregable (EF Core + reportes): órdenes, envíos y paquetes con sus relaciones
     internal DbSet<OrderStatusRecord> OrderStatuses => Set<OrderStatusRecord>();
@@ -37,6 +38,18 @@ public sealed class YHTransporteDbContext(DbContextOptions<YHTransporteDbContext
         {
             e.ToTable("ThirdPartiesAddresses");
             e.HasKey(row => new {row.IdThirdParty, row.IdAddress});
+        });
+
+        modelBuilder.Entity<ProductSqlRow>(e =>
+        {
+            e.ToTable("Products");
+            e.HasKey(x => x.Id);
+        });
+
+        modelBuilder.Entity<SupplierProductSqlRow>(e =>
+        {
+            e.ToTable("SupplierProducts");
+            e.HasKey(x => new { x.IdProduct, x.IdSupplier });
         });
 
         modelBuilder.Entity<OrderStatusRecord>(e =>

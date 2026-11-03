@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using YHTransporte.Application.ThirdParties.Repositories;
@@ -169,23 +170,63 @@ public sealed class SqlServerThirdPartyRepository(
 
     }
 
-    public IAsyncEnumerable<Product> GetSupplierProducts(int supplierId, CancellationToken cancellationToken = default)
+    // Productos
+
+    public async IAsyncEnumerable<Product> GetSupplierProducts(
+        int supplierId,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            """
+            SELECT p.Id, p.Code, p.Name
+            FROM dbo.SupplierProducts sp
+            INNER JOIN dbo.Products p ON p.Id = sp.IdProduct
+            WHERE sp.IdSupplier = @SupplierId
+            ORDER BY p.Id;
+            """,
+            new { SupplierId = supplierId },
+            cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<ProductSqlRow>(command);
+
+        foreach (var row in rows)
+            yield return ProductSqlMapper.ToEntity(row);
     }
 
-    public Task<Product?> GetProductByCode(string code, CancellationToken cancellationToken = default)
+    public async Task<Product?> GetProductByCode(string code, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "SELECT Id, Code, Name FROM dbo.Products WHERE Code = @Code;",
+            new { Code = code.Trim() },
+            cancellationToken: cancellationToken);
+
+        var row = await connection.QuerySingleOrDefaultAsync<ProductSqlRow>(command);
+
+        return row is null ? null : ProductSqlMapper.ToEntity(row);
     }
 
-    public Task<Product> AddProduct(Product product, CancellationToken cancellationToken = default)
+    public async Task<Product> AddProduct(Product product, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(product);
+
+        var row = ProductSqlMapper.ToValue(product);
+
+        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        context.Products.Add(row);
+        await context.SaveChangesAsync(cancellationToken);
+
+        // Después de guardar, EF deja en la fila el Id que asignó la base de datos.
+        return ProductSqlMapper.ToEntity(row);
     }
 
-    public Task AddProductToSupplier(int productId, int supplierId, CancellationToken cancellationToken = default)
+    public async Task AddProductToSupplier(int productId, int supplierId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+        context.SupplierProducts.Add(new(productId, supplierId));
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

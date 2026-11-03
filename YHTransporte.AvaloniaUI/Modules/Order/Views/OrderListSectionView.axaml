@@ -27,7 +27,7 @@
 
 
                 <ScrollViewer Grid.Row="2">
-                    <ListBox Background="Transparent" Classes="boring" ItemsSource="True" SelectedItem="True" >
+                    <ListBox Background="Transparent" Classes="boring" ItemsSource="{Binding OrderList}" SelectedItem="{Binding SelectedOrder}" >
 
 
                         <ListBox.ItemTemplate>
@@ -37,7 +37,7 @@
                                     <Grid RowDefinitions="Auto, *" >
 
                                         <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,12">
-                                            <TextBlock Grid.Column="0" Text="ID" Foreground="#8B93AF" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="0" Text="{Binding Dto.Code}" Foreground="#8B93AF" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
 
                                             <Button Grid.Column="2" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="White" Width="28" Height="28" CornerRadius="14" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                                                 <TextBlock Text="X" FontSize="11" FontWeight="Bold"/>
@@ -52,8 +52,10 @@
                                             </Border>
 
                                             <StackPanel Grid.Column="1" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="15,0,24,0">
-                                                <TextBlock Text="Cliente" Foreground="#8B93AF" FontSize="15" />
-                                                <TextBlock Text="Fecha de Solicitud" Foreground="#8B93AF" FontSize="15"/>
+                                                <TextBlock Text="{Binding Customer.Name}" Foreground="#8B93AF" FontSize="15" />
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <TextBlock Text="Fecha de Creación" Foreground="#8B93AF" FontSize="15"/>
+                                                </StackPanel>
                                                 <TextBlock Text="Última dirección registrada" Foreground="#8B93AF" FontSize="15"/>
                                             </StackPanel>
 

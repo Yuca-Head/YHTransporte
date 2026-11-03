@@ -13,7 +13,9 @@ using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
 using YHTransporte.Application.Orders.Repositories;
 using YHTransporte.Application.Orders.UseCases.CreateOrder;
+using YHTransporte.Application.Orders.UseCases.GetOrder;
 using YHTransporte.Application.Reports;
+using YHTransporte.Application.Shipments.Repositories;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;
@@ -36,6 +38,7 @@ using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Addresses;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Orders;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Reports;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shipments;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.ThirdParties;
 
 namespace YHTransporte.AvaloniaUI;
@@ -63,9 +66,10 @@ public sealed class Program
 
         var contexts =  Host.Services.GetServices<IInitiableContext>();
 
-        foreach(var c in contexts)   
+        foreach(var c in contexts)
+        {   
             await c.Init();
-
+        }
         
         BuildAvaloniaApp()
         .StartWithClassicDesktopLifetime(args);
@@ -106,6 +110,7 @@ public sealed class Program
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);
         RegisterInitiableContext<AddressContext>(services);
+        RegisterInitiableContext<OrderContext>(services);
 
         //Windows
         services.AddTransient<MainWindow>();
@@ -117,12 +122,15 @@ public sealed class Program
         services.AddSingleton<GetAddressHandler>();
         services.AddSingleton<CreateThirdPartyAddressHandler>();
         services.AddSingleton<CreateOrderHandler>();
+        services.AddSingleton<GetOrderHandler>();
 
         //Repositories
         services.AddSingleton<IThirdPartyRepository, SqlServerThirdPartyRepository>();
         services.AddSingleton<IAddressRepository, SqlServerAddressRepository>();
         services.AddSingleton<IOrderRepository, SqlServerOrderRepository>();
         services.AddSingleton<IShipmentReportRepository, EfShipmentReportRepository>();
+        services.AddSingleton<IShipmentRepository, SqlServerShipmentRepository>();
+        services.AddSingleton<IDeliveryRepository, SqlServerDeliveryRepository>();
 
         //dbRelated
         services.AddSingleton<DbConnectionFactory>();

@@ -47,7 +47,8 @@ public static class OrderSqlMapper
 public static class ShipmentSqlMapper
 {
     /// <summary>Reconstruye un envío guardado (usa Shipment.Restore, sin validar fechas viejas).</summary>
-    public static Shipment ToEntity(ShipmentSqlRow row, Driver? driver, Vehicle? vehicle)
+    public static Shipment ToEntity(
+        ShipmentSqlRow row, Driver? driver, Vehicle? vehicle, IEnumerable<Package>? packages = null)
     => Shipment.Restore(
         key: row.Code,
         orderKey: row.CodeOrder,
@@ -57,7 +58,8 @@ public static class ShipmentSqlMapper
         description: row.Description,
         estimatedPickUpAt: row.EstimatedPickupAt,
         pickedUpAt: row.PickedUpAt,
-        deliveredAt: row.DeliveredAt);
+        deliveredAt: row.DeliveredAt,
+        packages: packages ?? Array.Empty<Package>());
 }
 
 public static class PackageSqlMapper
@@ -65,18 +67,19 @@ public static class PackageSqlMapper
     public static Package ToEntity(PackageSqlRow row)
     => new(new Product(row.ProductCode, row.ProductName) { Key = row.IdProduct }, row.WeightKg, row.ProductAmount)
     {
-        Key = row.Id
+        Key = row.Id,
+        ShipmentCode = row.ShipmentCode
     };
 }
 
 public static class DriverSqlMapper
 {
     public static Driver ToEntity(DriverSqlRow row)
-    => new(row.Code, row.Name, row.MiddleName, row.LastName, row.SecondLastName ?? "") { Key = row.Id };
+    => new(row.Name, row.MiddleName, row.LastName, row.SecondLastName ?? "") { Key = row.Id, Code = row.Code, InUse = row.InUse };
 }
 
 public static class VehicleSqlMapper
 {
     public static Vehicle ToEntity(VehicleSqlRow row)
-    => new() { Key = row.Id, Plate = row.Plate, Description = row.Description ?? "" };
+    => new() { Key = row.Id, Plate = row.Plate, Description = row.Description ?? "", InUse = row.InUse };
 }

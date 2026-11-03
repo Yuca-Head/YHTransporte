@@ -29,7 +29,10 @@
                 Foreground="Black" CornerRadius="6"  Height="38" ItemsSource="{Binding SelectedCustomer.Addresses}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Municipality.Name, StringFormat='- {0}'}" Foreground="#8A92A6" FontSize="13"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -53,7 +56,10 @@
                 Foreground="Black" CornerRadius="6"  Height="38" ItemsSource="{Binding SelectedSupplier.Addresses}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}" />
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Municipality.Name, StringFormat='- {0}'}" Foreground="#8A92A6" FontSize="13"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -68,7 +74,7 @@
 
                 <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
                         FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"
-                        HorizontalContentAlignment="Center"/>
+                        HorizontalContentAlignment="Center" Command="{Binding CreateCommand}" />
 
                 <Button Grid.Column="2" Command="{Binding CloseCommand}"
                         Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="White"

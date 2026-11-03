@@ -6,4 +6,8 @@ using YHTransporte.Core.Enums;
 namespace YHTransporte.Application.Orders.Dtos;
 
 public record OrderDto(SupplierRoleDto Supplier, CustomerRoleDto Customer, AddressDetailsDto Origin, AddressDetailsDto Destination, 
-OrderStatuses Status = OrderStatuses.Pending);
+OrderStatuses Status = OrderStatuses.Pending)
+{
+    //I'd really forgotten about this.
+    public string Code{get; init;} = "";
+};      

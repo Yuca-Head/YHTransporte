@@ -14,6 +14,7 @@ internal sealed class OrderMapper : IMapper<OrderDto, Order>
 
     public static OrderDto ToValue(Order entity)
     => new(SupplierRoleMapper.ToValue(entity.Supplier), CustomerRoleMapper.ToValue(entity.Customer),
-    AddressDetailsMapper.ToValue(entity.OriginDirection), AddressDetailsMapper.ToValue(entity.DestinationDirection), entity.Status);
+    AddressDetailsMapper.ToValue(entity.OriginDirection), AddressDetailsMapper.ToValue(entity.DestinationDirection), entity.Status)
+    {Code = entity.Key};
     
 }

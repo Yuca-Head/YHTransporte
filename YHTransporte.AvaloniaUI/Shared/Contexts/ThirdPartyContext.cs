@@ -1,11 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Messaging;
+using OneOf;
+using OneOf.Types;
+using YHTransporte.Application.Shared.Results;
 using YHTransporte.Application.ThirdParties.Dtos;
-using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
+using YHTransporte.Application.ThirdParties.Results;
 using YHTransporte.Application.ThirdParties.UseCases.GetThirdParty;
 using YHTransporte.AvaloniaUI.Shared.Messaging;
 
@@ -67,6 +69,16 @@ public sealed class ThirdPartyContext : IInitiableContext
         
     }
 
-    public ThirdPartyDetailsDto? GetById(int id) 
-    => _parties.GetValueOrDefault(id);
+    public async Task<ThirdPartyDetailsDto?> GetById(int id) 
+    {
+        var result = await GenericContexts.TryGetAsync
+        ([new GetThirdPartyQuery(id)], x => x.Key, _parties, p => p.Key, _queryHandler.GetThirdPartyDetails, [.. ThirdParties], default);
+        
+
+        if(result.IsT0 && result.AsT0.Value is null)
+            return null;
+
+        return result.AsT0.Value.First();
+        
+    }
 }
