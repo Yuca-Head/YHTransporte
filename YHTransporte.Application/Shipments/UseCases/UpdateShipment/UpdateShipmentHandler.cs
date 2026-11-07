@@ -8,11 +8,9 @@ using YHTransporte.Core.Enums;
 namespace YHTransporte.Application.Shipments.UseCases.UpdateShipment;
 
 public sealed class UpdateShipmentHandler
-(IShipmentRepository repository, IDeliveryRepository deliveryRepository, IOrderRepository orderRepository)
+(IShipmentRepository repository,  IOrderRepository orderRepository)
 {
     private readonly IShipmentRepository _repository = repository;
-
-    private readonly IDeliveryRepository _deliveryRepository = deliveryRepository;
     
     private readonly IOrderRepository _orderRepository = orderRepository;
 

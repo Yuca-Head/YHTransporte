@@ -33,4 +33,35 @@ internal static class GenericGetHandler
             new NotFound<IEnumerable<int>> (ids.Except(values.Select(dtoSelector)));
     }
 
+    
+    /// <summary>
+    /// Igual que HandleById, pero funciona con cualquier tipo de clave (por ejemplo, string).
+    /// </summary>
+    // Aún así le falta usar comparers, pero bueno
+    internal static async Task<OneOf<
+    Success<IEnumerable<TDto>>,
+    NotFound<IEnumerable<TKey>>,
+    RepeatedValue<IEnumerable<RepeatedValue<TKey>.RepeatedKeyInformation>>>>
+    HandleByKey<TEntity, TDto, TQuery, TKey>
+    (IEnumerable<TQuery> query,
+    Func<TQuery, TKey> querySelector,
+    Func<IEnumerable<TKey>, CancellationToken, Task<IEnumerable<TEntity>>> getFunction,
+    Func<TEntity, TDto> converter,
+    Func<TDto, TKey> dtoSelector,
+    CancellationToken cancellationToken = default)
+    {
+        TKey[] keys = [.. query.Select(querySelector)];
+        var keysValidator = MinimalValidator.ValidateForRepeatedKeys(keys);
+
+        if (keysValidator.IsT1)
+            return keysValidator.AsT1;
+
+        var values = (await getFunction(keys, cancellationToken))
+            .Select(converter)
+            .ToList();
+
+        return values.Count == keys.Length ?
+            new Success<IEnumerable<TDto>>(values) :
+            new NotFound<IEnumerable<TKey>>(keys.Except(values.Select(dtoSelector)));
+    }
 }

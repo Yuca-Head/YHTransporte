@@ -1,0 +1,71 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Vehicle.Views.CreateVehicleView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels"
+             x:DataType="vm:CreateVehicleViewModel">
+
+    <Grid>
+        <Border Background="{DynamicResource BackgroundBrush}"
+                BorderThickness="1.5" CornerRadius="10" Width="480" HorizontalAlignment="Center"
+                VerticalAlignment="Center" Padding="25">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="600">
+                <StackPanel Spacing="16">
+                    <Grid ColumnDefinitions="*, Auto">
+                        <TextBlock Grid.Column="0" Text="Registrar Nuevo Vehículo" Foreground="White" FontSize="20"
+                                   FontWeight="Bold"/>
+
+                        <Button Grid.Column="1" Content="X" Background="Transparent" Foreground="#DA1212"
+                                FontSize="16" Padding="5" Cursor="Hand" Command="{Binding CloseCommand}"/>
+                    </Grid>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Placa / Matrícula" Foreground="White" FontSize="11"/>
+                        <TextBox PlaceholderText="Ej. M 123-456" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Marca/Modelo" Foreground="White" FontSize="11"/>
+                        <TextBox PlaceholderText="Ej. Freightliner M2" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Capacidad de Carga" Foreground="White" FontSize="11"/>
+                        <TextBox PlaceholderText="Ej. 5 Toneladas" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Año" Foreground="White" FontSize="11"/>
+                        <TextBox PlaceholderText="Ej. 2022" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Tipo de Combustible" Foreground="White" FontSize="11"/>
+                        <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Estado" Foreground="White" FontSize="11"/>
+                        <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
+                        <TextBox  PlaceholderText="Notas adicionales sobre el vehículo..." Background="White" Foreground="Black" CornerRadius="8" Height="50"/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*, 12, *" Margin="0,15,0,0">
+                        <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}"
+                                Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+
+                        <Button Grid.Column="2" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}"
+                                Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
+

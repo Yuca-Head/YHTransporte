@@ -24,7 +24,7 @@
             </StackPanel>
             
             <StackPanel Spacing="6">
-                <TextBlock Text="Origen *" Foreground="#8A92A6" FontSize="13"/>
+                <TextBlock Text="Destino *" Foreground="#8A92A6" FontSize="13"/>
                 <ComboBox PlaceholderText="Seleccionar Destino..."  SelectedItem="{Binding Destination}" Classes="common" HorizontalAlignment="Stretch" Background="White"
                 Foreground="Black" CornerRadius="6"  Height="38" ItemsSource="{Binding SelectedCustomer.Addresses}">
                     <ComboBox.ItemTemplate>
@@ -69,6 +69,8 @@
                 <TextBlock Text="Fecha Estimada" Foreground="#8A92A6" FontSize="13"/>
                 <DatePicker Classes="common" CornerRadius="6" HorizontalAlignment="Stretch"/>
             </StackPanel-->
+
+            <TextBlock Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock" TextWrapping="Wrap" FontSize="12" HorizontalAlignment="Center"/>
 
             <Grid ColumnDefinitions="*, 12, *" Margin="0,15,0,0">
 

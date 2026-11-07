@@ -31,7 +31,7 @@ public partial class OrderListSectionViewModel : ViewModelBase
     public partial CreateOrderViewModel Creator {get; private set;}
 
     [ObservableProperty]
-    public partial CreateOrderCommand? SelectedOrder {get; set;}
+    public partial OrderDto? SelectedOrder {get; set;}
     
 
     public ObservableCollection<OrderDetailsVM> OrderList {get;} = [];

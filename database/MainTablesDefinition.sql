@@ -213,6 +213,8 @@ DBCC CHECKIDENT ('Addresses', RESEED, 12);
 DELETE FROM Addresses WHERE Id > 4;
 
 SELECT * FROM ThirdPartiesAddresses;  
+
+
 SELECT * FROM ThirdParties;    
 
 SELECT * FROM Orders;

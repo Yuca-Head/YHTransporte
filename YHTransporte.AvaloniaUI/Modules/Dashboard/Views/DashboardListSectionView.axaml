@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Dashboard.Views.DashboardListSectionView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels"
+             x:DataType="vm:DashboardListSectionViewModel">
+
+    <Border Background="{DynamicResource BackgroundBrush}" BorderThickness="1"
+            CornerRadius="12" Padding="24" Width="680" Height="520">
+        <Grid RowDefinitions="Auto, Auto, *">
+
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,16">
+                <TextBlock Text="Listado Completo de los Próximos Viajes" FontSize="18" FontWeight="Bold"
+                           Foreground="White" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="X" Background="Transparent" Foreground="#DA1212"
+                        FontSize="16" Padding="5" Cursor="Hand" Command="{Binding CloseCommand}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,16">
+                <TextBox Grid.Column="0" PlaceholderText="Buscar código o ciudad..." Background="White"
+                         Foreground="Black" BorderBrush="#374151" CornerRadius="8" Classes="searchbar"
+                         VerticalContentAlignment="Center" Height="40"/>
+            </Grid>
+
+            <ScrollViewer Grid.Row="2">
+                <ListBox Background="Transparent" Classes="boring" ItemsSource="True" SelectedItem="True">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border Background="{DynamicResource PrimaryBrush}" Padding="16" CornerRadius="12" Margin="0,0,0,12">
+                                <Grid RowDefinitions="Auto, *">
+
+                                    <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,8">
+                                        <TextBlock Grid.Column="0" Text="Carga #C-1025" Foreground="#8B93AF" FontWeight="SemiBold"
+                                                   FontSize="13" VerticalAlignment="Center"/>
+                                        <Button Grid.Column="2" Background="#ef4444" Foreground="White" Width="26" Height="26"
+                                                CornerRadius="13" Padding="0" HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center">
+                                            <TextBlock Text="X" FontSize="10" FontWeight="Bold"/>
+                                        </Button>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" ColumnDefinitions="Auto, *" VerticalAlignment="Center">
+
+                                        <Border Grid.Column="0" Width="45" Height="45" CornerRadius="22" ClipToBounds="True" Margin="0,0,12,0">
+                                            <Image Source="avares://YHTransporte.AvaloniaUI/Assets/ruta.png" Stretch="UniformToFill"/>
+                                        </Border>
+
+                                        <Grid Grid.Column="1" ColumnDefinitions="Auto, 20, Auto, *, Auto" VerticalAlignment="Center">
+                                            <TextBlock Grid.Column="0" Text="Managua" Foreground="White" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text=" → " Foreground="White" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="León" Foreground="White" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" Text="12/03/2025" Foreground="#a0aec0" FontSize="12"
+                                                       VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+                                            <Border Grid.Column="4" Background="#3b82f6" CornerRadius="12" Padding="10,3">
+                                                <TextBlock Text="En tránsito" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </Grid>
+
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

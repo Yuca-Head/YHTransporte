@@ -28,7 +28,7 @@
 
                     <Border Grid.Column="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" Margin="0,0,20,0">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="{Binding Order.Value, StringFormat='Número de Servicio: {0}'}" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                            <TextBlock Text="{Binding Order.Code, StringFormat='Número de Servicio: {0}'}" Foreground="White" FontWeight="Bold" FontSize="15"/>
 
                             <Grid ColumnDefinitions="*, *">
 

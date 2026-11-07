@@ -6,12 +6,35 @@ namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
 
 public sealed class DbConnectionFactory(IConfiguration configuration)
 {
+    private enum Databases
+    {
+        Default,
+        Backup
+    }
 
-    private readonly string _connectionString =
-    configuration.GetConnectionString("AzureConnection")
-    ?? throw new InvalidOperationException(
-        "Connection string not configured.");  
+    private string ConnectionString => CreateBuilder(Databases.Default).ToString() ?? 
+    throw new InvalidOperationException("Connection string not configured.");
+    private SqlConnectionStringBuilder CreateBuilder(Databases databases)
+    => databases switch
+    {
+        Databases.Backup => new SqlConnectionStringBuilder
+        {
+            DataSource = configuration["BackupDatabase:Server"],
+            InitialCatalog = configuration["BackupDatabase:Name"],
+            UserID = configuration["BackupDatabase:User"],
+            Password = configuration["BackupDatabase:Password"],
+            Encrypt = true
+        },
+        _ => new SqlConnectionStringBuilder
+        {
+            DataSource = configuration["YHDatabase:Server"],
+            InitialCatalog = configuration["YHDatabase:Name"],
+            UserID = configuration["YHDatabase:User"],
+            Password = configuration["YHDatabase:Password"],
+            Encrypt = true
+        }
+    };
 
     public SqlConnection Create()
-    => new(_connectionString);
+    => new(ConnectionString);
 }

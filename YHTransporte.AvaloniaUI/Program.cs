@@ -106,6 +106,10 @@ public sealed class Program
         services.AddTransient<OrderEditorViewModel>();
         services.AddTransient<CreateOrderViewModel>();
         services.AddTransient<ReportsMenuViewModel>();
+        services.AddTransient<DashboardListSectionViewModel>();
+        services.AddTransient<VehicleEditorViewModel>();
+        services.AddTransient<VehicleListSectionViewModel>();
+        services.AddTransient<CreateVehicleViewModel>();
 
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);

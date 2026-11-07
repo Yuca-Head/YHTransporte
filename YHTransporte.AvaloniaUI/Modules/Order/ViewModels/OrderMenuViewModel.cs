@@ -6,26 +6,30 @@ namespace YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
 
 public partial class OrderMenuViewModel : ViewModelBase
 {
-    public OrderMenuViewModel(CreateOrderViewModel createOrderViewModel, OrderListSectionViewModel listView)
+    public OrderMenuViewModel(CreateOrderViewModel createOrderViewModel, OrderListSectionViewModel listView,
+    OrderEditorViewModel editor)
     {
         _createOrderView = createOrderViewModel;
         _listSection = listView;
+        _editor = editor;
 
         CurrentView = _listSection;
         
 
         _listSection.SelectedOrderChanged += () =>
         {
-
-            CurrentView = _createOrderView;
+            _editor.Order = _listSection.SelectedOrder;
+            CurrentView = _editor;
         };
+
+        _editor.ViewIsClosed += () => CurrentView = _listSection;
     }
 
     [ObservableProperty]
     public partial ViewModelBase CurrentView { get; private set; }
     private readonly CreateOrderViewModel _createOrderView;
 
-
+    private readonly OrderEditorViewModel _editor;
 
     private readonly OrderListSectionViewModel _listSection;
 
@@ -38,4 +42,5 @@ public partial class OrderMenuViewModel : ViewModelBase
 
     [ObservableProperty]
     public partial bool IsOpen {get; set;}
+    
 }
