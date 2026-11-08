@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -30,8 +32,9 @@ public partial class OrderListSectionViewModel : ViewModelBase
     [ObservableProperty]
     public partial CreateOrderViewModel Creator {get; private set;}
 
+    // CAMBIO: antes era OrderDto?, pero la lista muestra OrderDetailsVM y el SelectedItem nunca coincidía (quedaba null).
     [ObservableProperty]
-    public partial OrderDto? SelectedOrder {get; set;}
+    public partial OrderDetailsVM? SelectedOrder {get; set;}
     
 
     public ObservableCollection<OrderDetailsVM> OrderList {get;} = [];
@@ -46,10 +49,15 @@ public partial class OrderListSectionViewModel : ViewModelBase
     
     private async void UpdateMeAsync()
     {
-        OrderList.Clear();
+        // CAMBIO: primero se arman todos y luego se llena la lista, para que dos actualizaciones seguidas
+        // no mezclen elementos; además se ordena de la más reciente a la más antigua.
+        List<OrderDetailsVM> orders = [];
 
-        foreach(var order in _context.Orders)
-            OrderList.Add(await OrderDetailsVM.CreateFromContext(order, _thirdPartyContext));
+        foreach(var order in _context.Orders.OrderByDescending(x => x.CreatedAt))
+            orders.Add(await OrderDetailsVM.CreateFromContext(order, _thirdPartyContext));
+
+        OrderList.Clear();
+        orders.ForEach(OrderList.Add);
     }
 
 

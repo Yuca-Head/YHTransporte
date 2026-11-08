@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Driver.Views.CreateDriverView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Driver.ViewModels"
+    x:DataType="vm:CreateDriverViewModel">
+
+    <Border Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}" BorderThickness="1"
+    CornerRadius="10" Padding="24" Width="420" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Spacing="14">
+            <TextBlock Text="Registrar Nuevo Conductor" FontSize="18" FontWeight="Bold" Foreground="White"/>
+
+            <Grid ColumnDefinitions="*, 12, *" RowDefinitions="Auto, Auto" RowSpacing="12">
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                    <TextBlock Text="Nombre *" Foreground="#CCD6F6" FontSize="14"/>
+                    <TextBox Classes="searchbar" PlaceholderText="Ej. Juan" Text="{Binding Name}" MaxLength="20"
+                    CornerRadius="6" Height="38" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="0" Grid.Column="2" Spacing="6">
+                    <TextBlock Text="Segundo Nombre" Foreground="#CCD6F6" FontSize="14"/>
+                    <TextBox Classes="searchbar" PlaceholderText="Ej. Francisco" Text="{Binding MiddleName}" MaxLength="20"
+                    CornerRadius="6" Height="38" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" Spacing="6">
+                    <TextBlock Text="Apellido *" Foreground="#CCD6F6" FontSize="14"/>
+                    <TextBox Classes="searchbar" PlaceholderText="Ej. Pérez" Text="{Binding LastName}" MaxLength="15"
+                    CornerRadius="6" Height="38" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="2" Spacing="6">
+                    <TextBlock Text="Segundo Apellido" Foreground="#CCD6F6" FontSize="14"/>
+                    <TextBox Classes="searchbar" PlaceholderText="Ej. López" Text="{Binding SecondLastName}" MaxLength="15"
+                    CornerRadius="6" Height="38" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="El código del conductor (DRV-0000) se genera automáticamente." Foreground="#8A92A6" FontSize="11"/>
+
+            <TextBlock Classes="result" x:Name="ResultTextBlock" Text="{Binding ResultManager.ResultMessage}"/>
+
+            <Grid ColumnDefinitions="*, 12, *">
+                <Button Grid.Column="0" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}" Foreground="#CCD6F6" FontWeight="Bold"
+                CornerRadius="6" Height="36" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
+
+                <Button Grid.Column="2" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White" FontWeight="Bold"
+                CornerRadius="6" Height="36" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center" Command="{Binding CreateCommand}"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

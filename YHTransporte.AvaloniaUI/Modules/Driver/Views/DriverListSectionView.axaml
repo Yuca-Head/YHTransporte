@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="YHTransporte.AvaloniaUI.Modules.Driver.Views.DriverListSectionView"
+    xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Driver.ViewModels"
+    xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
+    x:DataType="vm:DriverListSectionViewModel">
+
+    <Grid>
+
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundBrush}" Padding="25">
+            <Grid RowDefinitions="Auto, 24, *">
+
+                <Grid Grid.Row="0" ColumnDefinitions="380, *, Auto" Margin="0,0,0,20">
+                    <TextBox Grid.Column="0" PlaceholderText="Buscar por nombre o código" Background="White"
+                            Foreground="Black" BorderBrush="#374151" CornerRadius="8" Classes="searchbar"
+                            VerticalContentAlignment="Center" Height="40" Text="{Binding SearchText}"/>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12">
+                        <Button Content="+ Registrar Nuevo Conductor" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                                FontWeight="Bold" CornerRadius="8" Height="40" Padding="16,0"
+                                VerticalContentAlignment="Center" Command="{Binding OpenCreatorCommand}"/>
+                    </StackPanel>
+                </Grid>
+
+
+                <ScrollViewer Grid.Row="2">
+                    <ListBox Background="Transparent" Classes="boring" ItemsSource="{Binding Drivers}" SelectedItem="{Binding SelectedDriver}">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="dto:DriverDto">
+
+                                <Border Classes="listItem" DoubleTapped="Driver_DoubleTapped">
+                                    <Grid RowDefinitions="Auto, *">
+
+                                        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,12">
+                                            <TextBlock Grid.Column="0" Text="{Binding Code}" Foreground="#8B93AF" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+                                        </Grid>
+
+                                        <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto" VerticalAlignment="Center">
+
+                                            <Border Grid.Column="0" Background="#2B304C" CornerRadius="36" Width="72" Height="72" Margin="0,0,24,0" VerticalAlignment="Center"
+                                            ClipToBounds="True">
+                                                <Image Source="avares://YHTransporte.AvaloniaUI/Assets/conductor.png" Stretch="UniformToFill"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="1" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="0,0,24,0">
+                                                <TextBlock Text="{Binding FullName}" Foreground="White" FontSize="18" FontWeight="SemiBold"/>
+                                                <TextBlock Text="Conductor" Foreground="#8B93AF" FontSize="13"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2" Orientation="Vertical" Spacing="4" VerticalAlignment="Center" Margin="0,0,32,0">
+                                                <TextBlock Text="Estado" Foreground="#A2A9C0" FontSize="13" HorizontalAlignment="Center"/>
+                                                <Border Classes="statusPill" HorizontalAlignment="Center"
+                                                Background="{Binding InUse, Converter={StaticResource StatusToBrushConverter}}">
+                                                    <TextBlock Text="{Binding InUse, Converter={StaticResource StatusToTextConverter}}"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+
+            </Grid>
+        </Border>
+
+        <Grid>
+            <UserControl Content="{Binding CreateDriver}" ZIndex="10" IsVisible="{Binding CreateDriver.IsOpen}"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -2,65 +2,93 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="YHTransporte.AvaloniaUI.Modules.Vehicle.Views.VehicleEditorView"
              xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
              x:DataType="vm:VehicleEditorViewModel">
 
-    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Border Background="{DynamicResource BackgroundBrush}" Padding="25">
-            <Grid RowDefinitions="Auto, *, Auto">
+            <Grid RowDefinitions="Auto, Auto, *">
 
-                <Grid Grid.Row="0" Margin="0,0,0,20">
+                <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="Auto, *">
                     <Button Content="Regresar" Foreground="White" FontWeight="Bold" CornerRadius="8"
                             Padding="15,10" FontSize="14" Margin="0,0,20,0" Classes="warning" Command="{Binding ExitCommand}" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Vehicle.Plate, StringFormat='Vehículo {0}'}" Foreground="White" FontWeight="Bold" FontSize="20"/>
+                        <Border Classes="statusPill" Background="{Binding Vehicle.InUse, Converter={StaticResource StatusToBrushConverter}}">
+                            <TextBlock Text="{Binding Vehicle.InUse, Converter={StaticResource StatusToTextConverter}}"/>
+                        </Border>
+                    </StackPanel>
                 </Grid>
 
-                <Grid Grid.Row="1" Margin="0,0,0,20">
+                <TextBlock Grid.Row="1" Classes="result" Margin="0,0,0,12" x:Name="ResultTextBlock"
+                Text="{Binding ResultManager.ResultMessage}"/>
 
-                    <Border Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" Margin="0,0,20,0">
+                <Grid Grid.Row="2" ColumnDefinitions="440, *">
+
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,20,0" VerticalAlignment="Top">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="Información del Vehículo" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                            <TextBlock Classes="cardTitle" Text="Información del Vehículo"/>
 
-                            <Grid ColumnDefinitions="*, *">
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Placa / Matrícula" Foreground="White" FontSize="11"/>
-                                    <TextBox  PlaceholderText="Ej. M 123-456" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                                </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Classes="fieldLabel" Text="Placa / Matrícula"/>
+                                <TextBox Classes="searchbar" PlaceholderText="Ej. M 123-456" Text="{Binding Plate}" MaxLength="25"
+                                CornerRadius="8" Height="35" VerticalContentAlignment="Center" IsEnabled="{Binding CanEditPlate}"/>
+                                <TextBlock Text="La placa no se puede cambiar mientras el vehículo está en un envío"
+                                Foreground="#9ca3af" FontSize="11" TextWrapping="Wrap" IsVisible="{Binding !CanEditPlate}"/>
+                            </StackPanel>
 
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Marca/Modelo" Foreground="White" FontSize="11"/>
-                                    <TextBox  PlaceholderText="Ej. Freightliner M2" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <Grid ColumnDefinitions="*, *">
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Capacidad de Carga" Foreground="White" FontSize="11"/>
-                                    <TextBox  PlaceholderText="Ej. 5 Toneladas" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Año" Foreground="White" FontSize="11"/>
-                                    <TextBox  PlaceholderText="Ej. 2022" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <Grid ColumnDefinitions="*, *">
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Tipo de Combustible" Foreground="White" FontSize="11"/>
-                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch"  />
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Estado" Foreground="White" FontSize="11"/>
-                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch"  />
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Spacing="4">
+                                <TextBlock Classes="fieldLabel" Text="Descripción (marca, modelo, capacidad, observaciones...)"/>
+                                <TextBox Classes="searchbar" Text="{Binding Description}" MaxLength="120" CornerRadius="8" Height="60"
+                                TextWrapping="Wrap"/>
+                            </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,0,0">
-                                <Button Content="Guardar Cambios" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
-                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
-                                <Button Content="Limpiar Campos" Background="#374151" Foreground="White"
-                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
+                                <Button Classes="action" Content="Guardar Cambios" Background="{DynamicResource PrimaryButtonBrush}"
+                                Command="{Binding SaveChangesCommand}"/>
+                                <Button Classes="action" Content="Restablecer Campos" Background="{DynamicResource SecondaryButtonBrush}"
+                                Command="{Binding ResetFieldsCommand}"/>
                             </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--Historial de envíos del vehículo (vista vw_ShipmentHistory)-->
+                    <Border Grid.Column="1" Classes="card">
+                        <StackPanel Spacing="12">
+                            <TextBlock Classes="cardTitle" Text="Historial de Envíos"/>
+
+                            <Grid Margin="0,5,0,5" ColumnDefinitions="130, 130, *, 110, 100">
+                                <TextBlock Grid.Column="0" Text="Envío" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="Orden" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="2" Text="Ruta" Foreground="Gray" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="3" Text="Estado" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="Entrega" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+
+                            <Separator Background="#374151" Height="1"/>
+
+                            <ItemsControl ItemsSource="{Binding History}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="dto:ShipmentHistoryDto">
+                                        <Grid Margin="0,5" ColumnDefinitions="130, 130, *, 110, 100">
+                                            <TextBlock Grid.Column="0" Text="{Binding ShipmentCode}" Foreground="White" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding OrderCode}" Foreground="LightGray" VerticalAlignment="Center"/>
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Origin}" Foreground="LightGray"/>
+                                                <TextBlock Text="→" Foreground="LightGray"/>
+                                                <TextBlock Text="{Binding Destination}" Foreground="LightGray"/>
+                                            </StackPanel>
+                                            <Border Grid.Column="3" Classes="statusPill" HorizontalAlignment="Center"
+                                            Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}">
+                                                <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}" FontSize="11"/>
+                                            </Border>
+                                            <TextBlock Grid.Column="4" Text="{Binding DeliveredAt, StringFormat='{}{0:dd/MM/yyyy}', TargetNullValue='-'}"
+                                            Foreground="LightGray" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </Border>
                 </Grid>

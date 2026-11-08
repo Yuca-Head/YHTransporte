@@ -14,6 +14,15 @@ public static class ValidationErrors
     => $"No se permite una fecha inferior a {info.ExpectedLimit:dd/MM/yyyy} para {info.FieldName} en {info.ClassName} "+
     $"(fecha ingresada: {info.InvalidDate:dd/MM/yyyy})";    
 
+    public static string MustBePositive(string className, string fieldName)
+    => $"{fieldName} de {className} debe ser mayor que cero.";
+
+    public static string GreaterThanAllowed(string className, string fieldName, decimal limit)
+    => $"{fieldName} de {className} no puede ser mayor que {limit:N2}.";
+
+    public static string ExceedsMaxLength(string className, string fieldName, int maxLength)
+    => $"{fieldName} de {className} no puede tener más de {maxLength} caracteres.";
+
     public static string DateIsAlreadyCreated(InvalidDateInfo info)
     => $"{info.ClassName} ya tiene una fecha para {info.FieldName} ({info.ExpectedLimit:dd/MM/yyyy})";
 

@@ -5,9 +5,7 @@
              x:DataType="vm:CreateVehicleViewModel">
 
     <Grid>
-        <Border Background="{DynamicResource BackgroundBrush}"
-                BorderThickness="1.5" CornerRadius="10" Width="480" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Padding="25">
+        <Border Classes="popup">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="600">
                 <StackPanel Spacing="16">
@@ -19,45 +17,25 @@
                                 FontSize="16" Padding="5" Cursor="Hand" Command="{Binding CloseCommand}"/>
                     </Grid>
 
+                    <!--CAMBIO: solo se dejan los campos que existen en dbo.Vehicles (Plate, Description)-->
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Placa / Matrícula" Foreground="White" FontSize="11"/>
-                        <TextBox PlaceholderText="Ej. M 123-456" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                        <TextBlock Classes="fieldLabel" Text="Placa / Matrícula *"/>
+                        <TextBox Classes="searchbar" PlaceholderText="Ej. M 123-456" Text="{Binding Plate}" MaxLength="25"
+                        CornerRadius="8" Height="35" VerticalContentAlignment="Center"/>
                     </StackPanel>
 
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Marca/Modelo" Foreground="White" FontSize="11"/>
-                        <TextBox PlaceholderText="Ej. Freightliner M2" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                        <TextBlock Classes="fieldLabel" Text="Descripción (marca, modelo, capacidad, observaciones...)"/>
+                        <TextBox Classes="searchbar" PlaceholderText="Ej. Freightliner M2 - 5 toneladas" Text="{Binding Description}"
+                        MaxLength="120" CornerRadius="8" Height="60" TextWrapping="Wrap"/>
                     </StackPanel>
 
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="Capacidad de Carga" Foreground="White" FontSize="11"/>
-                        <TextBox PlaceholderText="Ej. 5 Toneladas" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                    </StackPanel>
-
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="Año" Foreground="White" FontSize="11"/>
-                        <TextBox PlaceholderText="Ej. 2022" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                    </StackPanel>
-
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="Tipo de Combustible" Foreground="White" FontSize="11"/>
-                        <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="Estado" Foreground="White" FontSize="11"/>
-                        <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35" HorizontalAlignment="Stretch" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
-                        <TextBox  PlaceholderText="Notas adicionales sobre el vehículo..." Background="White" Foreground="Black" CornerRadius="8" Height="50"/>
-                    </StackPanel>
+                    <TextBlock Classes="result" Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock"/>
 
                     <Grid ColumnDefinitions="*, 12, *" Margin="0,15,0,0">
                         <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}"
                                 Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CreateCommand}"/>
 
                         <Button Grid.Column="2" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}"
                                 Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
@@ -68,4 +46,3 @@
         </Border>
     </Grid>
 </UserControl>
-

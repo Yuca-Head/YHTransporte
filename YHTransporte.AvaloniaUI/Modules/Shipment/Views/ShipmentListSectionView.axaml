@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Shipment.Views.ShipmentListSectionView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
+             x:DataType="vm:ShipmentListSectionViewModel">
+
+    <Grid>
+        <Border Classes="card" Padding="15">
+            <Grid RowDefinitions="Auto, Auto, *">
+
+                <Grid Grid.Row="0" ColumnDefinitions="Auto, *, 300, Auto" Margin="0,0,0,12">
+                    <TextBlock Grid.Column="0" Classes="cardTitle" Text="Envíos de la Orden" VerticalAlignment="Center"/>
+
+                    <TextBox Grid.Column="2" Classes="searchbar" PlaceholderText="Buscar por código, conductor o placa"
+                    Text="{Binding SearchText}" CornerRadius="8" Height="36" VerticalContentAlignment="Center" Margin="0,0,12,0"/>
+
+                    <Button Grid.Column="3" Content="+ Agregar Envío" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                    FontWeight="Bold" CornerRadius="8" Height="36" Padding="16,0" VerticalContentAlignment="Center"
+                    Command="{Binding OpenCreatorCommand}" IsEnabled="{Binding CanAddShipments}"
+                    ToolTip.Tip="Solo se agregan envíos mientras la orden está en espera"/>
+                </Grid>
+
+                <!--Encabezados (misma tabla que tenía el mock de "Servicios Registrados")-->
+                <Grid Grid.Row="1" Background="{DynamicResource BackgroundBrush}" Height="35"
+                ColumnDefinitions="140, *, 120, 110, 80, 100, 120">
+                    <TextBlock Grid.Column="0" Text="N° de Envío" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+                    <TextBlock Grid.Column="1" Text="Conductor" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="Vehículo" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="Recogida Est." Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="Paquetes" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Peso (kg)" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Text="Estado" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                </Grid>
+
+                <ListBox Grid.Row="2" Background="Transparent" Classes="boring" ItemsSource="{Binding Shipments}"
+                SelectedItem="{Binding SelectedShipment}" MinHeight="60">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="dto:ShipmentDto">
+                            <Grid Height="38" ColumnDefinitions="140, *, 120, 110, 80, 100, 120" Background="Transparent"
+                            DoubleTapped="Shipment_DoubleTapped" ToolTip.Tip="Doble clic para abrir el envío">
+                                <TextBlock Grid.Column="0" Text="{Binding Key}" Foreground="White" VerticalAlignment="Center" Margin="10,0"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Driver.FullName, FallbackValue='Sin asignar'}" Foreground="White"
+                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Vehicle.Plate, FallbackValue='Sin asignar'}" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="{Binding EstimatedPickUpAt, StringFormat='{}{0:dd/MM/yyyy}', TargetNullValue='-'}"
+                                Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="{Binding PackageCount}" Foreground="White" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="{Binding TotalWeight, StringFormat='{}{0:N2}'}" Foreground="White" VerticalAlignment="Center"/>
+                                <Border Grid.Column="6" Classes="statusPill" Background="{Binding Status, Converter={StaticResource StatusToBrushConverter}}">
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <!--Creador de envío (popup)-->
+        <UserControl Content="{Binding Creator}" ZIndex="10" IsVisible="{Binding Creator.IsOpen}"/>
+    </Grid>
+</UserControl>

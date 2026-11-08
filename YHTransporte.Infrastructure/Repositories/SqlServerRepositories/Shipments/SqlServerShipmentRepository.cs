@@ -27,9 +27,12 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
     SELECT TOP 1 Code FROM dbo.Orders WITH (UPDLOCK, HOLDLOCK)
     ORDER BY TRY_CAST(LEFT(Code, 4) AS INT) DESC;
     """;
+    // CAMBIO: ahora filtra por el día de hoy (@TodayPattern). Antes ordenaba entre TODOS los días y,
+    // si otro día tenía un número de serie mayor, OrderCode.Generate reiniciaba en 0001 y se repetía el código.
     private const string LastShipmentCodeLocked =
     """
     SELECT TOP 1 Code FROM dbo.Shipments WITH (UPDLOCK, HOLDLOCK)
+    WHERE Code LIKE @TodayPattern
     ORDER BY TRY_CAST(LEFT(Code, 4) AS INT) DESC;
     """;
 
@@ -300,6 +303,60 @@ public sealed class SqlServerShipmentRepository(DbConnectionFactory factory) : I
         ArgumentException.ThrowIfNullOrWhiteSpace(shipmentCode);
 
         await ChangeStatusAsync(shipmentCode, ShipmentStatuses.Canceled, cancellationToken);
+    }
+
+    // ============================================================
+    // Modificar
+    // ============================================================
+
+    /// <summary>
+    /// Guarda los datos editables del envío. UpdateShipment valida que siga Pending y hace el cambio de
+    /// InUse (libera el conductor/vehículo anterior y ocupa el nuevo) en una sola transacción.
+    /// </summary>
+    public async Task UpdateShipment(Shipment shipment, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(shipment);
+        ArgumentException.ThrowIfNullOrWhiteSpace(shipment.Key);
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "UpdateShipment",
+            new
+            {
+                Code = shipment.Key,
+                IdVehicle = shipment.Vehicle?.Key,
+                IdDriver = shipment.Driver?.Key,
+                EstimatedPickupAt = shipment.EstimatedPickUpAt,
+                Description = NullIfEmpty(shipment.Description)
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task UpdatePackage(string shipmentCode, Package package, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(shipmentCode);
+        ArgumentNullException.ThrowIfNull(package);
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "UpdateShipmentsDetail",
+            new
+            {
+                Code = shipmentCode,
+                Id = package.Key,
+                Product = package.Product.Key,
+                Kg = package.Weight,
+                Amount = ToWholeAmount(package.ProductAmount)
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
     }
 
     private async Task ChangeStatusAsync(string shipmentCode, ShipmentStatuses status, CancellationToken cancellationToken)

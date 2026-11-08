@@ -11,15 +11,30 @@ using System.Threading.Tasks;
 using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Addresses.UseCases.CreateAddress;
 using YHTransporte.Application.Addresses.UseCases.GetAddress;
+using YHTransporte.Application.Deliveries.UseCases.CreateDriver;
+using YHTransporte.Application.Deliveries.UseCases.CreateVehicle;
+using YHTransporte.Application.Deliveries.UseCases.GetDriver;
+using YHTransporte.Application.Deliveries.UseCases.GetVehicle;
+using YHTransporte.Application.Deliveries.UseCases.ModifyDriver;
+using YHTransporte.Application.Deliveries.UseCases.ModifyVehicle;
 using YHTransporte.Application.Orders.Repositories;
 using YHTransporte.Application.Orders.UseCases.CreateOrder;
 using YHTransporte.Application.Orders.UseCases.GetOrder;
+using YHTransporte.Application.Orders.UseCases.UpdateOrder;
 using YHTransporte.Application.Reports;
 using YHTransporte.Application.Shipments.Repositories;
+using YHTransporte.Application.Shipments.UseCases.AddPackage;
+using YHTransporte.Application.Shipments.UseCases.CreateShipment;
+using YHTransporte.Application.Shipments.UseCases.GetShipment;
+using YHTransporte.Application.Shipments.UseCases.ModifyPackage;
+using YHTransporte.Application.Shipments.UseCases.ModifyShipment;
+using YHTransporte.Application.Shipments.UseCases.UpdateShipment;
 using YHTransporte.Application.ThirdParties.Repositories;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdParty;
+using YHTransporte.Application.ThirdParties.UseCases.CreateSupplierProduct;
 using YHTransporte.Application.ThirdParties.UseCases.CreateThirdPartyAddress;
 using YHTransporte.Application.ThirdParties.UseCases.GetThirdParty;
+using YHTransporte.Application.ThirdParties.UseCases.ModifySupplierProduct;
 using YHTransporte.AvaloniaUI.Modules.Address.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Cargo.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Dashboard.ViewModels;
@@ -27,7 +42,9 @@ using YHTransporte.AvaloniaUI.Modules.Driver.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Home.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Login.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Order.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Package.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Reports.ViewModels;
+using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.Extra;
 using YHTransporte.AvaloniaUI.Modules.ThirdParty.ViewModels;
 using YHTransporte.AvaloniaUI.Modules.Vehicle.ViewModels;
@@ -110,11 +127,28 @@ public sealed class Program
         services.AddTransient<VehicleEditorViewModel>();
         services.AddTransient<VehicleListSectionViewModel>();
         services.AddTransient<CreateVehicleViewModel>();
+        // Envíos (dentro del editor de órdenes)
+        services.AddTransient<ShipmentMenuViewModel>();
+        services.AddTransient<ShipmentListSectionViewModel>();
+        services.AddTransient<CreateShipmentViewModel>();
+        services.AddTransient<ShipmentEditorViewModel>();
+        // Paquetes (dentro del editor de envíos)
+        services.AddTransient<PackageMenuViewModel>();
+        services.AddTransient<PackageListSectionViewModel>();
+        services.AddTransient<CreatePackageViewModel>();
+        services.AddTransient<PackageEditorViewModel>();
+        // Conductores
+        services.AddTransient<DriverListSectionViewModel>();
+        services.AddTransient<CreateDriverViewModel>();
+        services.AddTransient<DriverEditorViewModel>();
 
         //Contexts
         RegisterInitiableContext<ThirdPartyContext>(services);
         RegisterInitiableContext<AddressContext>(services);
         RegisterInitiableContext<OrderContext>(services);
+        RegisterInitiableContext<ShipmentContext>(services);
+        RegisterInitiableContext<VehicleContext>(services);
+        RegisterInitiableContext<DriverContext>(services);
 
         //Windows
         services.AddTransient<MainWindow>();
@@ -127,6 +161,21 @@ public sealed class Program
         services.AddSingleton<CreateThirdPartyAddressHandler>();
         services.AddSingleton<CreateOrderHandler>();
         services.AddSingleton<GetOrderHandler>();
+        services.AddSingleton<UpdateOrderHandler>();
+        services.AddSingleton<GetShipmentHandler>();
+        services.AddSingleton<CreateShipmentHandler>();
+        services.AddSingleton<UpdateShipmentHandler>();
+        services.AddSingleton<ModifyShipmentHandler>();
+        services.AddSingleton<AddPackageHandler>();
+        services.AddSingleton<ModifyPackageHandler>();
+        services.AddSingleton<CreateVehicleHandler>();
+        services.AddSingleton<ModifyVehicleHandler>();
+        services.AddSingleton<GetVehicleHandler>();
+        services.AddSingleton<CreateDriverHandler>();
+        services.AddSingleton<ModifyDriverHandler>();
+        services.AddSingleton<GetDriverHandler>();
+        services.AddSingleton<CreateSupplierProductHandler>();
+        services.AddSingleton<ModifySupplierProductHandler>();
 
         //Repositories
         services.AddSingleton<IThirdPartyRepository, SqlServerThirdPartyRepository>();
@@ -139,10 +188,11 @@ public sealed class Program
         //dbRelated
         services.AddSingleton<DbConnectionFactory>();
         services.AddDbContextFactory<YHTransporteDbContext>((sp, options) =>
-        options.UseSqlServer(sp.GetRequiredService<IConfiguration>().GetConnectionString("AzureConnection")));
+        options.UseSqlServer(sp.GetRequiredService<DbConnectionFactory>().ConnectionString));
 
         //Others
         services.AddTransient<ThirdPartyAddressCreator>();
+        services.AddTransient<ThirdPartyProductManager>();
 
     }
             

@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using YHTransporte.AvaloniaUI.Modules.Order.Models;
 using YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels;
 using YHTransporte.AvaloniaUI.ViewModels;
 
@@ -18,7 +19,10 @@ public partial class OrderMenuViewModel : ViewModelBase
 
         _listSection.SelectedOrderChanged += () =>
         {
-            _editor.Order = _listSection.SelectedOrder;
+            if(_listSection.SelectedOrder is not OrderDetailsVM selected)
+                return;
+
+            _editor.Order = selected.Dto;
             CurrentView = _editor;
         };
 

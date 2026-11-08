@@ -28,7 +28,20 @@ public partial class ThirdPartyEditorMenuView : UserControl
         }
         };
         _subscriber.SubscribeToMrBeast();
+
+        // CAMBIO: mismo coloreado (verde/rojo) para los mensajes de productos.
+        _productSubscriber = new(this, this.ProductResultMessage){Selector = () =>
+        {
+            if(this.DataContext is ThirdPartyEditorMenuViewModel vm)
+                return vm.ProductManager;
+            else
+                throw new InvalidOperationException();
+        }
+        };
+        _productSubscriber.SubscribeToMrBeast();
     }
+
+    private readonly ResultManagerSubscription<ThirdPartyProductManager> _productSubscriber;
 
     
 

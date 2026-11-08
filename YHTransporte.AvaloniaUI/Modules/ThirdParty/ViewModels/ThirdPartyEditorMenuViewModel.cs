@@ -16,11 +16,12 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
 
     public ThirdPartyEditorMenuViewModel(CreateThirdPartyViewModel createCustomer, AddressContext addressContext, 
     ThirdPartyAddressCreator addressCreator, CreateMunicipalityViewModel createMunicipalityVM, 
-    CreateDepartmentViewModel createDepartmentVM)
+    CreateDepartmentViewModel createDepartmentVM, ThirdPartyProductManager productManager)
     {
         CreateThirdParty = createCustomer;
         AddressContext = addressContext;
         AddressCreator = addressCreator;
+        ProductManager = productManager;
 
         _createDepartmentVM = createDepartmentVM;
         _createMunicipalityVM = createMunicipalityVM;
@@ -57,6 +58,9 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
     [ObservableProperty]
     public partial ThirdPartyAddressCreator AddressCreator {get; private set;}
 
+    // CAMBIO: productos del proveedor (solo se muestran si el tercero es proveedor).
+    public ThirdPartyProductManager ProductManager {get;}
+
     [ObservableProperty]
     public partial AddressContext AddressContext {get; private set;}
     public event Action? ViewIsClosed;
@@ -74,6 +78,7 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
             return;
 
         AddressCreator.ThirdParty = newValue;
+        ProductManager.ThirdParty = newValue;
     }
 
     public bool AnyPopupIsOpen => CurrentPopup != null;
@@ -105,11 +110,24 @@ public partial class ThirdPartyEditorMenuViewModel : ViewModelBase
     => _createMunicipalityVM.IsOpen = true;
 
 
+    [ObservableProperty]
+    public partial bool IsAddProductOptionOpen {get; set;}
+
+    [RelayCommand]
+    private void ShowAddProduct()
+    => IsAddProductOptionOpen = true;
+
+    [RelayCommand]
+    private void CancelAddProduct()
+    => IsAddProductOptionOpen = false;
+
     [RelayCommand]
     private void Exit()
     {
         ThirdParty = null;
         CancelAddAddress();
+        CancelAddProduct();
+        ProductManager.Clear();
         ViewIsClosed?.Invoke();
     }
 }

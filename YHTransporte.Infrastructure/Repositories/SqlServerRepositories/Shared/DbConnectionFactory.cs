@@ -12,7 +12,7 @@ public sealed class DbConnectionFactory(IConfiguration configuration)
         Backup
     }
 
-    private string ConnectionString => CreateBuilder(Databases.Default).ToString() ?? 
+    public string ConnectionString => CreateBuilder(Databases.Backup).ConnectionString ?? 
     throw new InvalidOperationException("Connection string not configured.");
     private SqlConnectionStringBuilder CreateBuilder(Databases databases)
     => databases switch

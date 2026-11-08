@@ -71,14 +71,19 @@ public sealed class ThirdPartyContext : IInitiableContext
 
     public async Task<ThirdPartyDetailsDto?> GetById(int id) 
     {
+        // CAMBIO: si ya está en caché se devuelve directo. Antes TryGetAsync devolvía "default" cuando lo
+        // encontraba en caché y este método terminaba devolviendo null (por eso la lista de órdenes no mostraba nombres).
+        if(_parties.TryGetValue(id, out var cached))
+            return cached;
+
         var result = await GenericContexts.TryGetAsync
         ([new GetThirdPartyQuery(id)], x => x.Key, _parties, p => p.Key, _queryHandler.GetThirdPartyDetails, [.. ThirdParties], default);
         
 
-        if(result.IsT0 && result.AsT0.Value is null)
+        if(!result.IsT0 || result.AsT0.Value is null)
             return null;
 
-        return result.AsT0.Value.First();
+        return result.AsT0.Value.FirstOrDefault();
         
     }
 }

@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Package.Views.PackageMenuView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Package.ViewModels"
+             x:DataType="vm:PackageMenuViewModel">
+
+    <!--Vive dentro de ShipmentEditorView: alterna entre la lista de paquetes y el editor de paquete-->
+    <UserControl Content="{Binding CurrentView}"/>
+
+</UserControl>

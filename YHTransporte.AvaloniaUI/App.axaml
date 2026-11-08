@@ -15,6 +15,7 @@
         <StyleInclude Source="/Resources/Styles/InputControls.axaml"/>
         <StyleInclude Source="/Resources/Styles/Collections.axaml"/>
         <StyleInclude Source="/Resources/Styles/Buttons.axaml"/>
+        <StyleInclude Source="/Resources/Styles/Cards.axaml"/>
     </Application.Styles>
 
     
@@ -25,6 +26,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:BoolToEmojiConverter x:Key="BoolToEmojiConverter"/>
+            <converters:StatusToTextConverter x:Key="StatusToTextConverter"/>
+            <converters:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 

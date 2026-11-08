@@ -32,7 +32,8 @@ public sealed class OrderContext : IInitiableContext
                 var result = await _handler.GetByCode(new(x), token);
 
 
-                if(!result.IsT1)
+                // CAMBIO: la condición estaba invertida (T1 es NotFound).
+                if(result.IsT1)
                     throw new InvalidOperationException("Every order key was expected to exist");
                 return result.AsT0.Value;
 
@@ -48,6 +49,8 @@ public sealed class OrderContext : IInitiableContext
     private readonly Dictionary<string, OrderDto> _orders = new(StringComparer.OrdinalIgnoreCase);
 
     public IReadOnlyCollection<OrderDto> Orders => _orders.Values;
+
+    public OrderDto? GetByCode(string code) => _orders.GetValueOrDefault(code);
     
     public async Task Init()
     {

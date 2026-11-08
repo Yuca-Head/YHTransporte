@@ -2,53 +2,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="YHTransporte.AvaloniaUI.Modules.Shipment.Views.CreateShipmentView"
              xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Shipment.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
              x:DataType="vm:CreateShipmentViewModel">
 
     <Grid>
-        <Border Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource PrimaryButtonBrush}"
-                BorderThickness="1.5" CornerRadius="10" Width="480" HorizontalAlignment="Center"
-                VerticalAlignment="Center" Padding="25">
+        <Border Classes="popup">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="600">
                 <StackPanel Spacing="16">
                     <Grid ColumnDefinitions="*, Auto">
-                        <TextBlock Grid.Column="0" Text="Registrar Nuevo Envío" Foreground="White" FontSize="20"
-                                   FontWeight="Bold"/>
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Registrar Nuevo Envío" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Order.Code, StringFormat='Orden {0}'}" Foreground="#8A92A6" FontSize="12"/>
+                        </StackPanel>
 
                         <Button Grid.Column="1" Content="X" Background="Transparent" Foreground="#DA1212"
-                                FontSize="16" Padding="5" Cursor="Hand"/>
+                                FontSize="16" Padding="5" Cursor="Hand" Command="{Binding CloseCommand}"/>
                     </Grid>
 
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Cliente *" Foreground="#8A92A6" FontSize="13"/>
-                        <ComboBox PlaceholderText="Seleccionar cliente..." HorizontalAlignment="Stretch" Background="White"
-                                  Foreground="Black" CornerRadius="6" Height="38"/>
+                        <TextBlock Classes="popupLabel" Text="Conductor (solo disponibles)"/>
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="8">
+                            <ComboBox PlaceholderText="Sin asignar" Classes="common" HorizontalAlignment="Stretch"
+                            CornerRadius="6" Height="38" ItemsSource="{Binding Drivers}" SelectedItem="{Binding SelectedDriver}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="dto:DriverDto">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="{Binding Code}" Foreground="#8A92A6"/>
+                                            <TextBlock Text="{Binding FullName}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button Grid.Column="1" Classes="circleClear" Command="{Binding ClearDriverCommand}" ToolTip.Tip="Quitar conductor">
+                                <TextBlock Text="X" FontSize="11" FontWeight="Bold"/>
+                            </Button>
+                        </Grid>
                     </StackPanel>
 
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Remitente *" Foreground="#8A92A6" FontSize="13"/>
-                        <ComboBox PlaceholderText="Seleccionar remitente..." HorizontalAlignment="Stretch" Background="White"
-                                  Foreground="Black" CornerRadius="6" Height="38"/>
+                        <TextBlock Classes="popupLabel" Text="Vehículo (solo disponibles)"/>
+                        <Grid ColumnDefinitions="*, Auto" ColumnSpacing="8">
+                            <ComboBox PlaceholderText="Sin asignar" Classes="common" HorizontalAlignment="Stretch"
+                            CornerRadius="6" Height="38" ItemsSource="{Binding Vehicles}" SelectedItem="{Binding SelectedVehicle}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="dto:VehicleDto">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="{Binding Plate}"/>
+                                            <TextBlock Text="{Binding Description, StringFormat='- {0}'}" Foreground="#8A92A6"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button Grid.Column="1" Classes="circleClear" Command="{Binding ClearVehicleCommand}" ToolTip.Tip="Quitar vehículo">
+                                <TextBlock Text="X" FontSize="11" FontWeight="Bold"/>
+                            </Button>
+                        </Grid>
+                        <TextBlock Text="El conductor y el vehículo se pueden asignar después, pero son obligatorios para que el envío se ponga en camino."
+                        Foreground="#8A92A6" FontSize="11" TextWrapping="Wrap"/>
                     </StackPanel>
 
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Fecha Solicitud" Foreground="#8A92A6" FontSize="13"/>
-                        <DatePicker Background="White" CornerRadius="6" HorizontalAlignment="Stretch"/>
+                        <TextBlock Classes="popupLabel" Text="Fecha Estimada de Recogida"/>
+                        <CalendarDatePicker Classes="common" SelectedDate="{Binding EstimatedPickUpDate}"/>
                     </StackPanel>
 
                     <StackPanel Spacing="6">
-                        <TextBlock Text="Fecha Estimada" Foreground="#8A92A6" FontSize="13"/>
-                        <DatePicker Background="White" CornerRadius="6" HorizontalAlignment="Stretch"/>
+                        <TextBlock Classes="popupLabel" Text="Descripción (máx. 120 caracteres)"/>
+                        <TextBox Classes="searchbar" Text="{Binding Description}" MaxLength="120" CornerRadius="6" Height="60"
+                        TextWrapping="Wrap" AcceptsReturn="False" PlaceholderText="Notas del envío..."/>
                     </StackPanel>
+
+                    <TextBlock Classes="result" Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock"/>
 
                     <Grid ColumnDefinitions="*, 12, *" Margin="0,15,0,0">
                         <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}"
                                 Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"/>
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CreateCommand}"/>
 
                         <Button Grid.Column="2" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}"
                                 Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"/>
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

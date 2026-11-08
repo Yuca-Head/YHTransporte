@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Package.Views.PackageEditorView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Package.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
+             x:DataType="vm:PackageEditorViewModel">
+
+    <!--Editor mínimo: solo información general del paquete-->
+    <Border Background="{DynamicResource BackgroundBrush}" CornerRadius="10" Padding="20">
+        <StackPanel Spacing="14">
+
+            <Grid ColumnDefinitions="Auto, *">
+                <Button Content="Volver a Paquetes" Foreground="White" FontWeight="Bold" CornerRadius="8"
+                Padding="15,8" Margin="0,0,20,0" Classes="warning" Command="{Binding ExitCommand}"/>
+
+                <TextBlock Grid.Column="1" Foreground="White" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"
+                Text="{Binding Package.Key, StringFormat='Paquete #{0}'}"/>
+            </Grid>
+
+            <TextBlock Text="El envío ya partió o la orden está terminada: el paquete no se puede modificar."
+            Foreground="#9ca3af" FontSize="12" TextWrapping="Wrap" IsVisible="{Binding !CanEdit}"/>
+
+            <Grid ColumnDefinitions="2*, *, *" ColumnSpacing="12" IsEnabled="{Binding CanEdit}">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Classes="fieldLabel" Text="Producto"/>
+                    <ComboBox Classes="common" HorizontalAlignment="Stretch" CornerRadius="8" Height="38"
+                    ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="dto:ProductDto">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="{Binding Code}" Foreground="#8A92A6"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Classes="fieldLabel" Text="Peso (kg)"/>
+                    <NumericUpDown Classes="common" Value="{Binding Weight}" Minimum="0" Maximum="99999999.99"
+                    Increment="0.5" FormatString="N2"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Spacing="4">
+                    <TextBlock Classes="fieldLabel" Text="Cantidad"/>
+                    <NumericUpDown Classes="common" Value="{Binding ProductAmount}" Minimum="0" Maximum="2147483647"
+                    Increment="1" FormatString="N0"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Classes="result" Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" IsVisible="{Binding CanEdit}">
+                <Button Classes="action" Content="Guardar Cambios" Background="{DynamicResource PrimaryButtonBrush}"
+                Command="{Binding SaveChangesCommand}"/>
+                <Button Classes="action" Content="Restablecer Campos" Background="{DynamicResource SecondaryButtonBrush}"
+                Command="{Binding ResetFieldsCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Package.Views.PackageListSectionView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Package.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
+             x:DataType="vm:PackageListSectionViewModel">
+
+    <Grid>
+        <Border Background="{DynamicResource BackgroundBrush}" CornerRadius="10" Padding="15">
+            <Grid RowDefinitions="Auto, *">
+
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,12">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="cardTitle" Text="Paquetes del Envío"/>
+                        <TextBlock Text="Solo se agregan o modifican mientras el envío no ha partido" Foreground="#9ca3af" FontSize="11"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Content="+ Agregar Paquete" Background="{DynamicResource PrimaryButtonBrush}" Foreground="White"
+                    FontWeight="Bold" CornerRadius="8" Height="36" Padding="16,0" VerticalContentAlignment="Center"
+                    Command="{Binding OpenCreatorCommand}" IsEnabled="{Binding CanAddPackages}"/>
+                </Grid>
+
+                <ListBox Grid.Row="1" Background="Transparent" Classes="boring" ItemsSource="{Binding Packages}"
+                SelectedItem="{Binding SelectedPackage}" MinHeight="40">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="dto:PackageDto">
+                            <Border Classes="listItem" Padding="14" Margin="0,0,0,10" DoubleTapped="Package_DoubleTapped"
+                            ToolTip.Tip="Doble clic para ver/editar el paquete">
+                                <Grid ColumnDefinitions="Auto, *, Auto, Auto">
+
+                                    <Border Grid.Column="0" Background="#2B304C" Width="44" Height="44" CornerRadius="22" Margin="0,0,15,0">
+                                        <TextBlock Text="📦" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Product.Name}" Foreground="White" FontSize="14" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Product.Code, StringFormat='Código: {0}'}" Foreground="#8B93AF" FontSize="12"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Spacing="2" VerticalAlignment="Center" Margin="0,0,30,0">
+                                        <TextBlock Text="Cantidad" Foreground="#8B93AF" FontSize="12" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding ProductAmount}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="Peso" Foreground="#8B93AF" FontSize="12" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Weight, StringFormat='{}{0:N2} kg'}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <!--Creador de paquete (popup)-->
+        <UserControl Content="{Binding Creator}" ZIndex="10" IsVisible="{Binding Creator.IsOpen}"/>
+    </Grid>
+</UserControl>

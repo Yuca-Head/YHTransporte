@@ -333,7 +333,10 @@ public sealed class SqlServerOrderRepository(DbConnectionFactory factory) : IOrd
         {
             await CancelOrderAsync("CancelOrderSafe", orderCode, cancellationToken);
             return true;
-        }catch (SqlException ex) when (ex.Number == 50040)
+        }
+        // CAMBIO: 50054 es el error que lanza ChangeOrderStatus cuando la orden tiene un envío en camino
+        // (ver CancelOrderProcedures.sql). Antes se esperaba 50040, que es "estado de envío inválido".
+        catch (SqlException ex) when (ex.Number == 50054)
         {
             return false;
         }

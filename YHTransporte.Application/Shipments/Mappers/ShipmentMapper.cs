@@ -14,5 +14,5 @@ internal sealed class ShipmentMapper : IMapper<ShipmentDto, Shipment>
     public static ShipmentDto ToValue(Shipment entity)
     => new(entity.Key, entity.OrderKey, entity.Status, entity.Driver is null? null : DriverMapper.ToValue(entity.Driver),
     entity.Vehicle is null? null : VehicleMapper.ToValue(entity.Vehicle), entity.Description, entity.EstimatedPickUpAt,
-    entity.PickedUpAt, entity.DeliveredAt, entity.Packages.Select(PackageMapper.ToValue));
+    entity.PickedUpAt, entity.DeliveredAt, entity.Packages.Select(PackageMapper.ToValue).ToArray());
 }

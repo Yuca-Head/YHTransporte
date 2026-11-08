@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace YHTransporte.AvaloniaUI.Shared;
@@ -48,8 +50,23 @@ public partial class ResultManager : ObservableObject
     }
 
     public void Success(string message = "")
-    { 
+    {
         ResultMessage = message;
         GotSuccess?.Invoke();
     }
+
+    /// <summary>Marca varios errores en una sola lista (por ejemplo, los de un ValidationError).</summary>
+    public void MarkErrors(IEnumerable<string> errors, string header = "Se han encontrado los siguientes errores:")
+    {
+        StringBuilder sb = new($"{header}\n");
+
+        foreach(var error in errors)
+            sb.Append($"• {error}\n");
+
+        MarkError(sb.ToString().TrimEnd());
+    }
+
+    /// <summary>Para errores que llegan desde la base de datos u otros que no se esperaban.</summary>
+    public void MarkUnexpected(Exception exception)
+    => MarkError($"Ocurrió un error inesperado: {exception.Message}");
 }

@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YHTransporte.AvaloniaUI.Modules.Package.Views.CreatePackageView"
+             xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Package.ViewModels"
+             xmlns:dto="using:YHTransporte.Application.Shipments.Dtos"
+             x:DataType="vm:CreatePackageViewModel">
+
+    <Grid>
+        <Border Classes="popup" Width="420">
+            <StackPanel Spacing="16">
+                <Grid ColumnDefinitions="*, Auto">
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="Agregar Paquete" Foreground="White" FontSize="20" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Shipment.Key, StringFormat='Envío {0}'}" Foreground="#8A92A6" FontSize="12"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Content="X" Background="Transparent" Foreground="#DA1212"
+                    FontSize="16" Padding="5" Cursor="Hand" Command="{Binding CloseCommand}"/>
+                </Grid>
+
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="popupLabel" Text="Producto (del proveedor de la orden) *"/>
+                    <ComboBox PlaceholderText="Seleccionar producto..." Classes="common" HorizontalAlignment="Stretch"
+                    CornerRadius="6" Height="38" ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="dto:ProductDto">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="{Binding Code}" Foreground="#8A92A6"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*, 12, *">
+                    <StackPanel Grid.Column="0" Spacing="6">
+                        <TextBlock Classes="popupLabel" Text="Peso (kg) *"/>
+                        <NumericUpDown Classes="common" Value="{Binding Weight}" Minimum="0" Maximum="99999999.99"
+                        Increment="0.5" FormatString="N2"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Spacing="6">
+                        <TextBlock Classes="popupLabel" Text="Cantidad *"/>
+                        <NumericUpDown Classes="common" Value="{Binding ProductAmount}" Minimum="0" Maximum="2147483647"
+                        Increment="1" FormatString="N0"/>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Classes="result" Text="{Binding ResultManager.ResultMessage}" x:Name="ResultTextBlock"/>
+
+                <Grid ColumnDefinitions="*, 12, *" Margin="0,10,0,0">
+                    <Button Grid.Column="0" Content="Guardar" Background="{DynamicResource PrimaryButtonBrush}"
+                    Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CreateCommand}"/>
+
+                    <Button Grid.Column="2" Content="Cancelar" Background="{DynamicResource PrimaryDeclineButtonBrush}"
+                    Foreground="White" FontWeight="Bold" Height="40" CornerRadius="6" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Command="{Binding CloseCommand}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

@@ -17,7 +17,8 @@ public sealed class GetOrderHandler(IOrderRepository repository)
     {
         var orders = (await _repository.GetByKeysAsync([query.Code], token)).ToList();
 
-        if(orders.Count != 0)
+        // CAMBIO: la condición estaba invertida (devolvía NotFound justo cuando sí encontraba la orden).
+        if(orders.Count == 0)
             return new NotFound();
         else
             return new Success<OrderDto>(OrderMapper.ToValue(orders.First()));

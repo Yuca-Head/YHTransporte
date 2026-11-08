@@ -229,4 +229,21 @@ public sealed class SqlServerThirdPartyRepository(
         context.SupplierProducts.Add(new(productId, supplierId));
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    // Entity Framework: una sola sentencia UPDATE, sin cargar la fila.
+    public async Task UpdateProduct(Product product, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(product);
+
+        await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+
+        int affected = await context.Products
+            .Where(x => x.Id == product.Key)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(x => x.Code, product.Code)
+                .SetProperty(x => x.Name, product.Name), cancellationToken);
+
+        if (affected == 0)
+            throw new KeyNotFoundException($"No existe el producto con Id {product.Key}.");
+    }
 }

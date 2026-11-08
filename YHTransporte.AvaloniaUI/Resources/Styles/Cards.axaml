@@ -1,0 +1,128 @@
+<Styles xmlns="https://github.com/avaloniaui">
+
+    <!--Estilos compartidos por los editores y listas nuevos (órdenes, envíos, paquetes, vehículos y conductores).
+    Usan los mismos colores que ya tenían las vistas (PrimaryBrush, #8B93AF, etc.)-->
+
+    <!--Card-->
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <Style Selector="Border.listItem">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
+    <Style Selector="Border.popup">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryButtonBrush}"/>
+        <Setter Property="BorderThickness" Value="1.5"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="25"/>
+        <Setter Property="Width" Value="480"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--/Card-->
+
+    <!--Pastilla de estado (el color lo pone StatusToBrushConverter)-->
+    <Style Selector="Border.statusPill">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Border.statusPill TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <!--/Pastilla de estado-->
+
+    <!--Textos-->
+    <Style Selector="TextBlock.cardTitle">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="15"/>
+    </Style>
+
+    <Style Selector="TextBlock.fieldLabel">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="11"/>
+    </Style>
+
+    <Style Selector="TextBlock.popupLabel">
+        <Setter Property="Foreground" Value="#8A92A6"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+
+    <Style Selector="TextBlock.infoLabel">
+        <Setter Property="Foreground" Value="#9ca3af"/>
+        <Setter Property="FontSize" Value="11"/>
+    </Style>
+
+    <Style Selector="TextBlock.infoValue">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style Selector="TextBlock.subtle">
+        <Setter Property="Foreground" Value="{DynamicResource SubtleTextBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style Selector="TextBlock.result">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <!--/Textos-->
+
+    <!--Botones de acción (mismo aspecto que "Guardar Servicio"/"Limpiar Campos")-->
+    <Style Selector="Button.action">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="20,8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.circleClear">
+        <Setter Property="Background" Value="{DynamicResource PrimaryDeclineButtonBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="28"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="CornerRadius" Value="14"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <!--/Botones de acción-->
+
+    <!--NumericUpDown con el mismo aspecto que los TextBox "searchbar"-->
+    <Style Selector="NumericUpDown.common">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+
+    <Style Selector="CalendarDatePicker.common">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+
+</Styles>

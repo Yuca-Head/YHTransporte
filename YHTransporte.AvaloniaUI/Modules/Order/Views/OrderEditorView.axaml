@@ -4,210 +4,127 @@
     xmlns:vm="using:YHTransporte.AvaloniaUI.Modules.Order.ViewModels"
     x:DataType="vm:OrderEditorViewModel">
 
-    
-    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Border Background="{DynamicResource BackgroundBrush}" Padding="25">
-            <Grid RowDefinitions="Auto, Auto, Auto">
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto">
 
-                <Grid Grid.Row="0" Margin="0,0,0,20" ColumnDefinitions="380, *, Auto">
+                <!--Barra superior: regresar, código/estado y acciones de la orden-->
+                <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="0,0,0,12">
 
-                    <TextBox Classes="searchbar" Grid.Column="0"
-                                PlaceholderText="Buscar por número de servicio, cliente, origen o destino "
-                                Background="White" Foreground="Black" BorderBrush="#374151"
-                                CornerRadius="8" VerticalAlignment="Center" Height="40"/>
+                    <Button Content="Regresar" Foreground="White" FontWeight="Bold" CornerRadius="8"
+                    Padding="15,10" FontSize="14" Margin="0,0,20,0" Classes="warning" Command="{Binding CloseCommand}"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Order.Code, StringFormat='Orden N° {0}'}" Foreground="White" FontWeight="Bold"
+                        FontSize="20" VerticalAlignment="Center"/>
+                        <Border Classes="statusPill" Background="{Binding Order.Status, Converter={StaticResource StatusToBrushConverter}}">
+                            <TextBlock Text="{Binding Order.Status, Converter={StaticResource StatusToTextConverter}}"/>
+                        </Border>
+                    </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
-                        <Button Content="+ Registrar Nuevo Servicio" Background="#0056D6" Foreground="White"
-                                FontWeight="Bold" CornerRadius="8" Padding="15,10"/>
-                        <Button Content="Exportar Lista" Background="#374151" Foreground="White" FontWeight="Bold"
-                                CornerRadius="8" Padding="15,10"/>
+                        <Button Classes="action" Content="{Binding NextStatusText}" Background="{DynamicResource PrimaryButtonBrush}"
+                        Command="{Binding AdvanceStatusCommand}" IsVisible="{Binding CanAdvanceStatus}"/>
+
+                        <Button Classes="action" Content="Cancelar Orden" Background="{DynamicResource PrimaryDeclineButtonBrush}"
+                        Command="{Binding CancelCommand}" IsVisible="{Binding CanCancel}"/>
+
+                        <Button Classes="action warning" Content="Forzar Cancelación" Background="{DynamicResource SecondaryButtonBrush}"
+                        Command="{Binding ForceCancelCommand}" IsVisible="{Binding CanForceCancel}"/>
                     </StackPanel>
                 </Grid>
 
-                <Grid Grid.Row="1" Margin="0,0,0,20" ColumnDefinitions="*, 380">
+                <TextBlock Grid.Row="1" Classes="result" Margin="0,0,0,12" x:Name="ResultTextBlock"
+                Text="{Binding ResultManager.ResultMessage}"/>
 
-                    <Border Grid.Column="0" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" Margin="0,0,20,0">
-                        <StackPanel Spacing="12">
-                            <TextBlock Text="{Binding Order.Code, StringFormat='Número de Servicio: {0}'}" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                <Grid Grid.Row="2" Margin="0,0,0,20" ColumnDefinitions="*, 380">
 
-                            <Grid ColumnDefinitions="*, *">
+                    <!--Información general-->
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,20,0">
+                        <StackPanel Spacing="14">
+                            <TextBlock Classes="cardTitle" Text="Información General"/>
 
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Número de Servicio" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" PlaceholderText="Ej. F-001" Background="White" Foreground="Black" CornerRadius="8"
-                                                Height="35"/>
+                            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="14" ColumnSpacing="20">
+
+                                
+                                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Proveedor (Remitente)"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Supplier.Name, FallbackValue='-'}"/>
+                                </StackPanel>
+                                    
+                                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Cliente"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Customer.Name, FallbackValue='-'}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Cliente" Foreground="White" FontSize="11"/>
-                                    <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35"
-                                                HorizontalAlignment="Stretch"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <Grid ColumnDefinitions="*, *">
-
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Origen" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
-                                                CornerRadius="8" Height="35"/>
+                                <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Origen"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Order.Origin.Name}"/>
+                                    <TextBlock Foreground="#34d399" FontSize="11" FontWeight="Bold"
+                                    Text="{Binding Order.Origin.Municipality.Name, StringFormat='Municipio: {0}'}"/>
+                                    <TextBlock Foreground="#34d399" FontSize="11" FontWeight="Bold"
+                                    Text="{Binding Order.Origin.Municipality.Department.Name, StringFormat='Departamento: {0}'}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Destino" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" PlaceholderText="Dirección/Municipio" Background="White" Foreground="Black"
-                                                CornerRadius="8" Height="35"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Ruta" Foreground="White" FontSize="11"/>
-                                <ComboBox Background="White" Foreground="Black" CornerRadius="8" Height="35"
-                                            HorizontalAlignment="Stretch"/>
-                            </StackPanel>
-
-                            <Grid ColumnDefinitions="*, *, *">
-
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
-                                    <TextBlock Text="Fecha de Solicitud" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Destino"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Order.Destination.Name}"/>
+                                    <TextBlock Foreground="#34d399" FontSize="11" FontWeight="Bold"
+                                    Text="{Binding Order.Destination.Municipality.Name, StringFormat='Municipio: {0}'}"/>
+                                    <TextBlock Foreground="#34d399" FontSize="11" FontWeight="Bold"
+                                    Text="{Binding Order.Destination.Municipality.Department.Name, StringFormat='Departamento: {0}'}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,8,0">
-                                    <TextBlock Text="Fecha Programada de Salida" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Fecha de Creación"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Order.CreatedAt, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="2" Spacing="4">
-                                    <TextBlock Text="Fecha Estimada de Entrega" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
+                                <StackPanel Grid.Row="2" Grid.Column="1" Spacing="4">
+                                    <TextBlock Classes="infoLabel" Text="Descripción"/>
+                                    <TextBlock Classes="infoValue" Text="{Binding Order.Description}"/>
                                 </StackPanel>
                             </Grid>
-
-                            <Grid ColumnDefinitions="*, *">
-
-                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,10,0">
-                                    <TextBlock Text="Tipo de Servicio" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" PlaceholderText="Normal/Urgente" Background="White" Foreground="Black"
-                                                CornerRadius="8" Height="35"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Text="Estado" Foreground="White" FontSize="11"/>
-                                    <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="35"/>
-                                </StackPanel>
-                            </Grid>
-
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Observaciones" Foreground="White" FontSize="11"/>
-                                <TextBox Classes="searchbar" Background="White" Foreground="Black" CornerRadius="8" Height="50"/>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,5,0,0">
-                                <Button Content="Guardar Servicio" Background="#0056D6" Foreground="White"
-                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
-                                <Button Content="Limpiar Campos" Background="#374151" Foreground="White"
-                                        FontWeight="Bold" CornerRadius="8" Padding="20,8"/>
-                            </StackPanel>
                         </StackPanel>
                     </Border>
 
-                    <Border Grid.Column="1" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="20" VerticalAlignment="Top">
+                    <!--Resumen de envíos-->
+                    <Border Grid.Column="1" Classes="card" VerticalAlignment="Top">
                         <StackPanel Spacing="12">
-                            <TextBlock Text="Resumen del Servicio" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                            <TextBlock Classes="cardTitle" Text="Resumen de Envíos"/>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Cliente" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="Comercial El Sancochado" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Classes="infoLabel" FontSize="12" Text="Envíos registrados" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Classes="infoValue" Text="{Binding TotalShipments}"/>
+                            </Grid>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Origen" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="Managua" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Classes="infoLabel" FontSize="12" Text="Activos (pendientes / en camino)" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Classes="infoValue" Text="{Binding ActiveShipments}"/>
+                            </Grid>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Destino" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="Chinandega" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Classes="infoLabel" FontSize="12" Text="Entregados" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Classes="infoValue" Text="{Binding DeliveredShipments}"/>
+                            </Grid>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Ruta" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="R-001" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
+                            <Rectangle Height="1" Fill="#374151" Margin="0,2"/>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Estado" Foreground="#9ca3af" FontSize="11"/>
-                                <Border Background="#f59e0b" CornerRadius="10" HorizontalAlignment="Left" Padding="10,3">
-                                    <TextBlock Text="Programado" Foreground="Black" FontWeight="Bold" FontSize="11"/>
-                                </Border>
-                            </StackPanel>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Classes="infoLabel" FontSize="12" Text="Paquetes (sin cancelados)" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Classes="infoValue" Text="{Binding TotalPackages}"/>
+                            </Grid>
 
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Fecha de Salida" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="10/05/2026" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
-
-                            <StackPanel Spacing="8">
-                                <TextBlock Text="Fecha Estimada de Entrega" Foreground="#9ca3af" FontSize="11"/>
-                                <TextBlock Text="27/05/2026" Foreground="White" FontWeight="Bold" FontSize="13"/>
-                            </StackPanel>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock Classes="infoLabel" FontSize="12" Text="Peso total" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Classes="infoValue" Text="{Binding TotalWeight, StringFormat='{}{0:N2} kg'}"/>
+                            </Grid>
                         </StackPanel>
                     </Border>
                 </Grid>
 
-                <Border Grid.Row="2" Background="{DynamicResource PrimaryBrush}" CornerRadius="10" Padding="15">
-                    <StackPanel Spacing="10">
-                        <TextBlock Text="Servicios Registrados" Foreground="White" FontWeight="Bold" FontSize="15"/>
-
-                        <Grid Background="{DynamicResource BackgroundBrush}" Height="35" ColumnDefinitions="100, 120, 100,
-                        100, 80, 90, 110, 110, 100, *">
-
-                            <TextBlock Grid.Column="0" Text="N° de Servicio" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center" Margin="10,0"/>
-                            <TextBlock Grid.Column="1" Text="Cliente" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Origen" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="Destino" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="Ruta" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="5" Text="Tipo" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="6" Text="Fecha de Salida" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="7" Text="Fecha Estimada" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="8" Text="Estado" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="9" Text="Acciones" Foreground="White" FontWeight="Bold"
-                                        VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <Grid Height="35" ColumnDefinitions="100, 120, 100, 100, 80, 90, 110, 110, 100, *">
-
-                            <TextBlock Grid.Column="0" Text="F-001" Foreground="White" VerticalAlignment="Center" Margin="10,0"/>
-                            <TextBlock Grid.Column="1" Text="Comercial" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" Text="Managua" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="León" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="4" Text="R-001" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="5" Text="Normal" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="6" Text="02/05/2026" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="7" Text="12/05/2026" Foreground="White" VerticalAlignment="Center"/>
-                            <StackPanel Grid.Column="8" VerticalAlignment="Center">
-                                <Border Background="#0284c7" CornerRadius="10" Padding="8,2" HorizontalAlignment="Left">
-                                    <TextBlock Text="En tránsito" Foreground="White" FontSize="10" FontWeight="Bold"/>
-                                </Border>
-                            </StackPanel>
-                            <StackPanel Grid.Column="9" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
-                                <TextBlock Text="[Ver]" Foreground="#38bdf8" Cursor="Hand"/>
-                                <TextBlock Text="[Editar]" Foreground="#38bdf8" Cursor="Hand"/>
-                                <TextBlock Text="[Cancelar]" Foreground="#ef4444" Cursor="Hand"/>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                <!--Envíos de la orden (lista / editor)-->
+                <UserControl Grid.Row="3" Content="{Binding ShipmentMenu}"/>
 
             </Grid>
         </Border>

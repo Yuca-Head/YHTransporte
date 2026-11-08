@@ -5,7 +5,7 @@
     x:DataType="vm:DriverMenuViewModel">
 
     <Grid>
-        <Image Source="avares://YHTransporte.AvaloniaUI/Assets/Full-logo.png" Stretch="Fill"/>
+        <UserControl Content="{Binding CurrentView}"/>
     </Grid>
 
 </UserControl>

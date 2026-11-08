@@ -14,7 +14,10 @@ public partial class VehicleMenuViewModel : ViewModelBase
 
         _listSection.SelectedVehicleChanged += () =>
         {
-            _vehicleEditorViewModel.Order = _listSection.SelectedVehicle;
+            if(_listSection.SelectedVehicle is null)
+                return;
+
+            _vehicleEditorViewModel.Vehicle = _listSection.SelectedVehicle;
 
             CurrentView = _vehicleEditorViewModel;
         };
@@ -29,14 +32,4 @@ public partial class VehicleMenuViewModel : ViewModelBase
 
 
     private readonly VehicleListSectionViewModel _listSection;
-
-
-    [ObservableProperty]
-    public partial string ResultMessage { get; private set; } = "";
-
-    [ObservableProperty]
-    public partial bool HasError { get; set; }
-
-    [ObservableProperty]
-    private bool _isOpen;
 }

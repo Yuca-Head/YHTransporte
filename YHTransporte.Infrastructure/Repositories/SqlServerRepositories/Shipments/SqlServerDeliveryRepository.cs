@@ -1,11 +1,14 @@
 using System.Data;
 using System.Runtime.CompilerServices;
 using Dapper;
+using YHTransporte.Application.Shipments.Dtos;
 using YHTransporte.Application.Shipments.Repositories;
 using YHTransporte.Core.Entities;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Orders.Dtos;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Orders.Mappers;
 using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shared;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shipments.Dtos;
+using YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shipments.Mappers;
 
 namespace YHTransporte.Infrastructure.Repositories.SqlServerRepositories.Shipments;
 
@@ -15,6 +18,8 @@ public sealed class SqlServerDeliveryRepository(DbConnectionFactory factory) : I
 
     private const string DriverColumns = "Id, Code, Name, MiddleName, LastName, SecondLastName, InUse";
     private const string VehicleColumns = "Id, Plate, Description, InUse";
+    private const string HistoryColumns =
+        "ShipmentCode, OrderCode, IdStatus, Origin, Destination, EstimatedPickupAt, DeliveredAt";
 
     // ============================================================
     // Guardar
@@ -181,6 +186,92 @@ public sealed class SqlServerDeliveryRepository(DbConnectionFactory factory) : I
 
         if (await connection.ExecuteAsync(command) == 0)
             throw new KeyNotFoundException($"No existe el vehículo con Id {vehicleId}.");
+    }
+
+    // ============================================================
+    // Modificar
+    // ============================================================
+
+    public async Task UpdateVehicle(Vehicle vehicle, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(vehicle);
+
+        using var connection = _factory.Create();
+
+        // UpdateVehicle vuelve a validar la placa repetida y que no cambie mientras está en uso.
+        var command = new CommandDefinition(
+            "UpdateVehicle",
+            new { Id = vehicle.Key, vehicle.Plate, Description = NullIfEmpty(vehicle.Description) },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task UpdateDriver(Driver driver, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(driver);
+        ArgumentException.ThrowIfNullOrWhiteSpace(driver.Code);
+
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            "UpdateDriver",
+            new
+            {
+                Code = driver.Code.Trim(),
+                driver.Name,
+                MiddleName = NullIfEmpty(driver.MiddleName),
+                driver.LastName,
+                SecondLastName = NullIfEmpty(driver.SecondLastName)
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        await connection.ExecuteAsync(command);
+    }
+
+    public async Task<bool> PlateExists(string plate, int? excludedVehicleId = null, CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(
+            """
+            SELECT CAST(CASE WHEN EXISTS (
+                SELECT 1 FROM dbo.Vehicles
+                WHERE UPPER(LTRIM(RTRIM(Plate))) = UPPER(LTRIM(RTRIM(@Plate)))
+                AND (@ExcludedId IS NULL OR Id <> @ExcludedId))
+            THEN 1 ELSE 0 END AS BIT);
+            """,
+            new { Plate = plate, ExcludedId = excludedVehicleId },
+            cancellationToken: cancellationToken);
+
+        return await connection.ExecuteScalarAsync<bool>(command);
+    }
+
+    // ============================================================
+    // Historial (vista vw_ShipmentHistory)
+    // ============================================================
+
+    public IAsyncEnumerable<ShipmentHistoryDto> GetVehicleHistory(int vehicleId, CancellationToken cancellationToken = default)
+    => GetHistoryAsync($"SELECT {HistoryColumns} FROM dbo.vw_ShipmentHistory WHERE IdVehicle = @Value ORDER BY OrderCreatedAt DESC, ShipmentCode DESC;",
+    vehicleId, cancellationToken);
+
+    public IAsyncEnumerable<ShipmentHistoryDto> GetDriverHistory(string driverCode, CancellationToken cancellationToken = default)
+    => GetHistoryAsync($"SELECT {HistoryColumns} FROM dbo.vw_ShipmentHistory WHERE DriverCode = @Value ORDER BY OrderCreatedAt DESC, ShipmentCode DESC;",
+    driverCode.Trim(), cancellationToken);
+
+    private async IAsyncEnumerable<ShipmentHistoryDto> GetHistoryAsync(
+        string sql, object value, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        using var connection = _factory.Create();
+
+        var command = new CommandDefinition(sql, new { Value = value }, cancellationToken: cancellationToken);
+
+        var rows = await connection.QueryAsync<ShipmentHistorySqlRow>(command);
+
+        foreach (var row in rows)
+            yield return ShipmentHistorySqlMapper.ToDto(row);
     }
 
     private static string? NullIfEmpty(string? value)

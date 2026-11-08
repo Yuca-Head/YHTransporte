@@ -9,6 +9,14 @@
     <Color x:Key="PrimaryButtonColor">#0056D6</Color>
     <Color x:Key="SecundaryButtonColor">#518FEA</Color>
     <Color x:Key="PrimaryDeclineButtonColor">#F14D1F</Color>
+    <Color x:Key="SecondaryButtonColor">#374151</Color>
+    <Color x:Key="SubtleTextColor">#8B93AF</Color>
+
+    <!--Estados (órdenes, envíos, vehículos y conductores)-->
+    <Color x:Key="PendingStatusColor">#f59e0b</Color>
+    <Color x:Key="InTransitStatusColor">#0284c7</Color>
+    <Color x:Key="DoneStatusColor">#108043</Color>
+    <Color x:Key="CanceledStatusColor">#ef4444</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
     <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
@@ -17,5 +25,13 @@
     <SolidColorBrush x:Key="PrimaryButtonBrush" Color="{DynamicResource PrimaryButtonColor}" />
     <SolidColorBrush x:Key="SecundaryButtonBrush" Color="{DynamicResource SecundaryButtonColor}" />
     <SolidColorBrush x:Key="PrimaryDeclineButtonBrush" Color="{DynamicResource PrimaryDeclineButtonColor}"/>
+    <!--SecondaryButtonBrush ya se usaba en ThirdPartyEditorMenuView pero no existía-->
+    <SolidColorBrush x:Key="SecondaryButtonBrush" Color="{DynamicResource SecondaryButtonColor}"/>
+    <SolidColorBrush x:Key="SubtleTextBrush" Color="{DynamicResource SubtleTextColor}"/>
+
+    <SolidColorBrush x:Key="PendingStatusBrush" Color="{DynamicResource PendingStatusColor}"/>
+    <SolidColorBrush x:Key="InTransitStatusBrush" Color="{DynamicResource InTransitStatusColor}"/>
+    <SolidColorBrush x:Key="DoneStatusBrush" Color="{DynamicResource DoneStatusColor}"/>
+    <SolidColorBrush x:Key="CanceledStatusBrush" Color="{DynamicResource CanceledStatusColor}"/>
 
 </ResourceDictionary>

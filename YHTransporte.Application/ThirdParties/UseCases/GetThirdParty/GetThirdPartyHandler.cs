@@ -4,6 +4,8 @@ using YHTransporte.Application.Addresses.AddressMappers;
 using YHTransporte.Application.Addresses.Repositories;
 using YHTransporte.Application.Shared;
 using YHTransporte.Application.Shared.Results;
+using YHTransporte.Application.Shipments.Dtos;
+using YHTransporte.Application.Shipments.Mappers;
 using YHTransporte.Application.ThirdParties.Dtos;
 using YHTransporte.Application.ThirdParties.Mappers;
 using YHTransporte.Application.ThirdParties.Repositories;
@@ -78,4 +80,12 @@ public sealed class GetThirdPartyHandler(IThirdPartyRepository repository, IAddr
 
         return parties.Values;
     }
+
+    /// <summary>
+    /// Productos que vende un proveedor. Vacío si el tercero no tiene productos (o no es proveedor).
+    /// </summary>
+    public async Task<IEnumerable<ProductDto>> GetSupplierProducts(int supplierId, CancellationToken cancellationToken = default)
+    => await _repository.GetSupplierProducts(supplierId, cancellationToken)
+    .Select(ProductMapper.ToValue)
+    .ToListAsync(cancellationToken);
 }

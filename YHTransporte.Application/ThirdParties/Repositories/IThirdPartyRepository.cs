@@ -23,4 +23,7 @@ public interface IThirdPartyRepository : IRepository<int, ThirdParty>
 
     /// <summary>Inserta la fila (productId, supplierId) en SupplierProducts</summary>
     Task AddProductToSupplier(int productId, int supplierId, CancellationToken cancellationToken = default);
+
+    /// <summary>Actualiza código y nombre del producto (afecta a todos los proveedores que lo vendan)</summary>
+    Task UpdateProduct(Product product, CancellationToken cancellationToken = default);
 }
